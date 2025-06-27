@@ -1,28 +1,87 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Top Pocket Find</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        padding-top: 100px;
-        background-color: #fef9f1;
-        color: #222;
-      }
-      h1 {
-        font-size: 3em;
-        margin-bottom: 0.2em;
-      }
-      p {
-        font-size: 1.5em;
-        color: #555;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>🧭 Top Pocket Find</h1>
-    <p>Our treasure is almost uncovered.<br>Coming soon!</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Pocket Find</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 200px;
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    nav h1 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+    }
+
+    nav a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 2em;
+      background: #f9f9f9;
+    }
+
+    .intro {
+      text-align: center;
+      margin-top: 5em;
+    }
+
+    .intro h2 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>Top Pocket Find</h1>
+    <a href="index.html">Home</a>
+    <a href="games.html">Games</a>
+    <a href="#">Toys</a>
+    <a href="#">Coins</a>
+    <a href="#">Comics</a>
+    <a href="#">Cards</a>
+    <a href="#">Other</a>
+  </nav>
+  <main>
+    <section class="intro">
+      <h2>Welcome to Top Pocket Find</h2>
+      <p>Our treasure is almost uncovered. Explore unique collectibles coming soon!</p>
+    </section>
+    <footer>
+      <p>Visitors: <span id="visitorCount">loading...</span></p>
+    </footer>
+  </main>
+  <script>
+    document.getElementById('visitorCount').innerText = Math.floor(Math.random() * 1000) + 1;
+  </script>
+</body>
 </html>
