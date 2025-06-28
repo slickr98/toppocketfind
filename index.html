@@ -19,10 +19,14 @@
       color: white;
       padding: 20px;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    nav h1 {
-      font-size: 1.5em;
+    nav img {
+      max-width: 100%;
+      height: auto;
       margin-bottom: 1em;
     }
 
@@ -58,11 +62,34 @@
       margin-top: 2em;
       color: #666;
     }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 10px;
+      }
+
+      nav img {
+        max-width: 60px;
+        margin-bottom: 0;
+      }
+
+      nav a {
+        margin-bottom: 0;
+        font-size: 0.9em;
+      }
+    }
   </style>
 </head>
 <body>
   <nav>
-    <h1>Top Pocket Find</h1>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Compass_rose_pale.svg/1024px-Compass_rose_pale.svg.png" alt="Top Pocket Find Logo" />
     <a href="index.html">Home</a>
     <a href="games.html">Games</a>
     <a href="#">Toys</a>
