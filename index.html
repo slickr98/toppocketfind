@@ -23,6 +23,12 @@
     .content {
       flex: 1;
       display: flex;
+      flex-direction: column;
+    }
+
+    .main-wrapper {
+      display: flex;
+      flex: 1;
       flex-direction: row;
     }
 
@@ -82,7 +88,7 @@
     }
 
     @media (max-width: 768px) {
-      .content {
+      .main-wrapper {
         flex-direction: column;
       }
 
@@ -115,20 +121,22 @@
 <body>
   <div class="page-wrapper">
     <div class="content">
-      <nav>
-        <a href="index.html">
-          <img src="/assets/pocket-logo.png" alt="Top Pocket Find Logo" />
-        </a>
-        <a href="games.html">Games</a>
-        <a href="#">Toys</a>
-        <a href="#">Coins</a>
-        <a href="#">Comics</a>
-        <a href="#">Cards</a>
-        <a href="#">Other</a>
-      </nav>
-      <main>
-        <img src="assets/main-banner.png" alt="Top Pocket Find Banner" class="hero-img" />
-      </main>
+      <div class="main-wrapper">
+        <nav>
+          <a href="index.html">
+            <img src="/assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+          </a>
+          <a href="games.html">Games</a>
+          <a href="#">Toys</a>
+          <a href="#">Coins</a>
+          <a href="#">Comics</a>
+          <a href="#">Cards</a>
+          <a href="#">Other</a>
+        </nav>
+        <main>
+          <img src="assets/main-banner.png" alt="Top Pocket Find Banner" class="hero-img" />
+        </main>
+      </div>
     </div>
 
     <footer>
