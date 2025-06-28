@@ -1,96 +1,145 @@
-body {
-  display: flex;
-  flex-direction: column;
-}
+<!DOCTYPE html>
+<html lang="en">
 
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Pocket Find</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      min-height: 100vh;
+    }
 
-nav {
-  width: 160px;
-  background-color: #fff8dc; /* soft yellow */
-  color: #00406F;
-  padding: 20px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-right: 2px solid #00406F;
-}
+    body {
+      display: flex;
+      flex-direction: column;
+    }
 
-nav img {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 1em;
-}
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+    }
 
-nav a {
-  display: block;
-  color: #00406F;
-  text-decoration: none;
-  margin-bottom: 1em;
-}
+    nav {
+      width: 160px;
+      background-color: #fff8dc; /* soft yellow */
+      color: #00406F;
+      padding: 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-right: 2px solid #00406F;
+    }
 
-nav a:hover {
-  text-decoration: underline;
-}
+    nav img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1em;
+    }
 
-main {
-  flex: 1;
-  padding: 0;
-  background: #f9f9f9;
-}
+    nav a {
+      display: block;
+      color: #00406F;
+      text-decoration: none;
+      margin-bottom: 1em;
+    }
 
-.hero {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2em 0;
-  background-color: #fff8dc;
-}
+    nav a:hover {
+      text-decoration: underline;
+    }
 
-.hero-img {
-  max-width: 100%;
-  height: auto;
-}
+    main {
+      flex: 1;
+      padding: 0;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-footer {
-  background-color: #222;
-  color: #ccc;
-  padding: 1em;
-  font-size: 0.9em;
-  text-align: center;
-}
+    .hero {
+      padding: 2em;
+      background-color: #fff8dc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-@media (max-width: 768px) {
-  .content {
-    flex-direction: column;
-  }
+    .hero-img {
+      max-width: 100%;
+      height: auto;
+    }
 
-  nav {
-    width: 100%;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: center;
-    padding: 10px;
-    gap: 0.75em;
-    border-right: none;
-    border-bottom: 2px solid #00406F;
-    background-color: #fff8dc;
-    box-sizing: border-box;
-  }
+    footer {
+      background-color: #222;
+      color: #ccc;
+      padding: 1em;
+      font-size: 0.9em;
+      text-align: center;
+    }
 
-  nav img {
-    max-width: 40px;
-    margin-bottom: 0;
-  }
+    @media (max-width: 768px) {
+      .content {
+        flex-direction: column;
+      }
 
-  nav a {
-    margin-bottom: 0;
-    font-size: 0.9em;
-  }
-}
+      nav {
+        width: 100%;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        padding: 10px;
+        gap: 0.75em;
+        border-right: none;
+        border-bottom: 2px solid #00406F;
+        background-color: #fff8dc;
+        box-sizing: border-box;
+      }
+
+      nav img {
+        max-width: 40px;
+        margin-bottom: 0;
+      }
+
+      nav a {
+        margin-bottom: 0;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="content">
+    <nav>
+      <img src="/assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      <a href="index.html">Home</a>
+      <a href="games.html">Games</a>
+      <a href="#">Toys</a>
+      <a href="#">Coins</a>
+      <a href="#">Comics</a>
+      <a href="#">Cards</a>
+    </nav>
+    <main>
+      <section class="hero">
+        <img src="e02e3a17-83b5-4e77-bd15-b3b3d28120b9.png" alt="Top Pocket Find Banner" class="hero-img" />
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+  </footer>
+
+  <script>
+    document.getElementById('visitorCount')?.remove();
+  </script>
+</body>
+
+</html>
