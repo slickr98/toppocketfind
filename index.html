@@ -15,6 +15,13 @@
 
     body {
       display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
     }
 
     nav {
@@ -63,13 +70,15 @@
     }
 
     footer {
+      background-color: #222;
+      color: #ccc;
+      padding: 1em;
+      font-size: 0.9em;
       text-align: center;
-      margin-top: 2em;
-      color: #666;
     }
 
     @media (max-width: 768px) {
-      body {
+      .content {
         flex-direction: column;
       }
 
@@ -99,25 +108,27 @@
   </style>
 </head>
 <body>
-  <nav>
-    <img src="/assets/pocket-logo.png" alt="Top Pocket Find Logo" />
-    <a href="index.html">Home</a>
-    <a href="games.html">Games</a>
-    <a href="#">Toys</a>
-    <a href="#">Coins</a>
-    <a href="#">Comics</a>
-    <a href="#">Cards</a>
-    <a href="#">Other</a>
-  </nav>
-  <main>
-    <section class="intro">
-      <h2>Welcome to Top Pocket Find</h2>
-      <p>Our treasure is almost uncovered. Explore unique collectibles coming soon!</p>
-    </section>
-    <footer>
-      <p>Visitors: <span id="visitorCount">loading...</span></p>
-    </footer>
-  </main>
+  <div class="content">
+    <nav>
+      <img src="/assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      <a href="index.html">Home</a>
+      <a href="games.html">Games</a>
+      <a href="#">Toys</a>
+      <a href="#">Coins</a>
+      <a href="#">Comics</a>
+      <a href="#">Cards</a>
+    </nav>
+    <main>
+      <section class="intro">
+        <h2>Welcome to Top Pocket Find</h2>
+        <p>Our treasure is almost uncovered. Explore unique collectibles coming soon!</p>
+        <p>Visitors: <span id="visitorCount">loading...</span></p>
+      </section>
+    </main>
+  </div>
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+  </footer>
   <script>
     document.getElementById('visitorCount').innerText = Math.floor(Math.random() * 1000) + 1;
   </script>
