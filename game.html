@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Games | Top Pocket Find</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    .main-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 160px;
+      background-color: #fff8dc;
+      color: #00406F;
+      padding: 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00406F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1em;
+    }
+
+    nav a {
+      display: block;
+      color: #00406F;
+      text-decoration: none;
+      margin-bottom: 1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 2em;
+      background-color: #ffffff;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5em;
+    }
+
+    .product-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .product-card img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 0.5em;
+    }
+
+    footer {
+      background-color: #222;
+      color: #ccc;
+      text-align: center;
+      padding: 1em;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-wrapper">
+    <nav>
+      <a href="index.html">
+        <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      </a>
+      <a href="game.html">Games</a>
+      <a href="toys.html">Toys</a>
+      <a href="coins.html">Coins</a>
+      <a href="comics.html">Comics</a>
+      <a href="cards.html">Cards</a>
+      <a href="other.html">Other</a>
+    </nav>
+
+    <main>
+      <h1>Games</h1>
+      <div class="product-grid">
+        <div class="product-card">
+          <img src="assets/game1.png" alt="Game 1">
+          <h3>Retro Console</h3>
+          <p>$45.00</p>
+        </div>
+        <div class="product-card">
+          <img src="assets/game2.png" alt="Game 2">
+          <h3>Board Game Classic</h3>
+          <p>$30.00</p>
+        </div>
+        <!-- Add more game items here -->
+      </div>
+    </main>
+  </div>
