@@ -92,3 +92,65 @@
     }
 
     @media (max-width: 768px) {
+      .main-wrapper {
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: center;
+        padding: 10px;
+        gap: 0.75em;
+        border-right: none;
+        border-bottom: 2px solid #00406F;
+        background-color: #fff8dc;
+        box-sizing: border-box;
+      }
+
+      nav img {
+        max-width: 40px;
+        margin-bottom: 0;
+      }
+
+      nav a {
+        margin-bottom: 0;
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="content">
+      <div class="main-wrapper">
+        <nav>
+          <a href="index.html">
+            <img src="/assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+          </a>
+          <a href="game.html">Games</a>
+          <a href="toys.html">Toys</a>
+          <a href="coins.html">Coins</a>
+          <a href="comics.html">Comics</a>
+          <a href="cards.html">Cards</a>
+          <a href="other.html">Other</a>
+        </nav>
+        <main>
+          <img src="assets/main-banner.png" alt="Top Pocket Find Banner" class="hero-img" />
+        </main>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('visitorCount')?.remove();
+  </script>
+</body>
+
+</html>
