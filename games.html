@@ -1,116 +1,100 @@
-<!-- This is Games.html -->
+<!-- This is games-220001.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Games | Top Pocket Find</title>
+  <title>Guitar Hero II (PS2) | Top Pocket Find</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
     body {
-      margin: 0;
       font-family: sans-serif;
-      background-color: #f0f0f0;
+      margin: 0;
+      background-color: #f4f4f4;
     }
-
-    .main-wrapper {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    nav {
-      width: 160px;
-      background-color: #fff8dc;
-      color: #00406F;
-      padding: 20px;
-      box-sizing: border-box;
-      border-right: 2px solid #00406F;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    nav img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 1em;
-    }
-
-    nav a {
-      display: block;
-      color: #00406F;
-      text-decoration: none;
-      margin-bottom: 1em;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    main {
-      flex: 1;
+    .wrapper {
+      max-width: 1000px;
+      margin: auto;
       padding: 2em;
-      background-color: #004E8D;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5em;
-    }
-
-    .product-card {
       background: #fff;
+    }
+    .gallery {
+      display: flex;
+      gap: 1em;
+      overflow-x: auto;
+      margin-bottom: 1em;
+    }
+    .gallery img {
+      max-width: 200px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1em;
-      text-align: center;
+      border-radius: 6px;
     }
-
-    .product-card img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 0.5em;
+    h1 {
+      color: #00406F;
     }
-
-    footer {
-      background-color: #222;
-      color: #ccc;
-      text-align: center;
-      padding: 1em;
-      font-size: 0.9em;
+    .price-box {
+      margin: 1em 0;
+      font-size: 1.2em;
+    }
+    .price-box strong {
+      display: inline-block;
+      min-width: 120px;
+    }
+    button.buy-button {
+      padding: 0.75em 1.5em;
+      font-size: 1em;
+      background-color: #004E8D;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button.buy-button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
     }
   </style>
 </head>
-
 <body>
-  <div class="main-wrapper">
-    <nav>
-      <a href="index.html">
-        <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
-      </a>
-      <a href="games.html">Games</a>
-      <a href="toys.html">Toys</a>
-      <a href="coins.html">Coins</a>
-      <a href="comics.html">Comics</a>
-      <a href="cards.html">Cards</a>
-      <a href="other.html">Other</a>
-    </nav>
+  <div class="wrapper">
+    <h1>Guitar Hero II (PS2)</h1>
 
-    <main>
-      <h1>Games</h1>
-      <div class="product-grid">
-        <div class="product-card">
-          <img src="assets/game1.png" alt="Game 1">
-          <h3>Retro Console</h3>
-          <p>$45.00</p>
-        </div>
-        <div class="product-card">
-          <img src="assets/game2.png" alt="Game 2">
-          <h3>Board Game Classic</h3>
-          <p>$30.00</p>
-        </div>
-        <!-- Add more game items here -->
-      </div>
-    </main>
+    <div class="gallery">
+      <img src="assets/220001/1.jpg" alt="Front Cover">
+      <img src="assets/220001/2.jpg" alt="Back Cover">
+      <img src="assets/220001/3.jpg" alt="Open Case">
+      <img src="assets/220001/4.jpg" alt="Disc Closeup">
+    </div>
+
+    <p>Includes case, manual &amp; disc in great condition.</p>
+
+    <div class="price-box">
+      <div><strong>Price:</strong> $15.99 CAD</div>
+      <div><strong>Shipping:</strong> $13.99 CAD (Canada only)</div>
+      <div><strong>Total:</strong> $29.98 CAD</div>
+    </div>
+
+    <button class="buy-button" onclick="reserveItem('220001')" id="buyBtn">Buy Now</button>
+
+    <p style="margin-top:2em;"><a href="toys.html">&#8592; Back to Listings</a></p>
   </div>
+
+  <script>
+    function reserveItem(itemId) {
+      const now = new Date();
+      const expires = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      localStorage.setItem(`reserved-${itemId}`, expires.toISOString());
+      alert("Item reserved for 24 hours. You will receive follow-up instructions.");
+      document.getElementById("buyBtn").disabled = true;
+    }
+
+    (function checkReservation() {
+      const key = 'reserved-220001';
+      const expires = localStorage.getItem(key);
+      if (expires && new Date() < new Date(expires)) {
+        document.getElementById("buyBtn").disabled = true;
+      }
+    })();
+  </script>
+</body>
+</html>
