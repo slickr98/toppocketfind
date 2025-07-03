@@ -8,38 +8,86 @@
   <link rel="stylesheet" href="css/style.css" />
   <style>
     body {
-      font-family: sans-serif;
       margin: 0;
+      font-family: sans-serif;
       background-color: #f4f4f4;
     }
-    .wrapper {
-      max-width: 1000px;
-      margin: auto;
-      padding: 2em;
-      background: #fff;
+
+    .main-wrapper {
+      display: flex;
+      min-height: 100vh;
     }
+
+    nav {
+      width: 160px;
+      background-color: #fff8dc;
+      color: #00406F;
+      padding: 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00406F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1em;
+    }
+
+    nav a {
+      display: block;
+      color: #00406F;
+      text-decoration: none;
+      margin-bottom: 1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 2em;
+      background-color: #004E8D;
+    }
+
+    .product-wrapper {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 2em;
+      border-radius: 8px;
+    }
+
     .gallery {
       display: flex;
       gap: 1em;
       overflow-x: auto;
       margin-bottom: 1em;
     }
+
     .gallery img {
       max-width: 200px;
       border: 1px solid #ccc;
       border-radius: 6px;
     }
+
     h1 {
       color: #00406F;
     }
+
     .price-box {
       margin: 1em 0;
       font-size: 1.2em;
     }
+
     .price-box strong {
       display: inline-block;
       min-width: 120px;
     }
+
     button.buy-button {
       padding: 0.75em 1.5em;
       font-size: 1em;
@@ -49,35 +97,64 @@
       border-radius: 4px;
       cursor: pointer;
     }
+
     button.buy-button:disabled {
       background-color: #aaa;
       cursor: not-allowed;
     }
+
+    footer {
+      background-color: #222;
+      color: #ccc;
+      text-align: center;
+      padding: 1em;
+      font-size: 0.9em;
+    }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <h1>Guitar Hero II (PS2)</h1>
+  <div class="main-wrapper">
+    <nav>
+      <a href="index.html">
+        <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      </a>
+      <a href="game.html">Games</a>
+      <a href="toys.html">Toys</a>
+      <a href="coins.html">Coins</a>
+      <a href="comics.html">Comics</a>
+      <a href="cards.html">Cards</a>
+      <a href="other.html">Other</a>
+    </nav>
 
-    <div class="gallery">
-      <img src="assets/220001/1.jpg" alt="Front Cover">
-      <img src="assets/220001/2.jpg" alt="Back Cover">
-      <img src="assets/220001/3.jpg" alt="Open Case">
-      <img src="assets/220001/4.jpg" alt="Disc Closeup">
-    </div>
+    <main>
+      <div class="product-wrapper">
+        <h1>Guitar Hero II (PS2)</h1>
 
-    <p>Includes case, manual &amp; disc in great condition.</p>
+        <div class="gallery">
+          <img src="assets/220001/1.jpg" alt="Front Cover">
+          <img src="assets/220001/2.jpg" alt="Back Cover">
+          <img src="assets/220001/3.jpg" alt="Open Case">
+          <img src="assets/220001/4.jpg" alt="Disc Closeup">
+        </div>
 
-    <div class="price-box">
-      <div><strong>Price:</strong> $15.99 CAD</div>
-      <div><strong>Shipping:</strong> $13.99 CAD (Canada only)</div>
-      <div><strong>Total:</strong> $29.98 CAD</div>
-    </div>
+        <p>Includes case, manual &amp; disc in great condition.</p>
 
-    <button class="buy-button" onclick="reserveItem('220001')" id="buyBtn">Buy Now</button>
+        <div class="price-box">
+          <div><strong>Price:</strong> $15.99 CAD</div>
+          <div><strong>Shipping:</strong> $13.99 CAD (Canada only)</div>
+          <div><strong>Total:</strong> $29.98 CAD</div>
+        </div>
 
-    <p style="margin-top:2em;"><a href="toys.html">&#8592; Back to Listings</a></p>
+        <button class="buy-button" onclick="reserveItem('220001')" id="buyBtn">Buy Now</button>
+
+        <p style="margin-top:2em;"><a href="toys.html">&#8592; Back to Listings</a></p>
+      </div>
+    </main>
   </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+  </footer>
 
   <script>
     function reserveItem(itemId) {
