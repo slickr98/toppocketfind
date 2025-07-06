@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Other | Top Pocket Find</title>
+  <title>Top Pocket Find - Other</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
     body {
       margin: 0;
       font-family: sans-serif;
-      background-color: #f0f0f0;
+      background-color: #f4f4f4;
     }
 
     .main-wrapper {
@@ -51,26 +51,11 @@
       flex: 1;
       padding: 2em;
       background-color: #004E8D;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5em;
-    }
-
-    .product-card {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1em;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-    }
-
-    .product-card img {
-      max-width: 100%;
-      height: auto;
-      margin-bottom: 0.5em;
     }
 
     footer {
@@ -80,16 +65,42 @@
       padding: 1em;
       font-size: 0.9em;
     }
+
+    @media (max-width: 600px) {
+      .main-wrapper {
+        flex-direction: column;
+      }
+
+      nav {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        border-right: none;
+        border-bottom: 2px solid #00406F;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      nav a {
+        margin: 0.5em 1em;
+      }
+
+      main {
+        padding: 1em;
+      }
+    }
   </style>
 </head>
-
 <body>
   <div class="main-wrapper">
     <nav>
       <a href="index.html">
         <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
       </a>
-      <a href="game.html">Games</a>
+      <a href="games.html">Games</a>
       <a href="toys.html">Toys</a>
       <a href="coins.html">Coins</a>
       <a href="comics.html">Comics</a>
@@ -98,21 +109,15 @@
     </nav>
 
     <main>
-      <h1>Other</h1>
-      <div class="product-grid">
-        <div class="product-card">
-          <img src="assets/other1.png" alt="Other 1">
-          <h3>Collector's Pin</h3>
-          <p>$10.00</p>
-        </div>
-        <div class="product-card">
-          <img src="assets/other2.png" alt="Other 2">
-          <h3>Vintage Sticker Pack</h3>
-          <p>$7.00</p>
-        </div>
-        <!-- Add more miscellaneous items here -->
-      </div>
-    </main>
+  <div style="margin-top: 4em;">
+    <h1>More treasures coming soon!</h1>
+    <p>Check back every Sunday<br>for new additions to the Other category at Top Pocket Find.</p>
   </div>
+</main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+  </footer>
 </body>
 </html>

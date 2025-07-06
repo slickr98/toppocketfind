@@ -1,0 +1,184 @@
+<!-- This is 240002-Buy.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - 2013 $20 Whale Fine Silver 3‑Coin Set – Royal Canadian Mint</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .main-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 160px;
+      background-color: #fff8dc;
+      color: #00406F;
+      padding: 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00406F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1em;
+    }
+
+    nav a {
+      display: block;
+      color: #00406F;
+      text-decoration: none;
+      margin-bottom: 1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 2em;
+      background-color: #004E8D;
+    }
+
+    .checkout-box {
+      background: #fff8dc;
+      padding: 2em;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .checkout-box h2 {
+      text-align: center;
+      color: #00406F;
+    }
+
+    .checkout-box p {
+      margin: 1em 0;
+    }
+
+    .summary {
+      background: #fef6d8;
+      padding: 1em;
+      border-radius: 6px;
+      margin-bottom: 1em;
+    }
+
+    .summary strong {
+      display: inline-block;
+      width: 120px;
+    }
+
+    .note {
+      color: #b22222;
+      font-style: italic;
+      margin-top: 1em;
+    }
+
+    .email-entry {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+
+    .email-entry label {
+      font-weight: bold;
+    }
+
+    .email-entry input[type="email"] {
+      padding: 0.5em;
+      font-size: 1em;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .confirm-button {
+      display: block;
+      margin: 2em auto 0;
+      padding: 0.75em 2em;
+      background-color: #004E8D;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #222;
+      color: #ccc;
+      text-align: center;
+      padding: 1em;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <nav>
+      <a href="index.html">
+        <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      </a>
+      <a href="games.html">Games</a>
+      <a href="toys.html">Toys</a>
+      <a href="coins.html">Coins</a>
+      <a href="comics.html">Comics</a>
+      <a href="cards.html">Cards</a>
+      <a href="other.html">Other</a>
+    </nav>
+
+    <main>
+      <div class="checkout-box">
+        <h2>Complete Your Purchase</h2>
+
+        <div class="summary">
+          <p><strong>Item:</strong> 2013 $20 Whale Fine Silver 3‑Coin Set – Royal Canadian Mint</p>
+          <p><strong>Condition:</strong> Sealed 3-coin set in original mint packaging. Capsules, COA, and folder included. Excellent condition.</p>
+          <p><strong>Item Price:</strong> $109.99 CAD</p>
+          <p><strong>Shipping:</strong> $13.99 CAD</p>
+          <p><strong>Total:</strong> $123.98 CAD</p>
+        </div>
+
+        <p><strong>Shipping:</strong> We currently ship <u>only within Canada</u>.</p>
+        <p><strong>Payment:</strong> We accept Interac e-transfer or local pickup. We'll confirm your address after placing the order.</p>
+
+        <div class="email-entry">
+          <label for="email">Enter your email to continue:</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        </div>
+
+        <p class="note">You will be contacted within 24 hours to arrange delivery and payment details.</p>
+
+        <form method="POST" action="mailto:leblancri@rogers.com" enctype="text/plain">
+          <input type="hidden" name="Item" value="2013 $20 Whale Fine Silver 3‑Coin Set – Royal Canadian Mint. - Stock #240003">
+          <input type="hidden" name="Total" value="$123.98 CAD">
+          <input type="hidden" name="Shipping Note" value="Canada only">
+          <input type="email" name="Customer Email" id="emailField" placeholder="you@example.com" required style="display:none;">
+          <button class="confirm-button" onclick="document.getElementById('emailField').value = document.getElementById('email').value">Place Order</button>
+        </form>
+
+        <p style="margin-top:2em; font-size: 0.95em; color: #333;"><em>Top Pocket Find is committed to ongoing site improvements. We will continue to add new features and payment options in the future to better serve you!</em></p>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+  </footer>
+</body>
+</html>
