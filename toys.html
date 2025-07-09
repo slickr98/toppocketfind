@@ -1,0 +1,193 @@
+<!-- This is Toys.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Pocket Find - Games</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .main-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 160px;
+      background-color: #fff8dc;
+      color: #00406F;
+      padding: 20px;
+      box-sizing: border-box;
+      border-right: 2px solid #00406F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    nav img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 1em;
+    }
+
+    nav a {
+      display: block;
+      color: #00406F;
+      text-decoration: none;
+      margin-bottom: 1em;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      flex: 1;
+      padding: 2em;
+      background-color: #004E8D;
+    }
+
+    .products {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      flex-wrap: wrap;
+    }
+
+    .product-wrapper {
+      background: #fff8dc;
+      padding: 1em;
+      border-radius: 8px;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    .product-wrapper img {
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .product-wrapper h2 {
+      font-size: 1em;
+      color: #00406F;
+    }
+
+    .price-box {
+      font-size: 0.9em;
+      margin: 1em 0;
+    }
+
+    .buy-button {
+      padding: 0.5em 1em;
+      font-size: 0.9em;
+      background-color: #004E8D;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    footer {
+      background-color: #222;
+      color: #ccc;
+      text-align: center;
+      padding: 1em;
+      font-size: 0.9em;
+    }
+  <style>
+ @media (max-width: 600px) {
+  .main-wrapper {
+    flex-direction: column;
+  }
+
+  nav {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-right: none;
+    border-bottom: 2px solid #00406F;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav a {
+    margin: 0.5em 1em;
+  }
+
+  main {
+    padding: 1em;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <nav>
+      <a href="index.html">
+        <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      </a>
+      <a href="games.html">Games</a>
+      <a href="toys.html">Toys</a>
+      <a href="coins.html">Coins</a>
+      <a href="comics.html">Comics</a>
+      <a href="cards.html">Cards</a>
+      <a href="other.html">Other</a>
+    </nav>
+
+    <main>
+      <div class="products">
+        <!-- 50 hard-coded product cards -->
+       <div class="product-wrapper">
+
+  <h2>Jordan vs Bird - Tiger Electronics (1988)</h2>
+  <img src="assets/230001/1.jpg" alt="Jordan vs Bird">
+  <div class="price-box">
+    <div><strong>Price:</strong> $24.99 CAD</div>
+  </div>
+  <a class="buy-button" href="230001.html">View Item</a>
+</div>
+
+<div class="product-wrapper">
+  <h2>Mego Superman (1974) - 8" Action Figure</h2>
+  <img src="assets/230002/1.jpg" alt="Superman (1974)">
+  <div class="price-box">
+    <div><strong>Price:</strong> $49.99 CAD</div>
+  </div>
+  <a class="buy-button" href="230002.html">View Item</a>
+</div>
+
+<div class="product-wrapper">
+  <h2>Marx Knight Figure (1964) - Louis Marx & Co</h2>
+  <img src="assets/230003/1.jpg" alt="Marx Knight Figure (1964)">
+  <div class="price-box">
+    <div><strong>Price:</strong> $19.99 CAD</div>
+  </div>
+  <a class="buy-button" href="230003.html">View Item</a>
+</div>
+
+
+
+
+
+     </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | Contact</p>
+  </footer>
+</body>
+</html>
