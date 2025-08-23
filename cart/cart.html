@@ -62,96 +62,91 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:0 16px;}
   </div>
 
   <script>
-    const KEY = 'tpf_cart';
-    const money = (cents)=> (cents/100).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
-    const SHIP_CENTS = 1450; function get(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } }
-    function set(items){ localStorage.setItem(KEY, JSON.stringify(items)); badge(); }
-    function remove(id){ const items=get().filter(i=>i.id!==id); set(items); render(); }
-    function qty(id,delta){ const items=get(); const i=items.find(it=>it.id===id); if(!i) return; i.qty=Math.max( (i.maxQty||1)===1?1:i.qty+delta, 0); if(i.qty===0) return remove(id); set(items); render(); }
-    function subtotalCents(){ return get().reduce((sum,i)=> sum + (i.priceCents*i.qty), 0); }
-    function badge(){ /* no badge needed on this page */ }
-    function render(){
-      const list=document.getElementById('list');
-      const empty=document.getElementById('empty');
-      const items=get();
-      if(items.length===0){ list.style.display='none'; empty.style.display='block'; document.getElementById('subtotal').textContent=money(0); document.getElementById('shipping').textContent=money(0); document.getElementById('total').textContent=money(0); return; }
-      empty.style.display='none'; list.style.display='grid';
-      list.innerHTML = items.map(i=>`
-        <div class="item" data-id="${i.id}">
-          <div>
-            <div class="title">${i.title}</div>
-            <div class="muted">${money(i.priceCents)}</div>
-            <div class="qty">
-              <button aria-label="decrease" data-act="dec">−</button>
-              <span>${i.qty}</span>
-              <button aria-label="increase" data-act="inc" ${i.maxQty===1 && i.qty===1 ? 'disabled' : ''}>+</button>
-              <button class="remove-btn" data-act="rm">Remove</button>
-            </div>
-          </div>
-          <div style="font-weight:600">${money(i.priceCents*i.qty)}</div>
-        </div>`).join('');
-      list.querySelectorAll('.item').forEach(row=>{
-        row.addEventListener('click', (e)=>{
-          const id=row.dataset.id;
-          const act=e.target.getAttribute('data-act');
-          if(!act) return;
-          if(act==='dec') qty(id,-1);
-          if(act==='inc') qty(id,1);
-          if(act==='rm') remove(id);
-        })
-      });
-      const sub = subtotalCents();
-      const ship = items.length ? SHIP_CENTS : 0; // flat-rate once per order
-      document.getElementById('subtotal').textContent = money(sub);
-      document.getElementById('shipping').textContent = money(ship);
-      document.getElementById('total').textContent = money(sub + ship);
+(() => {
+  const KEY = 'tpf_cart';
+  const money = (cents)=> (cents/100).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
+  const SHIP_CENTS = 1450;
+
+  const $ = (s)=>document.querySelector(s);
+  const list = $('#list');
+  const empty = $('#empty');
+  const elSubtotal = $('#subtotal');
+  const elShipping = $('#shipping');
+  const elTotal = $('#total');
+
+  const get = () => { try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch { return []; } };
+  const set = (items) => localStorage.setItem(KEY, JSON.stringify(items));
+
+  function render(){
+    const items = get();
+
+    if(items.length === 0){
+      list.style.display = 'none';
+      empty.style.display = 'block';
+      elSubtotal.textContent = money(0);
+      elShipping.textContent = money(0);
+      elTotal.textContent = money(0);
+      return;
     }
-    document.getElementById('clear').addEventListener('click', ()=>{ set([]); render(); });
-    document.getElementById('checkout').addEventListener('click', async (e) => {
-  e.preventDefault();
-  const btn = e.currentTarget;
 
-  // Pause checkout on non-localhost (live site)
-  if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
-    alert('Checkout is paused while we finish v2. Thanks!');
-    return;
+    empty.style.display = 'none';
+    list.style.display = 'grid';
+
+    list.innerHTML = items.map(i => `
+      <div class="item" data-id="${i.id}">
+        <div>
+          <div class="title">${i.title}</div>
+          <div class="muted">${money(i.priceCents)}</div>
+          <div class="qty">
+            <button type="button" aria-label="decrease" data-act="dec">−</button>
+            <span>${i.qty}</span>
+            <button type="button" aria-label="increase" data-act="inc" ${i.maxQty===1 && i.qty===1 ? 'disabled' : ''}>+</button>
+            <button type="button" class="remove-btn" data-act="rm">Remove</button>
+          </div>
+        </div>
+        <div style="font-weight:600">${money(i.priceCents*i.qty)}</div>
+      </div>`).join('');
+
+    list.querySelectorAll('.item').forEach(row => {
+      row.addEventListener('click', (e) => {
+        const id = row.dataset.id;
+        const act = e.target.getAttribute('data-act');
+        if(!act) return;
+        const items2 = get();
+        const idx = items2.findIndex(it => it.id === id);
+        if(idx === -1) return;
+        if(act === 'dec') items2[idx].qty = Math.max(0, items2[idx].qty - 1);
+        if(act === 'inc') items2[idx].qty = (items2[idx].maxQty===1 ? 1 : items2[idx].qty + 1);
+        if(act === 'rm') items2[idx].qty = 0;
+        const filtered = items2.filter(it => it.qty > 0);
+        set(filtered);
+        render();
+      });
+    });
+
+    const sub = items.reduce((sum,i)=> sum + (i.priceCents*i.qty), 0);
+    const ship = items.length ? SHIP_CENTS : 0; // flat-rate once per order
+    elSubtotal.textContent = money(sub);
+    elShipping.textContent = money(ship);
+    elTotal.textContent = money(sub + ship);
   }
 
-  let items=[]; try{ items=JSON.parse(localStorage.getItem('tpf_cart')||'[]'); }catch{}
-  if(!items.length){ alert('Your cart is empty.'); return; }
+  $('#clear').addEventListener('click', () => { set([]); render(); });
 
-  btn.disabled = true; const old=btn.textContent; btn.textContent='Redirecting…';
-  try{
-    const res = await fetch('http://127.0.0.1:4242/create-checkout-session', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ items: items.map(i => ({ title:i.title, priceCents:i.priceCents, qty:i.qty })) })
-    });
-    const data = await res.json();
-    if(data && data.url){ window.location = data.url; }
-    else{ throw new Error('No URL from server'); }
-  }catch(err){
-    console.error(err);
-    alert('Could not start checkout. Is the Stripe server running on port 4242?');
-    btn.disabled=false; btn.textContent=old;
-  }
-}); }catch{}
-      if(!items.length){ alert('Your cart is empty.'); return; }
-      btn.disabled = true; const old=btn.textContent; btn.textContent='Redirecting…';
-      try{
-        const res = await fetch('http://127.0.0.1:4242/create-checkout-session', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ items: items.map(i => ({ title:i.title, priceCents:i.priceCents, qty:i.qty })) })
-        });
-        const data = await res.json();
-        if(data && data.url){ window.location = data.url; }
-        else{ throw new Error('No URL from server'); }
-      }catch(err){
-        console.error(err);
-        alert('Could not start checkout. Is the Stripe server running on port 4242?');
-        btn.disabled=false; btn.textContent=old;
-      }
-    });
-    render();
-  </script>
+  $('#checkout').addEventListener('click', (e) => {
+    e.preventDefault();
+    // Pause checkout on non-localhost (live site)
+    if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      alert('Checkout is paused while we finish v2. Thanks!');
+      return;
+    }
+    const items = get();
+    if(!items.length){ alert('Your cart is empty.'); return; }
+    alert('Local checkout flow goes here.');
+  });
+
+  render();
+})();
+</script>
 </body>
 </html>
