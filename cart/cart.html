@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart — Top Pocket Find</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <style>
+  /* Keep page-specific minimal styles only */
+  .pill{display:inline-block;background:#0a457a;color:#fff;border-radius:999px;padding:3px 10px;font-size:.85rem}
+</style>
+</head>
+<body class="cart-page">
+  <div class="main-wrapper">
+    <main>
+      <button onclick="window.location.href='/index.html'" class="btn secondary" style="margin-bottom:16px;">← Back to Home</button>
+      <h1>Your Cart</h1>
+      <div class="cart">
+        <section>
+          <div id="empty" class="muted">Your cart is empty.</div>
+          <div id="list" style="display:none; display:grid; gap:12px"></div>
+        </section>
+        <aside class="summary">
+          <div class="row"><div>Subtotal</div><div id="subtotal">$0.00</div></div>
+          <div class="row"><div>Shipping</div><div id="shipping">$0.00</div></div>
+          <hr />
+          <div class="row" style="font-weight:700"><div>Total</div><div id="total">$0.00</div></div>
+          <div class="actions">
+            <button id="checkout" class="btn">Checkout</button>
+            <button id="clear" class="btn secondary">Clear</button>
+          </div>
+        <div class="muted" style="margin-top:12px"><span class="pill">Canada only</span> — we currently ship within Canada</div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const KEY = 'tpf_cart';
+    const money = (cents)=> (cents/100).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
+    const SHIP_CENTS = 1450; function get(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{ return []; } }
+    function set(items){ localStorage.setItem(KEY, JSON.stringify(items)); badge(); }
+    function remove(id){ const items=get().filter(i=>i.id!==id); set(items); render(); }
+    function qty(id,delta){ const items=get(); const i=items.find(it=>it.id===id); if(!i) return; i.qty=Math.max( (i.maxQty||1)===1?1:i.qty+delta, 0); if(i.qty===0) return remove(id); set(items); render(); }
+    function subtotalCents(){ return get().reduce((sum,i)=> sum + (i.priceCents*i.qty), 0); }
+    function badge(){ /* no badge needed on this page */ }
+    function render(){
+      const list=document.getElementById('list');
+      const empty=document.getElementById('empty');
+      const items=get();
+      if(items.length===0){ list.style.display='none'; empty.style.display='block'; document.getElementById('subtotal').textContent=money(0); document.getElementById('shipping').textContent=money(0); document.getElementById('total').textContent=money(0); return; }
+      empty.style.display='none'; list.style.display='grid';
+      list.innerHTML = items.map(i=>`
+        <div class="item" data-id="${i.id}">
+          <div>
+            <div class="title">${i.title}</div>
+            <div class="muted">${money(i.priceCents)}</div>
+            <div class="qty">
+              <button aria-label="decrease" data-act="dec">−</button>
+              <span>${i.qty}</span>
+              <button aria-label="increase" data-act="inc" ${i.maxQty===1 && i.qty===1 ? 'disabled' : ''}>+</button>
+              <button class="remove-btn" data-act="rm">Remove</button>
+            </div>
+          </div>
+          <div style="font-weight:600">${money(i.priceCents*i.qty)}</div>
+        </div>`).join('');
+      list.querySelectorAll('.item').forEach(row=>{
+        row.addEventListener('click', (e)=>{
+          const id=row.dataset.id;
+          const act=e.target.getAttribute('data-act');
+          if(!act) return;
+          if(act==='dec') qty(id,-1);
+          if(act==='inc') qty(id,1);
+          if(act==='rm') remove(id);
+        })
+      });
+      const sub = subtotalCents();
+      const ship = items.length ? SHIP_CENTS : 0; // flat-rate once per order
+      document.getElementById('subtotal').textContent = money(sub);
+      document.getElementById('shipping').textContent = money(ship);
+      document.getElementById('total').textContent = money(sub + ship);
+    }
+    document.getElementById('clear').addEventListener('click', ()=>{ set([]); render(); });
+    document.getElementById('checkout').addEventListener('click', async (e) => {
+      const btn = e.currentTarget; 
+      const KEY='tpf_cart';
+      let items=[]; try{ items=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{}
+      if(!items.length){ alert('Your cart is empty.'); return; }
+      btn.disabled = true; const old=btn.textContent; btn.textContent='Redirecting…';
+      try{
+        const res = await fetch('http://127.0.0.1:4242/create-checkout-session', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ items: items.map(i => ({ title:i.title, priceCents:i.priceCents, qty:i.qty })) })
+        });
+        const data = await res.json();
+        if(data && data.url){ window.location = data.url; }
+        else{ throw new Error('No URL from server'); }
+      }catch(err){
+        console.error(err);
+        alert('Could not start checkout. Is the Stripe server running on port 4242?');
+        btn.disabled=false; btn.textContent=old;
+      }
+    });
+    render();
+  </script>
+</body>
+</html>
