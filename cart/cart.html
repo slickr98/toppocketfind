@@ -22,6 +22,9 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:0 16px;}
 .btn:active{transform:translateY(0)}
 .btn.secondary{background:#0a457a;color:#fff;border-color:#0a457a;box-shadow:none}
 
+/* Back link positioning */
+.back-row{ position:sticky; top:12px; z-index:5; margin:0 0 12px; }
+
 /* Items */
 #list{display:grid;gap:12px}
 .item{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px 16px;}
@@ -44,7 +47,10 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:0 16px;}
 <body class="cart-page">
   <div class="main-wrapper">
     <main>
-      <button onclick="window.location.href='/games.html'" class="btn secondary" style="margin-bottom:16px;">← Back to Games</button><div class="cart">
+      <div class="back-row">
+  <button onclick="window.location.href='/games.html'" class="btn secondary">← Back to Games</button>
+</div>
+<div class="cart">
         <section>
           <div id="empty" class="muted">Your cart is empty.</div>
           <div id="list" style="display:none; display:grid; gap:12px"></div>
