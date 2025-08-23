@@ -584,25 +584,27 @@
 <script>
   (async function soldLock(){
     try{
-      const res = await fetch('http://127.0.0.1:4242/api/products', { cache: 'no-store' }); // deploy = fetch('/api/products')
-      if(!res.ok) return; // server not running? skip
+      // Read sold flags from static JSON (works on GitHub Pages)
+      const res = await fetch('api/products.json?ts=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) return;
       const products = await res.json();
       const byId = Object.fromEntries(products.map(p => [String(p.id), p]));
 
       document.querySelectorAll('.product-wrapper').forEach(card => {
         const addBtn = card.querySelector('.buy-button.add');
-        if(!addBtn) return;
+        if (!addBtn) return;
         const id = String(addBtn.dataset.id || '');
-        const prod = byId[id];
-        if(!prod) return;
 
-       if (prod.sold) {
-        // disable Add to Cart button
-      addBtn.disabled = true;
-      addBtn.setAttribute('aria-disabled','true');   
-      addBtn.classList.add('disabled');   // ← add this line
-      addBtn.textContent = 'Sold';
-      addBtn.classList.remove('add');
+        // 👇 TEMP FREEZE: treat anything not listed in JSON as sold
+        const prod = byId[id] || { sold: true };
+
+        if (prod.sold) {
+          // disable Add to Cart button
+          addBtn.disabled = true;
+          addBtn.setAttribute('aria-disabled','true');
+          addBtn.classList.add('disabled');
+          addBtn.textContent = 'Sold';
+          addBtn.classList.remove('add');
 
           // disable View Item link
           const view = card.querySelector('a.buy-button[href]');
