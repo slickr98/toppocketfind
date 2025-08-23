@@ -1,0 +1,700 @@
+<!-- This is games.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Pocket Find - Games</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .toolbar {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      padding: 8px;
+      justify-content: flex-start;
+    }
+    .toolbar input, .toolbar select {
+      padding: 6px 10px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,.25);
+    }
+    body.list-page main{
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      padding: 16px 0;
+    }
+    body.list-page .products{ justify-content: flex-start; }
+    @media (min-width: 900px){ body.list-page #q{ width: 420px; } }
+    @media (max-width: 768px) {
+      body.list-page main{ align-items: center; }
+      .toolbar { width:100%; padding:12px 16px; justify-content: center; }
+      #q{ width:92vw; max-width: 600px; }
+      body.list-page .products{ align-items: center; }
+    }
+
+    .product-wrapper .buy-button{
+      display:block; text-align:center; text-decoration:none;
+      padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer;
+      border:none; color:#fff; background:#0a457a;
+      transition:filter .15s, transform .02s; 
+    }
+    .product-wrapper .buy-button:hover{ filter:brightness(1.05); }
+    .product-wrapper .buy-button.add{
+      background:#FFD814; color:#111; border:1px solid #F0C14B; box-shadow:0 2px 0 #F0C14B;
+    }
+    .product-wrapper .buy-button.add:hover{ background:#F7CA00; }
+    .product-wrapper .buy-button + .buy-button{ margin-top:8px; }
+    .product-wrapper .buy-button[disabled]{ opacity:.6; cursor:not-allowed; box-shadow:none; }
+    .product-wrapper .buy-button{ position:relative; overflow:hidden; box-shadow:0 2px 0 rgba(0,0,0,.08); }
+    .product-wrapper .buy-button:hover{ transform:translateY(-1px); }
+    .product-wrapper .buy-button:active{ transform:translateY(0); }
+    .product-wrapper .buy-button::before{
+      content:""; position:absolute; top:-20%; left:-30%; width:60%; height:140%;
+      background:linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 50%, rgba(255,255,255,0) 100%);
+      transform:rotate(22deg) translateX(-130%); transition:transform .6s ease; pointer-events:none;
+    }
+    .product-wrapper .buy-button:hover::before{ transform:rotate(22deg) translateX(260%); }
+    .product-wrapper .buy-button::after{
+      content:'›'; position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      font-weight:700; opacity:.8; transition:transform .18s ease;
+    }
+    .product-wrapper .buy-button:hover::after{ transform:translate(4px, -50%); }
+    .product-wrapper .buy-button.add::after{ content:'🛒'; font-size:1.05em; }
+    .product-wrapper{ position:relative; }
+    .product-wrapper h2{
+      margin:22px 12px 8px;
+      text-align:center; font-size:1.06rem; line-height:1.25;
+      height:calc(1.25em * 3);
+      overflow:hidden; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+    }
+      /* Contact modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:1000;padding:20px}
+    .modal.open{display:flex}
+    .modal__card{background:#fff;width:min(440px,90vw);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.25);border:1px solid #e6e6e6}
+    .modal__header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #eee}
+    .modal__header h2{margin:0;font-size:1rem;letter-spacing:.03em;text-transform:uppercase;color:#1e293b}
+    .modal__close{background:transparent;border:0;font-size:22px;cursor:pointer;color:#64748b}
+    .modal__body{padding:14px}
+    .modal .field{margin-bottom:12px}
+    .modal label{display:block;font-weight:600;margin-bottom:6px;color:#334155}
+    .modal input,.modal textarea{width:100%;box-sizing:border-box;display:block;padding:8px 10px;border:1px solid #d6d6d6;border-radius:8px;font-size:15px}
+    .modal textarea{min-height:120px;resize:vertical}
+    .modal__actions{display:flex;gap:12px;justify-content:flex-end;padding:12px 14px;border-top:1px solid #eee}
+    .modal .btn{border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}
+    .modal .btn-secondary{background:#e5e7eb;color:#111827}
+    .modal .btn-primary{background:#0f3b63;color:#fff}
+    .modal .success{display:none;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;padding:8px 10px;border-radius:8px;margin-top:10px}
+  
+  /* FINAL overrides — keep these as the last CSS rules in <style> */
+.product-wrapper .buy-button.disabled{
+  background:#9aa3af; color:#fff; cursor:default; box-shadow:none; opacity:.85;
+}
+.product-wrapper .buy-button.disabled::after{ content:''; }  /* kills › or 🛒 */
+.product-wrapper a.buy-button.disabled{ pointer-events:none; } /* for <a> View */
+.product-wrapper .buy-button.disabled:hover{ transform:none; filter:none; }
+
+    /* extra lock for disabled buttons/links */
+.product-wrapper .buy-button.disabled::before{ display:none; }  /* hide shiny sweep */
+.product-wrapper a.buy-button.disabled{ cursor:default; }       /* no hand cursor */
+    
+  </style>
+</head>
+<body class="list-page">
+  <div class="main-wrapper">
+    <nav>
+      <a href="index.html">
+        <img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" />
+      </a>
+      <a href="games.html">Games</a>
+      <a href="toys.html"></a>
+      <a href="coins.html"></a>
+      <a href="comics.html"></a>
+      <a href="cards.html"></a>
+      <a href="other.html"></a>
+      <a href="cart/cart.html">Cart <span id="cart-count" class="muted"></span></a>
+    </nav>
+
+    <main>
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Search games…" />
+      </div>
+      <div class="products">
+        <div class="product-wrapper" data-title="PS2 - Used - Guitar Hero II (Used)">
+          <h2>PS2 / Used<br>Guitar Hero II<br></h2>
+          <img src="assets/220001/Capture.JPG" alt="Guitar Hero II">
+          <div class="price-box">
+            <div><strong>Price:</strong> $12.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220001.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220001"
+            data-title="PS2 - Guitar Hero II (Used)"
+            data-price="12.99"
+            data-image="assets/220001/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+
+        <div class="product-wrapper" data-title="PS2 - Used - Baldur's Gate: Dark Alliance (Used)">
+          <h2>PS2 / Used<br>Baldur's Gate:<br>Dark Alliance</h2>
+          <img src="assets/220002/Capture.JPG" alt="Baldur's Gate: Dark Alliance">
+          <div class="price-box">
+            <div><strong>Price:</strong> $19.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220002.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220002"
+            data-title="PS2 - Baldur's Gate: Dark Alliance (Used)"
+            data-price="19.99"
+            data-image="assets/220002/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+
+        <div class="product-wrapper" data-title="PS2 - Used - Final Fantasy XII (Used)">
+          <h2>PS2 / Used<br>Final Fantasy XII<br></h2>
+          <img src="assets/220003/Capture.JPG" alt="Final Fantasy XII">
+          <div class="price-box">
+            <div><strong>Price:</strong> $16.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220003.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220003"
+            data-title="PS2 - Final Fantasy XII (Used)"
+            data-price="16.99"
+            data-image="assets/220003/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Activision Anthology">
+          <h2>PS2 / Used<br>Activision Anthology<br></h2>
+          <img src="assets/220004/Capture.JPG" alt="Activision Anthology">
+          <div class="price-box">
+            <div><strong>Price:</strong> $14.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220004.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220004"
+            data-title="PS2 - Activision Anthology (Used)"
+            data-price="14.99"
+            data-image="assets/220004/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Tiger Woods PGA Tour 07 (Used)">
+          <h2>PS2 / Used<br>Tiger Woods PGA Tour 07<br></h2>
+          <img src="assets/220005/Capture.JPG" alt="Tiger Woods PGA Tour 07">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220005.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220005"
+            data-title="PS2 - Tiger Woods PGA Tour 07 (Used)"
+            data-price="11.99"
+            data-image="assets/220005/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Wheel of Fortune (Used)">
+          <h2>PS2 / Used<br>Wheel of Fortune<br></h2>
+          <img src="assets/220006/Capture.JPG" alt="Wheel of Fortune">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220006.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220006"
+            data-title="PS2 - Wheel of Fortune (Used)"
+            data-price="11.99"
+            data-image="assets/220006/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Sega Bass Fishing Duel (Used)">
+          <h2>PS2 / Used<br>Sega Bass Fishing Duel<br></h2>
+          <img src="assets/220007/Capture.JPG" alt="Sega Bass Fishing Duel">
+          <div class="price-box">
+            <div><strong>Price:</strong> $12.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220007.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220007"
+            data-title="PS2 - Sega Bass Fishing Duel (Used)"
+            data-price="12.99"
+            data-image="assets/220007/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Midway Arcade Treasures (Used)">
+          <h2>PS2 / Used<br>Midway Arcade Treasures<br></h2>
+          <img src="assets/220008/Capture.JPG" alt="Midway Arcade Treasures">
+          <div class="price-box">
+            <div><strong>Price:</strong> $14.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220008.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220008"
+            data-title="PS2 - Midway Arcade Treasures (Used)"
+            data-price="14.99"
+            data-image="assets/220008/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - World Soccer Winning Eleven 9 (Used)">
+          <h2>PS2 / Used<br>World Soccer Winning Eleven 9<br></h2>
+          <img src="assets/220009/Capture.JPG" alt="World Soccer Winning Eleven 9">
+          <div class="price-box">
+            <div><strong>Price:</strong> $16.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220009.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220009"
+            data-title="PS2 - World Soccer Winning Eleven 9 (Used)"
+            data-price="16.99"
+            data-image="assets/220009/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Pride FC Fighting Championships (Used)">
+          <h2>PS2 / Used<br>Pride FC Fighting Championships<br></h2>
+          <img src="assets/220010/Capture.JPG" alt="Pride FC Fighting Championships">
+          <div class="price-box">
+            <div><strong>Price:</strong> $16.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220010.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220010"
+            data-title="PS2 - Pride FC Fighting Championships (Used)"
+            data-price="16.99"
+            data-image="assets/220010/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - WC Poker 2 (Used)">
+          <h2>PS2 / Used<br>WC Poker 2<br></h2>
+          <img src="assets/220011/Capture.JPG" alt="WC Poker 2">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220011.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220011"
+            data-title="PS2 - WC Poker 2 (Used)"
+            data-price="11.99"
+            data-image="assets/220011/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - ProStroke Golf World Tour 2007 (Used)">
+          <h2>PS2 / Used<br>ProStroke Golf World Tour 2007<br></h2>
+          <img src="assets/220012/Capture.JPG" alt="ProStroke Golf World Tour 2007">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220012.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220012"
+            data-title="PS2 - ProStroke Golf World Tour 2007 (Used)"
+            data-price="11.99"
+            data-image="assets/220012/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - WC Pool 2004 (Used)">
+          <h2>PS2 / Used<br>WC Pool 2004<br></h2>
+          <img src="assets/220013/Capture.JPG" alt="WC Pool 2004">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220013.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220013"
+            data-title="PS2 - WC Pool 2004 (Used)"
+            data-price="11.99"
+            data-image="assets/220013/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - G1 Jockey 3 (Used)">
+          <h2>PS2 / Used<br>G1 Jockey 3<br></h2>
+          <img src="assets/220014/Capture.JPG" alt="G1 Jockey 3">
+          <div class="price-box">
+            <div><strong>Price:</strong> $12.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220014.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220014"
+            data-title="PS2 - G1 Jockey 3 (Used)"
+            data-price="12.99"
+            data-image="assets/220014/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Gauntlet Dark Legacy (Used)">
+          <h2>PS2 / Used<br>Gauntlet Dark Legacy<br></h2>
+          <img src="assets/220015/Capture.JPG" alt="Gauntlet Dark Legacy">
+          <div class="price-box">
+            <div><strong>Price:</strong> $39.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220015.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220015"
+            data-title="PS2 - Gauntlet Dark Legacy (Used)"
+            data-price="39.99"
+            data-image="assets/220015/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - NHL Hitz 2003 (Used)">
+          <h2>PS2 / Used<br>NHL Hitz 2003<br></h2>
+          <img src="assets/220016/Capture.JPG" alt="NHL Hitz 2003">
+          <div class="price-box">
+            <div><strong>Price:</strong> $34.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220016.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220016"
+            data-title="PS2 - NHL Hitz 2003 (Used)"
+            data-price="34.99"
+            data-image="assets/220016/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Namco Museum (Used)">
+          <h2>PS2 / Used<br>Namco Museum<br></h2>
+          <img src="assets/220017/Capture.JPG" alt="Namco Museum">
+          <div class="price-box">
+            <div><strong>Price:</strong> $14.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220017.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220017"
+            data-title="PS2 - Namco Museum (Used)"
+            data-price="14.99"
+            data-image="assets/220017/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Cabela's Big Game Hunter (2002) (Used)">
+          <h2>PS2 / Used<br>Cabela's Big Game Hunter (2002)<br></h2>
+          <img src="assets/220018/Capture.JPG" alt="Cabela's Big Game Hunter (2002)">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220018.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220018"
+            data-title="PS2 - Cabela's Big Game Hunter (2002) (Used)"
+            data-price="11.99"
+            data-image="assets/220018/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Rapala Pro Fishing (Used)">
+          <h2>PS2 / Used<br>Rapala Pro Fishing<br></h2>
+          <img src="assets/220019/Capture.JPG" alt="Rapala Pro Fishing">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220019.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220019"
+            data-title="PS2 - Rapala Pro Fishing (Used)"
+            data-price="11.99"
+            data-image="assets/220019/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Guitar Hero Aerosmith (Used)">
+          <h2>PS2 / Used<br>Guitar Hero Aerosmith<br></h2>
+          <img src="assets/220020/Capture.JPG" alt="Guitar Hero Aerosmith">
+          <div class="price-box">
+            <div><strong>Price:</strong> $12.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220020.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220020"
+            data-title="PS2 - Guitar Hero Aerosmith (Used)"
+            data-price="12.99"
+            data-image="assets/220020/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Guitar Hero Encore Rocks the 80's (Used)">
+          <h2>PS2 / Used<br>Guitar Hero Encore Rocks the 80's<br></h2>
+          <img src="assets/220021/Capture.JPG" alt="Guitar Hero Encore Rocks the 80's">
+          <div class="price-box">
+            <div><strong>Price:</strong> $12.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220021.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220021"
+            data-title="PS2 - Guitar Hero Encore Rocks the 80's (Used)"
+            data-price="12.99"
+            data-image="assets/220021/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Champions Return to Arms (Used)">
+          <h2>PS2 / Used<br>Champions Return to Arms<br></h2>
+          <img src="assets/220022/Capture.JPG" alt="Champions Return to Arms">
+          <div class="price-box">
+            <div><strong>Price:</strong> $49.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220022.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220022"
+            data-title="PS2 - Champions Return to Arms (Used)"
+            data-price="49.99"
+            data-image="assets/220022/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		<div class="product-wrapper" data-title="PS2 - Used - Chessmaster (Used)">
+          <h2>PS2 / Used<br>Chessmaster<br></h2>
+          <img src="assets/220023/Capture.JPG" alt="Chessmaster">
+          <div class="price-box">
+            <div><strong>Price:</strong> $11.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220023.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220023"
+            data-title="PS2 - Chessmaster (Used)"
+            data-price="11.99"
+            data-image="assets/220023/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+				
+		<div class="product-wrapper" data-title="PS2 - Used - Champions of Norrath (Used)">
+          <h2>PS2 / Used<br>Champions of Norrath<br></h2>
+          <img src="assets/220024/Capture.JPG" alt="Champions of Norrath">
+          <div class="price-box">
+            <div><strong>Price:</strong> $39.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220024.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220024"
+            data-title="PS2 - Champions of Norrath (Used)"
+            data-price="39.99"
+            data-image="assets/220024/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+				
+		<div class="product-wrapper" data-title="PS2 - Used - Baldur's Gate Dark Alliance II (Used)">
+          <h2>PS2 / Used<br>Baldur's Gate Dark Alliance II<br></h2>
+          <img src="assets/220025/Capture.JPG" alt="Baldur's Gate Dark Alliance II">
+          <div class="price-box">
+            <div><strong>Price:</strong> $45.99 CAD</div>
+          </div>
+          <a class="buy-button" href="220025.html">View Item</a>
+          <button class="buy-button add"
+            data-id="220025"
+            data-title="PS2 - Baldur's Gate Dark Alliance II (Used)"
+            data-price="45.99"
+            data-image="assets/220025/Capture.JPG">
+            Add to Cart
+          </button>
+        </div>
+		
+		
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | <a href="contact.html" id="contact-open" class="footer-link">Contact</a></p>
+  </footer>
+
+  <script src="cart/cart.js" defer></script>
+  <script>
+    const q = document.getElementById('q');
+    const cards = [...document.querySelectorAll('.product-wrapper')];
+    function normalize(s){ return s.toLowerCase(); }
+    q.addEventListener('input', ()=>{
+      const text = normalize(q.value);
+      cards.forEach(card => {
+        const title = normalize(card.dataset.title);
+        card.style.display = !text || title.includes(text) ? '' : 'none';
+      });
+    });
+
+    (function(){
+      const KEY='tpf_cart';
+      function badge(){
+        const el=document.getElementById('cart-count'); if(!el) return;
+        let items=[]; try{ items=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{}
+        const count=items.reduce((n,i)=>n+i.qty,0);
+        el.textContent = count ? `(${count})` : '';
+      }
+      function fallbackAdd(item){
+        let cart=[]; try{ cart=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{}
+        const ex=cart.find(i=>i.id===item.id);
+        if(ex){ ex.qty=Math.min((ex.maxQty||99), ex.qty+item.qty); }
+        else { cart.push(item); }
+        localStorage.setItem(KEY, JSON.stringify(cart));
+        badge();
+      }
+      badge();
+      document.querySelectorAll('.add').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const item = {
+            id: btn.dataset.id,
+            title: btn.dataset.title,
+            priceCents: Math.round(parseFloat(btn.dataset.price)*100),
+            image: btn.dataset.image,
+            qty: 1,
+            maxQty: 1
+          };
+          if (window.addToCart) window.addToCart(item); else fallbackAdd(item);
+          btn.textContent='Added ✓';
+          setTimeout(()=>btn.textContent='Add to Cart', 900);
+        });
+      });
+      window.tpfBadge = badge;
+    })();
+  </script>
+
+<!-- Sold lockout: read /api/products and disable buttons for sold items -->
+<script>
+  (async function soldLock(){
+    try{
+      const res = await fetch('http://127.0.0.1:4242/api/products', { cache: 'no-store' }); // deploy = fetch('/api/products')
+      if(!res.ok) return; // server not running? skip
+      const products = await res.json();
+      const byId = Object.fromEntries(products.map(p => [String(p.id), p]));
+
+      document.querySelectorAll('.product-wrapper').forEach(card => {
+        const addBtn = card.querySelector('.buy-button.add');
+        if(!addBtn) return;
+        const id = String(addBtn.dataset.id || '');
+        const prod = byId[id];
+        if(!prod) return;
+
+       if (prod.sold) {
+        // disable Add to Cart button
+      addBtn.disabled = true;
+      addBtn.setAttribute('aria-disabled','true');   
+      addBtn.classList.add('disabled');   // ← add this line
+      addBtn.textContent = 'Sold';
+      addBtn.classList.remove('add');
+
+          // disable View Item link
+          const view = card.querySelector('a.buy-button[href]');
+          if (view) {
+            view.textContent = 'View (Sold)';
+            view.classList.add('disabled');
+            view.removeAttribute('href');
+            view.setAttribute('aria-disabled','true');
+            view.setAttribute('tabindex','-1');
+          }
+
+          card.style.opacity = 0.9; // subtle visual cue
+        }
+      });
+    } catch(e) {
+      // ignore for local dev
+    }
+  })();
+</script>
+
+
+  <!-- Contact Modal (games.html) -->
+  <div id="contact-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="contact-title" hidden>
+    <div class="modal__card">
+      <div class="modal__header">
+        <h2 id="contact-title">Send an email to Top Pocket Find</h2>
+        <button class="modal__close" aria-label="Close">×</button>
+      </div>
+      <form id="contact-form" class="modal__body">
+        <div class="field">
+          <label for="ct-name">Name *</label>
+          <input id="ct-name" type="text" required />
+        </div>
+        <div class="field">
+          <label for="ct-email">Email *</label>
+          <input id="ct-email" type="email" required />
+        </div>
+        <div class="field">
+          <label for="ct-phone">Phone</label>
+          <input id="ct-phone" type="text" />
+        </div>
+        <div class="field">
+          <label for="ct-msg">Message *</label>
+          <textarea id="ct-msg" required></textarea>
+          <div id="ct-ok" class="success">Opening your email app… If nothing opens, email <strong>leblancri@rogers.com</strong> manually.</div>
+        </div>
+        <div class="modal__actions">
+          <button type="button" class="btn btn-secondary" id="contact-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const openLink=document.getElementById('contact-open');
+      const modal=document.getElementById('contact-modal');
+      if(openLink && modal){
+        const closeBtn=modal.querySelector('.modal__close');
+        const cancelBtn=document.getElementById('contact-cancel');
+        function open(){ modal.classList.add('open'); modal.removeAttribute('hidden'); document.body.style.overflow='hidden'; }
+        function close(){ modal.classList.remove('open'); modal.setAttribute('hidden',''); document.body.style.overflow=''; }
+        openLink.addEventListener('click', (e)=>{ e.preventDefault(); open(); });
+        closeBtn.addEventListener('click', close);
+        cancelBtn.addEventListener('click', close);
+        modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
+        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) close(); });
+
+        // mailto on submit
+        document.getElementById('contact-form').addEventListener('submit', (e)=>{
+          e.preventDefault();
+          const name=document.getElementById('ct-name').value.trim();
+          const email=document.getElementById('ct-email').value.trim();
+          const phone=document.getElementById('ct-phone').value.trim();
+          const msg=document.getElementById('ct-msg').value.trim();
+          if(!name||!email||!msg) return;
+          const to='leblancri@rogers.com';
+          const subject=encodeURIComponent(`TPF Contact — ${name}`);
+          const body=encodeURIComponent(`Name: ${name}
+Email: ${email}
+Phone: ${phone || '—'}
+
+Message:
+${msg}
+
+— Sent from toppocketfind (games modal)`);
+          document.getElementById('ct-ok').style.display='block';
+          window.location.href=`mailto:${to}?subject=${subject}&body=${body}`;
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
