@@ -8,6 +8,8 @@
   <style>
 /* page background */
 body.cart-page{background:#FFF8DC;}
+/* remove the blue panel from base theme on cart */
+.cart-page .main-wrapper, .cart-page main{ background:transparent !important; }
 
 /* Cart page styles (v2 polish) */
 body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:0 16px;}
@@ -42,9 +44,7 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:0 16px;}
 <body class="cart-page">
   <div class="main-wrapper">
     <main>
-      <button onclick="window.location.href='/games.html'" class="btn secondary" style="margin-bottom:16px;">← Back to Games</button>
-      <h1>Your Cart</h1>
-      <div class="cart">
+      <button onclick="window.location.href='/games.html'" class="btn secondary" style="margin-bottom:16px;">← Back to Games</button><div class="cart">
         <section>
           <div id="empty" class="muted">Your cart is empty.</div>
           <div id="list" style="display:none; display:grid; gap:12px"></div>
