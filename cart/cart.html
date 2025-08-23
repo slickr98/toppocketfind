@@ -6,14 +6,40 @@
   <title>Cart — Top Pocket Find</title>
   <link rel="stylesheet" href="/css/style.css" />
   <style>
-  /* Keep page-specific minimal styles only */
-  .pill{display:inline-block;background:#0a457a;color:#fff;border-radius:999px;padding:3px 10px;font-size:.85rem}
+/* Cart page styles (v2 polish) */
+body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:0 16px;}
+.cart{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;}
+@media (max-width:900px){ .cart{grid-template-columns:1fr;} }
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid #0a457a;background:#ffd814;color:#111;font-weight:700;cursor:pointer;box-shadow:0 2px 0 #af8a00;transition:.15s transform;}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:translateY(0)}
+.btn.secondary{background:#0a457a;color:#fff;border-color:#0a457a;box-shadow:none}
+
+/* Items */
+#list{display:grid;gap:12px}
+.item{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px 16px;}
+.item .title{font-weight:600}
+.item .qty{display:inline-flex;gap:6px;align-items:center;margin-top:6px}
+.item .qty button{min-width:28px;height:28px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer}
+.item .remove-btn{margin-left:8px;border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer}
+
+.muted{color:#6b7280}
+
+/* Summary card */
+.summary{position:sticky;top:24px;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;box-shadow:0 6px 24px rgba(0,0,0,.08)}
+.summary .row{display:flex;justify-content:space-between;margin:8px 0}
+.summary .actions{display:flex;gap:10px;margin-top:12px}
+
+/* Badges */
+.pill{display:inline-block;background:#0a457a;color:#fff;border-radius:999px;padding:3px 10px;font-size:.85rem}
 </style>
 </head>
 <body class="cart-page">
   <div class="main-wrapper">
     <main>
-      <button onclick="window.location.href='/index.html'" class="btn secondary" style="margin-bottom:16px;">← Back to Home</button>
+      <button onclick="window.location.href='/games.html'" class="btn secondary" style="margin-bottom:16px;">← Back to Games</button>
       <h1>Your Cart</h1>
       <div class="cart">
         <section>
@@ -82,9 +108,33 @@
     }
     document.getElementById('clear').addEventListener('click', ()=>{ set([]); render(); });
     document.getElementById('checkout').addEventListener('click', async (e) => {
-      const btn = e.currentTarget; 
-      const KEY='tpf_cart';
-      let items=[]; try{ items=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{}
+  e.preventDefault();
+  const btn = e.currentTarget;
+
+  // Pause checkout on non-localhost (live site)
+  if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+    alert('Checkout is paused while we finish v2. Thanks!');
+    return;
+  }
+
+  let items=[]; try{ items=JSON.parse(localStorage.getItem('tpf_cart')||'[]'); }catch{}
+  if(!items.length){ alert('Your cart is empty.'); return; }
+
+  btn.disabled = true; const old=btn.textContent; btn.textContent='Redirecting…';
+  try{
+    const res = await fetch('http://127.0.0.1:4242/create-checkout-session', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ items: items.map(i => ({ title:i.title, priceCents:i.priceCents, qty:i.qty })) })
+    });
+    const data = await res.json();
+    if(data && data.url){ window.location = data.url; }
+    else{ throw new Error('No URL from server'); }
+  }catch(err){
+    console.error(err);
+    alert('Could not start checkout. Is the Stripe server running on port 4242?');
+    btn.disabled=false; btn.textContent=old;
+  }
+}); }catch{}
       if(!items.length){ alert('Your cart is empty.'); return; }
       btn.disabled = true; const old=btn.textContent; btn.textContent='Redirecting…';
       try{
