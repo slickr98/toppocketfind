@@ -1,0 +1,258 @@
+<!-- 220006.html - Product detail cloned from 220001 with updated data -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wheel of Fortune (PS2) – Top Pocket Find</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body.detail-page main{ align-items:flex-start; justify-content:center; padding:16px 0; display:flex; }
+    .product-card{ background:#fff8dc; border-radius:12px; padding:16px; width:min(860px, 92%); margin:0 auto; box-shadow:0 4px 12px rgba(0,0,0,.06); text-align:center; }
+    .product-card h1{ margin:.25rem 0 1rem; font-size:1.35rem; color:#0a457a; }
+    .gallery{display:flex;flex-direction:column;gap:.75rem;align-items:center}
+    .hero{width:clamp(280px,80vw,560px);max-height:560px;object-fit:contain;border-radius:12px;background:#fff;padding:.5rem;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+    .thumbs{display:flex;gap:12px;justify-content:center;margin-top:10px;flex-wrap:wrap;max-width:clamp(280px,80vw,560px);margin-left:auto;margin-right:auto}
+    .thumbs img{ width:80px; height:80px; object-fit:cover; border-radius:8px; cursor:pointer; border:2px solid transparent; }
+    .thumbs img:hover{ border-color:#0a457a; }
+    .thumbs img.active{border-color:#0a457a;box-shadow:0 0 0 3px rgba(10,69,122,.12)}
+    .meta{ margin:.8rem 0; line-height:1.45; }
+    .price-row{display:grid;grid-template-columns:repeat(3,auto);gap:1rem 1.25rem;justify-content:center;align-items:center;font-weight:700}
+    .buy-button{ display:inline-block; text-align:center; text-decoration:none; padding:14px 24px; font-size:1.05rem; border-radius:10px; font-weight:600; cursor:pointer; border:none; position:relative; overflow:hidden; box-shadow:0 2px 0 rgba(0,0,0,.08); transition:filter .15s, transform .02s; }
+    .buy-button:hover{ filter:brightness(1.05); transform:translateY(-1px); }
+    .buy-button:active{ transform:translateY(0); }
+    .buy-button.add{ background:#FFD814; color:#111; border:1px solid #F0C14B; box-shadow:0 2px 0 #F0C14B; }
+    .buy-button.add:hover{ background:#F7CA00; }
+    .buy-button.add::after{ content:' 🛒'; font-size:1.05em; }
+    .buy-button.buy-now{ background:#0a457a; color:#fff; } .action-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:clamp(280px,80vw,560px);margin:0 auto;}
+    .buy-button.buy-now::after{ content:'›'; position:absolute; right:12px; top:50%; transform:translateY(-50%); font-weight:700; opacity:.8; transition:transform .18s ease; }
+    .buy-button.buy-now:hover::after{ transform:translate(4px, -50%); }
+    @media (max-width: 768px){ .product-card{ width:94%; } .hero{ max-height:420px; } .price-row{ grid-template-columns: 1fr; gap:.35rem; } }
+      /* Contact modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.5);z-index:1000;padding:20px}
+    .modal.open{display:flex}
+    .modal__card{background:#fff;width:min(440px,90vw);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.25);border:1px solid #e6e6e6}
+    .modal__header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #eee}
+    .modal__header h2{margin:0;font-size:1rem;letter-spacing:.03em;text-transform:uppercase;color:#1e293b}
+    .modal__close{background:transparent;border:0;font-size:22px;cursor:pointer;color:#64748b}
+    .modal__body{padding:14px}
+    .modal .field{margin-bottom:12px}
+    .modal label{display:block;font-weight:600;margin-bottom:6px;color:#334155}
+    .modal input,.modal textarea{width:100%;box-sizing:border-box;display:block;padding:8px 10px;border:1px solid #d6d6d6;border-radius:8px;font-size:15px}
+    .modal textarea{min-height:120px;resize:vertical}
+    .modal__actions{display:flex;gap:12px;justify-content:flex-end;padding:12px 14px;border-top:1px solid #eee}
+    .modal .btn{border:0;border-radius:10px;padding:10px 16px;font-weight:700;cursor:pointer}
+    .modal .btn-secondary{background:#e5e7eb;color:#111827}
+    .modal .btn-primary{background:#0f3b63;color:#fff}
+    .modal .success{display:none;color:#065f46;background:#ecfdf5;border:1px solid #a7f3d0;padding:8px 10px;border-radius:8px;margin-top:10px}
+      /* Simple image lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;z-index:2000;padding:24px}
+    .lightbox.open{display:flex}
+    .lightbox img{max-width:96vw;max-height:96vh;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+  </style>
+</head>
+<body class="detail-page">
+  <div class="main-wrapper">
+    <nav>
+      <a href="index.html"><img src="assets/pocket-logo.png" alt="Top Pocket Find Logo" /></a>
+      <a href="games.html">Games</a>
+      <a href="toys.html"></a>
+      <a href="coins.html"></a>
+      <a href="comics.html"></a>
+      <a href="cards.html"></a>
+      <a href="other.html"></a>
+      <a href="cart/cart.html">Cart <span id="cart-count" class="muted"></span></a>
+    </nav>
+
+    <main>
+      <article class="product-card" aria-labelledby="title">
+        <h1 id="title">Wheel of Fortune (PS2) – Used</h1>
+        <figure class="gallery">
+          <img id="main-image" class="hero" src="assets/220006/1.jpg" alt="Wheel of Fortune front cover">
+          <div class="thumbs">
+            <img class="active" src="assets/220006/1.jpg" alt="Front" data-full="assets/220006/1.jpg">
+            <img src="assets/220006/2.jpg" alt="Back" data-full="assets/220006/2.jpg">
+            <img src="assets/220006/3.jpg" alt="Disc" data-full="assets/220006/3.jpg">
+            <img src="assets/220006/4.jpg" alt="Manual" data-full="assets/220006/4.jpg">
+          </div>
+        </figure>
+        <div class="meta">
+          <div class="price-row">
+            <div>Price: $11.99 CAD</div>
+            <div>Shipping: $14.50 CAD</div>
+            <div>Total: $26.49 CAD</div>
+          </div>
+          <p><strong>Condition:</strong> Includes case, manual & disc in great condition.</p>
+          <p><strong>Shipping:</strong> We currently ship <u>only within Canada</u>.</p>
+        </div>
+        <div class="action-row">
+          <button class="buy-button add"
+            data-id="220006"
+            data-title="PS2 - Wheel of Fortune (Used)"
+            data-price="11.99"
+            data-image="assets/220006/1.jpg">
+            Add to Cart
+          </button>
+          <a href="cart/cart.html" id="buy-now" class="buy-button buy-now">Buy Now</a>
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Top Pocket Find. All rights reserved. | Privacy | Terms | <a href="contact.html" id="contact-open" class="footer-link">Contact</a></p>
+  </footer>
+
+  <script src="cart/cart.js" defer></script>
+  <script>
+  (function(){
+    const hero=document.getElementById('main-image');
+    const thumbs=document.querySelectorAll('.thumbs img');
+    if(hero && thumbs.length){
+      thumbs.forEach(t=>{
+        t.addEventListener('click',()=>{
+          const full=t.getAttribute('data-full');
+          if(full){ hero.src=full; }
+          document.querySelectorAll('.thumbs img.active').forEach(a=>a.classList.remove('active'));
+          t.classList.add('active');
+        });
+      });
+    }
+  })();
+  (function(){
+    const KEY='tpf_cart';
+    function badge(){
+      const el=document.getElementById('cart-count'); if(!el) return;
+      let items=[]; try{ items=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{}
+      const count=items.reduce((n,i)=>n+i.qty,0);
+      el.textContent = count ? `(${count})` : '';
+    }
+    function addOrUpdate(item){
+      let cart=[]; try{ cart=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch{}
+      const ex=cart.find(i=>i.id===item.id);
+      if(ex){ ex.qty=Math.min((ex.maxQty||99), (ex.qty||0)+item.qty); }
+      else { cart.push(item); }
+      localStorage.setItem(KEY, JSON.stringify(cart));
+      badge();
+    }
+    function buildItemFrom(el){
+      const src = (el && el.dataset && el.dataset.id) ? el : document.querySelector('.add');
+      if(!src) return null;
+      const price = parseFloat(src.dataset.price || '0');
+      return { id: src.dataset.id, title: src.dataset.title, priceCents: Math.round(price*100), image: src.dataset.image, qty: 1, maxQty: 1 };
+    }
+    function addItemFromEl(el){
+      const item = buildItemFrom(el);
+      if(item) addOrUpdate(item);
+    }
+    badge();
+    document.querySelectorAll('.add').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        addItemFromEl(btn);
+        btn.textContent='Added ✓';
+        setTimeout(()=>btn.textContent='Add to Cart', 900);
+      });
+    });
+    const buyNow=document.getElementById('buy-now');
+    if(buyNow){
+      buyNow.addEventListener('click', (e)=>{
+        e.preventDefault();
+        addItemFromEl(buyNow);
+        window.location.href='cart/cart.html';
+      });
+    }
+  })();
+  </script>
+  
+  <!-- Contact Modal (product page) -->
+  <div id="contact-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="contact-title" hidden>
+    <div class="modal__card">
+      <div class="modal__header">
+        <h2 id="contact-title">Send an email to Top Pocket Find</h2>
+        <button class="modal__close" aria-label="Close">×</button>
+      </div>
+      <form id="contact-form" class="modal__body">
+        <div class="field">
+          <label for="ct-name">Name *</label>
+          <input id="ct-name" type="text" required />
+        </div>
+        <div class="field">
+          <label for="ct-email">Email *</label>
+          <input id="ct-email" type="email" required />
+        </div>
+        <div class="field">
+          <label for="ct-phone">Phone</label>
+          <input id="ct-phone" type="text" />
+        </div>
+        <div class="field">
+          <label for="ct-msg">Message *</label>
+          <textarea id="ct-msg" required></textarea>
+          <div id="ct-ok" class="success">Opening your email app… If nothing opens, email <strong>leblancri@rogers.com</strong> manually.</div>
+        </div>
+        <div class="modal__actions">
+          <button type="button" class="btn btn-secondary" id="contact-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const openLink=document.getElementById('contact-open');
+      const modal=document.getElementById('contact-modal');
+      if(openLink && modal){
+        const closeBtn=modal.querySelector('.modal__close');
+        const cancelBtn=document.getElementById('contact-cancel');
+        function open(){ modal.classList.add('open'); modal.removeAttribute('hidden'); document.body.style.overflow='hidden'; }
+        function close(){ modal.classList.remove('open'); modal.setAttribute('hidden',''); document.body.style.overflow=''; }
+        openLink.addEventListener('click', (e)=>{ e.preventDefault(); open(); });
+        closeBtn.addEventListener('click', close);
+        cancelBtn.addEventListener('click', close);
+        modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
+        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) close(); });
+
+        document.getElementById('contact-form').addEventListener('submit', (e)=>{
+          e.preventDefault();
+          const name=document.getElementById('ct-name').value.trim();
+          const email=document.getElementById('ct-email').value.trim();
+          const phone=document.getElementById('ct-phone').value.trim();
+          const msg=document.getElementById('ct-msg').value.trim();
+          if(!name||!email||!msg) return;
+          const to='leblancri@rogers.com';
+          const subject=encodeURIComponent(`TPF Contact — ${name}`);
+          const body=encodeURIComponent(`Name: ${name}
+Email: ${email}
+Phone: ${phone || '—'}
+
+Message:
+${msg}
+
+— Sent from toppocketfind (product modal 220006)`);
+          document.getElementById('ct-ok').style.display='block';
+          window.location.href=`mailto:${to}?subject=${subject}&body=${body}`;
+        });
+      }
+    })();
+  </script>
+  
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" hidden>
+    <img alt="Full-size view" />
+  </div>
+
+  <script>
+    // Hero click → open full-size lightbox
+    (function(){
+      const hero=document.getElementById('main-image');
+      const lb=document.getElementById('lightbox');
+      const lbImg=lb.querySelector('img');
+      function open(src){ lbImg.src=src; lb.classList.add('open'); lb.removeAttribute('hidden'); document.body.style.overflow='hidden'; }
+      function close(){ lb.classList.remove('open'); lb.setAttribute('hidden',''); document.body.style.overflow=''; }
+      if(hero){ hero.style.cursor='zoom-in'; hero.addEventListener('click', ()=> open(hero.src)); }
+      lb.addEventListener('click', close);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) close(); });
+    })();
+  </script>
+</body>
+</html>
