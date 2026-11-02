@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Top Pocket Find | Workshop</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top, #25445a, #0d1724 65%); color: #f4f7fb; }
+    main { width: min(100%, 440px); text-align: center; padding: 42px 30px; border: 1px solid #506274; border-radius: 18px; background: #101e2edb; box-shadow: 0 20px 70px #0006; }
+    .mark { font-size: 44px; margin-bottom: 12px; }
+    h1 { font-size: clamp(28px, 7vw, 38px); margin: 0 0 8px; }
+    p { color: #b7c6d4; line-height: 1.55; margin: 0 0 25px; }
+    label { display: block; text-align: left; font-size: 13px; margin-bottom: 8px; color: #dce6f0; }
+    input, button { width: 100%; border-radius: 9px; min-height: 46px; font: inherit; }
+    input { padding: 0 14px; border: 1px solid #71849a; background: #0b1725; color: white; }
+    input:focus { outline: 2px solid #7abbeb; outline-offset: 2px; }
+    button { margin-top: 13px; border: 0; background: #e3b95e; color: #142333; font-weight: 750; cursor: pointer; }
+    button:hover { background: #f1cc7c; }
+    #error { color: #ffb5b5; min-height: 22px; font-size: 13px; margin: 10px 0 0; }
+    #workshop { text-align: left; }
+    #workshop h2 { margin-top: 0; }
+    #workshop a { display: block; padding: 12px; color: #f5cc78; border-bottom: 1px solid #42546a; }
+    #workshop button { background: transparent; border: 1px solid #71849a; color: white; margin-top: 24px; }
+    [hidden] { display: none !important; }
+    footer { margin-top: 20px; font-size: 12px; color: #91a2b4; }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="login">
+      <div class="mark" aria-hidden="true">🗝️</div>
+      <h1>Top Pocket Find</h1>
+      <p>Something good is in the works.<br>Enter the workshop passphrase to continue.</p>
+      <form id="entry-form">
+        <label for="password">Workshop passphrase</label>
+        <input id="password" type="password" autocomplete="off" required autofocus>
+        <button type="submit">Enter Workshop</button>
+        <div id="error" role="status" aria-live="polite"></div>
+      </form>
+      <footer>Private development preview</footer>
+    </section>
+    <section id="workshop" hidden>
+      <h2>Welcome to the workshop</h2>
+      <p>Our storefront is being rebuilt. Existing pages remain available here for testing.</p>
+      <a href="games.html">Browse games</a>
+      <a href="220001.html">View sample product</a>
+      <a href="cart/cart.html">View shopping cart</a>
+      <button id="lock" type="button">Lock this browser session</button>
+    </section>
+  </main>
+  <script>
+    // This is a casual visitor gate ONLY. GitHub Pages is static hosting:
+    // page HTML, images and files remain publicly accessible by direct URL.
+    // Do not use this to protect personal data, credentials or secrets.
+    const expectedHash = "8d81030723c06aabfd0e3752a5acb42723d5041c0338098bc72a2f6543739db7";
+    const login = document.getElementById("login");
+    const workshop = document.getElementById("workshop");
+    const error = document.getElementById("error");
+    function showWorkshop() { login.hidden = true; workshop.hidden = false; }
+    if (sessionStorage.getItem("tpf-workshop") === "yes") showWorkshop();
+    document.getElementById("entry-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const value = document.getElementById("password").value;
+      const bytes = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      const hash = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
+      if (hash === expectedHash) {
+        sessionStorage.setItem("tpf-workshop", "yes");
+        document.getElementById("password").value = "";
+        showWorkshop();
+      } else {
+        error.textContent = "That passphrase isn't quite right.";
+      }
+    });
+    document.getElementById("lock").addEventListener("click", () => {
+      sessionStorage.removeItem("tpf-workshop");
+      location.reload();
+    });
+  </script>
+</body>
+</html>
