@@ -3,14 +3,14 @@
     {
       "id": "coin-001",
       "slug": "2013-santa-silver-coins",
-      "title": "2013 $20 Santa Fine Silver Coins — Lot of 3",
+      "title": "2013 $20 Santa Fine Silver Coin",
       "url": "products/2013-santa-silver-coins.html",
-      "status": "price_pending",
+      "status": "available",
       "currency": "CAD",
-      "priceCents": null,
-      "purchasable": false,
-      "quantityAvailable": 1,
-      "coinCount": 3,
+      "priceCents": 5495,
+      "purchasable": true,
+      "quantityAvailable": 3,
+      "coinCount": 1,
       "year": 2013,
       "mint": "Royal Canadian Mint",
       "composition": "99.99% fine silver",
@@ -18,7 +18,7 @@
       "diameterMmPerCoin": 27,
       "faceValueCadPerCoin": 20,
       "grade": null,
-      "includes": "Three pictured coins, protective sleeves and pictured presentation packaging/certificate.",
+      "includes": "One Santa coin in its protective packaging, with one holiday presentation card and accompanying Mint paperwork.",
       "images": [
         {
           "src": "assets/product-001/10-cover-scan-source.jpg",
@@ -150,7 +150,11 @@
         }
       ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---santa-2013",
-      "coverImage": 0
+      "coverImage": 0,
+      "shippingIncluded": true,
+      "shippingCountries": [
+        "CA"
+      ]
     }
   ]
 }

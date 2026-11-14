@@ -48,7 +48,7 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:56px 16px
   <div class="main-wrapper">
     <main>
       <div class="back-row">
-  <button onclick="window.location.href='/games.html'" class="btn secondary">← Back to Games</button>
+  <button onclick="window.location.href='/index.html#collection'" class="btn secondary">← Back to the collection</button>
 </div>
 <div class="cart">
         <section>
@@ -60,8 +60,9 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:56px 16px
           <div class="row"><div>Shipping</div><div id="shipping">$0.00</div></div>
           <hr />
           <div class="row" style="font-weight:700"><div>Total</div><div id="total">$0.00</div></div>
+          <p id="cart-status" class="muted" role="status" aria-live="polite">Loading your bag…</p>
           <div class="actions">
-            <button id="checkout" class="btn">Checkout</button>
+            <button id="checkout" class="btn" disabled>Checkout</button>
             <button id="clear" class="btn secondary">Clear</button>
           </div>
         <div class="muted" style="margin-top:12px"><span class="pill">Canada only</span> — we currently ship within Canada</div>
@@ -70,111 +71,7 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:56px 16px
     </main>
   </div>
 
-  <script>
-(() => {
-  const KEY = 'tpf_cart';
-  const money = (cents)=> (cents/100).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
-  const SHIP_CENTS = 0;
-
-  const $ = (s)=>document.querySelector(s);
-  const list = $('#list');
-  const empty = $('#empty');
-  const elSubtotal = $('#subtotal');
-  const elShipping = $('#shipping');
-  const elTotal = $('#total');
-
-  const get = () => { try{ return JSON.parse(localStorage.getItem(KEY)||'[]'); } catch { return []; } };
-  const set = (items) => localStorage.setItem(KEY, JSON.stringify(items));
-
-  function render(){
-    const items = get();
-
-    if(items.length === 0){
-      list.style.display = 'none';
-      empty.style.display = 'block';
-      elSubtotal.textContent = money(0);
-      elShipping.textContent = money(0);
-      elTotal.textContent = money(0);
-      return;
-    }
-
-    empty.style.display = 'none';
-    list.style.display = 'grid';
-
-    list.innerHTML = items.map(i => `
-      <div class="item" data-id="${i.id}">
-        <div>
-          <div class="title">${i.title}</div>
-          <div class="muted">${money(i.priceCents)}</div>
-          <div class="qty">
-            <button type="button" aria-label="decrease" data-act="dec">−</button>
-            <span>${i.qty}</span>
-            <button type="button" aria-label="increase" data-act="inc" ${i.maxQty===1 && i.qty===1 ? 'disabled' : ''}>+</button>
-            <button type="button" class="remove-btn" data-act="rm">Remove</button>
-          </div>
-        </div>
-        <div style="font-weight:600">${money(i.priceCents*i.qty)}</div>
-      </div>`).join('');
-
-    list.querySelectorAll('.item').forEach(row => {
-      row.addEventListener('click', (e) => {
-        const id = row.dataset.id;
-        const act = e.target.getAttribute('data-act');
-        if(!act) return;
-        const items2 = get();
-        const idx = items2.findIndex(it => it.id === id);
-        if(idx === -1) return;
-        if(act === 'dec') items2[idx].qty = Math.max(0, items2[idx].qty - 1);
-        if(act === 'inc') items2[idx].qty = (items2[idx].maxQty===1 ? 1 : items2[idx].qty + 1);
-        if(act === 'rm') items2[idx].qty = 0;
-        const filtered = items2.filter(it => it.qty > 0);
-        set(filtered);
-        render();
-      });
-    });
-
-    const sub = items.reduce((sum,i)=> sum + (i.priceCents*i.qty), 0);
-    const ship = items.length ? SHIP_CENTS : 0; // flat-rate once per order
-    elSubtotal.textContent = money(sub);
-    elShipping.textContent = money(ship);
-    elTotal.textContent = money(sub + ship);
-  }
-
-  $('#clear').addEventListener('click', () => { set([]); render(); });
-
-  $('#checkout').addEventListener('click', async (e) => {
-    e.preventDefault();
-
-    const items = get();
-    if (!items.length) { alert('Your cart is empty.'); return; }
-
-    try {
-      const res = await fetch('https://tpf-api.onrender.com/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: items.map(i => ({
-            title: i.title,
-            priceCents: i.priceCents,
-            qty: i.qty
-          }))
-        })
-      });
-
-      const data = await res.json();
-      if (data && data.url) {
-        window.location = data.url; // send to Stripe Checkout
-      } else {
-        throw new Error('Bad response from API');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Checkout error. Please try again in a minute.');
-    }
-  });
-
-  render();
-})();
-</script>
+  <script src="../js/shop.js?v=20261114-quantity1" defer></script>
+  <script src="cart-page.js?v=20261114-quantity1" defer></script>
 </body>
 </html>

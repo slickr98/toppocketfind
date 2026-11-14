@@ -1,85 +1,178 @@
-# server/app.py
+import json
 import os
+from pathlib import Path
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import stripe
 
+try:
+    from .inventory import Inventory, OutOfStock
+except ImportError:  # Existing Render start command: gunicorn app:app, root directory server.
+    from inventory import Inventory, OutOfStock
+
 app = Flask(__name__)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024
+ROOT = Path(__file__).resolve().parent.parent
+CATALOG = {item['id']: item for item in json.loads((ROOT / 'api/coins.json').read_text())['products']}
+# Preserve the remaining original game listing with a server-trusted price.
+CATALOG['220025'] = {'id': '220025', 'title': "PS2 - Baldur's Gate Dark Alliance II (Used)",
+                     'priceCents': 4599, 'quantityAvailable': 1, 'purchasable': True}
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY_TEST') or os.getenv('STRIPE_SECRET_KEY')
+CORS(app, resources={r'/*': {'origins': [
+    'https://toppocketfind.ca', 'https://www.toppocketfind.ca',
+    'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8080'
+]}}, methods=['GET', 'POST', 'OPTIONS'], allow_headers=['Content-Type'])
 
-# Read Stripe secret from env (test or live)
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY_TEST") or os.getenv("STRIPE_SECRET_KEY")
 
-# Allow your site (and localhost for quick testing) to call the API
-CORS(
-    app,
-    resources={r"/create-checkout-session": {"origins": [
-        "https://toppocketfind.ca",
-        "http://localhost:8000", "http://127.0.0.1:8000",
-        "http://localhost:8080"
-    ]}},
-    methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type"],
-)
+def inventory():
+    # No ephemeral fallback: losing this file must not silently restock sold coins.
+    path = app.config.get('INVENTORY_DB_PATH') or os.getenv('INVENTORY_DB_PATH')
+    if not path:
+        return None
+    return Inventory(path, CATALOG)
 
-@app.after_request
-def add_cors_headers(resp):
-    # Helpful for some proxies; harmless if duplicated with flask-cors
-    resp.headers["Access-Control-Allow-Origin"] = "https://toppocketfind.ca"
-    resp.headers["Access-Control-Allow-Methods"] = "GET,POST,OPTIONS"
-    resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    return resp
 
-@app.route("/", methods=["GET"])
+def checkout_ready():
+    return bool((app.config.get('CHECKOUT_ENABLED') or os.getenv('CHECKOUT_ENABLED') == '1')
+                and stripe.api_key and os.getenv('STRIPE_WEBHOOK_SECRET')
+                and (app.config.get('INVENTORY_DB_PATH') or os.getenv('INVENTORY_DB_PATH')))
+
+
+def reconcile(store):
+    # Never release by a local timer: Stripe may have accepted payment just before expiry.
+    for session_id in store.stale_sessions():
+        try:
+            store.settle(stripe.checkout.Session.retrieve(session_id))
+        except Exception:
+            app.logger.exception('Unable to reconcile a checkout reservation')
+
+
+@app.get('/')
 def health():
-    return "ok"
+    return 'ok'
 
-@app.route("/create-checkout-session", methods=["POST", "OPTIONS"])
-def create_checkout_session():
-    # Handle browser CORS preflight
-    if request.method == "OPTIONS":
-        return ("", 204)
 
-    data = request.get_json(silent=True) or {}
-    items = data.get("items", [])
-
-    # Build Stripe line items
-    line_items = []
-    for it in items:
-        title = it.get("title", "Item")
-        unit_amount = int(it.get("priceCents", 0))
-        qty = max(1, int(it.get("qty", 1) or 1))
-        line_items.append({
-            "price_data": {
-                "currency": "cad",
-                "product_data": {"name": title},
-                "unit_amount": unit_amount,
-            },
-            "quantity": qty,
-        })
-
-    # Optional flat shipping (from env)
-    ship_cents = int(os.getenv("SHIP_CENTS", "0") or 0)
-    if ship_cents:
-        line_items.append({
-            "price_data": {
-                "currency": "cad",
-                "product_data": {"name": "Shipping"},
-                "unit_amount": ship_cents,
-            },
-            "quantity": 1,
-        })
-
+@app.get('/inventory')
+def stock():
     try:
-        session = stripe.checkout.Session.create(
-            mode="payment",
-            line_items=line_items,
-            success_url="https://toppocketfind.ca/cart/success.html",
-            cancel_url="https://toppocketfind.ca/cart/cart.html",
-        )
-        return jsonify({"url": session.url})
-    except Exception as e:
-        # Log server-side for debugging
-        print("Stripe error:", repr(e))
-        return jsonify({"error": "stripe"}), 500
+        store = inventory()
+        if store and stripe.api_key:
+            reconcile(store)
+        quantities = store.quantities() if store else {key: item['quantityAvailable'] for key, item in CATALOG.items()}
+        response = jsonify(products=[{'id': key, 'quantityAvailable': qty} for key, qty in quantities.items()],
+                           checkoutReady=checkout_ready())
+        response.headers['Cache-Control'] = 'no-store'
+        return response
+    except Exception:
+        app.logger.exception('Inventory unavailable')
+        return jsonify(error='Stock information is temporarily unavailable.'), 503
 
-# Gunicorn entry point: app:app
+
+def validated_lines(data):
+    if not isinstance(data, dict):
+        raise ValueError('Invalid cart.')
+    items = data.get('items')
+    if not isinstance(items, list) or not 1 <= len(items) <= 25:
+        raise ValueError('Your bag is empty or invalid.')
+    merged = {}
+    for item in items:
+        if not isinstance(item, dict):
+            raise ValueError('Invalid item.')
+        item_id, qty = item.get('id'), item.get('qty')
+        if not isinstance(item_id, str) or item_id not in CATALOG or not CATALOG[item_id].get('purchasable'):
+            raise ValueError('An item in your bag is not available to purchase.')
+        if type(qty) is not int or not 1 <= qty <= CATALOG[item_id]['quantityAvailable']:
+            raise ValueError('Choose a valid whole-number quantity.')
+        merged[item_id] = merged.get(item_id, 0) + qty
+        if merged[item_id] > CATALOG[item_id]['quantityAvailable']:
+            raise ValueError('Requested quantity exceeds stock.')
+    return [{'id': key, 'qty': qty} for key, qty in sorted(merged.items())]
+
+
+@app.route('/create-checkout-session', methods=['POST', 'OPTIONS'])
+def create_checkout_session():
+    if request.method == 'OPTIONS':
+        return '', 204
+    try:
+        lines = validated_lines(request.get_json(silent=True))
+    except ValueError as error:
+        return jsonify(error=str(error)), 400
+    if not checkout_ready():
+        return jsonify(error='Checkout is being prepared. Your items can stay in your bag.'), 503
+    token = None
+    try:
+        store = inventory()
+        reconcile(store)
+        token, expires_at = store.reserve(lines)
+        line_items = [{'price_data': {'currency': 'cad', 'product_data': {'name': CATALOG[line['id']]['title']},
+                                     'unit_amount': CATALOG[line['id']]['priceCents']},
+                       'quantity': line['qty']} for line in lines]
+        session = stripe.checkout.Session.create(
+            mode='payment', payment_method_types=['card'], line_items=line_items,
+            shipping_address_collection={'allowed_countries': ['CA']},
+            shipping_options=[{'shipping_rate_data': {'type': 'fixed_amount',
+                'fixed_amount': {'amount': 0, 'currency': 'cad'}, 'display_name': 'Shipping included within Canada'}}],
+            success_url='https://toppocketfind.ca/cart/success.html?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='https://toppocketfind.ca/cart/cart.html',
+            metadata={'inventory_reservation_id': token}, client_reference_id=token,
+            expires_at=expires_at, idempotency_key='tpf-checkout-' + token,
+        )
+        store.attach(token, session.id)
+        return jsonify(url=session.url)
+    except OutOfStock as error:
+        return jsonify(error=str(error)), 409
+    except stripe.error.InvalidRequestError:
+        # Stripe definitively rejected creation; this reservation can be released.
+        if token:
+            store.fail(token)
+        app.logger.exception('Stripe rejected checkout creation')
+        return jsonify(error='Unable to start checkout. Please try again later.'), 502
+    except Exception:
+        # A timeout may mean Stripe created the session. Keep stock held, never oversell.
+        app.logger.exception('Unable to start checkout; any ambiguous reservation remains held')
+        return jsonify(error='Unable to start checkout. Please try again later.'), 503
+
+
+@app.post('/stripe-webhook')
+def stripe_webhook():
+    secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+    if not secret or not inventory():
+        return jsonify(error='Webhook is not configured.'), 503
+    try:
+        event = stripe.Webhook.construct_event(request.get_data(), request.headers.get('Stripe-Signature', ''), secret)
+    except (ValueError, stripe.error.SignatureVerificationError):
+        return jsonify(error='Invalid webhook signature.'), 400
+    if event['type'] in ('checkout.session.completed', 'checkout.session.async_payment_succeeded', 'checkout.session.expired'):
+        try:
+            incoming = event['data']['object']
+            if not incoming.get('metadata', {}).get('inventory_reservation_id'):
+                return jsonify(received=True)
+            # Verify current payment state with Stripe; redirects and browser data never change stock.
+            session = stripe.checkout.Session.retrieve(incoming['id'])
+            inventory().settle(session)
+        except Exception:
+            app.logger.exception('Unable to settle checkout; Stripe should retry')
+            return jsonify(error='Unable to update stock.'), 500
+    return jsonify(received=True)
+
+
+@app.get('/checkout-status')
+def checkout_status():
+    session_id = request.args.get('session_id', '')
+    if not session_id.startswith('cs_') or len(session_id) > 255:
+        return jsonify(error='Invalid checkout reference.'), 400
+    try:
+        store = inventory()
+        if not store or not stripe.api_key:
+            return jsonify(error='Order confirmation is temporarily unavailable.'), 503
+        session = stripe.checkout.Session.retrieve(session_id)
+        paid = store.settle(session)
+        token = session.get('metadata', {}).get('inventory_reservation_id')
+        reservation = store.get(token) if token else None
+        response = jsonify(paid=paid, items=json.loads(reservation['lines']) if paid and reservation else [])
+        response.headers['Cache-Control'] = 'no-store'
+        return response
+    except Exception:
+        app.logger.exception('Unable to confirm checkout')
+        return jsonify(error='Order confirmation is temporarily unavailable.'), 503
