@@ -4,81 +4,52 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Top Pocket Find | Workshop</title>
-  <style>
-    :root { color-scheme: dark; font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
-    * { box-sizing: border-box; }
-    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at top, #25445a, #0d1724 65%); color: #f4f7fb; }
-    main { width: min(100%, 440px); text-align: center; padding: 42px 30px; border: 1px solid #506274; border-radius: 18px; background: #101e2edb; box-shadow: 0 20px 70px #0006; }
-    .mark { font-size: 44px; margin-bottom: 12px; }
-    h1 { font-size: clamp(28px, 7vw, 38px); margin: 0 0 8px; }
-    p { color: #b7c6d4; line-height: 1.55; margin: 0 0 25px; }
-    label { display: block; text-align: left; font-size: 13px; margin-bottom: 8px; color: #dce6f0; }
-    input, button { width: 100%; border-radius: 9px; min-height: 46px; font: inherit; }
-    input { padding: 0 14px; border: 1px solid #71849a; background: #0b1725; color: white; }
-    input:focus { outline: 2px solid #7abbeb; outline-offset: 2px; }
-    button { margin-top: 13px; border: 0; background: #e3b95e; color: #142333; font-weight: 750; cursor: pointer; }
-    button:hover { background: #f1cc7c; }
-    #error { color: #ffb5b5; min-height: 22px; font-size: 13px; margin: 10px 0 0; }
-    #workshop { text-align: left; }
-    #workshop h2 { margin-top: 0; }
-    #workshop a { display: block; padding: 12px; color: #f5cc78; border-bottom: 1px solid #42546a; }
-    #workshop button { background: transparent; border: 1px solid #71849a; color: white; margin-top: 24px; }
-    [hidden] { display: none !important; }
-    footer { margin-top: 20px; font-size: 12px; color: #91a2b4; }
-  </style>
+  <meta name="theme-color" content="#142735">
+  <meta name="description" content="Top Pocket Find — coins and collectibles from a family collection in Moncton, New Brunswick.">
+  <title>Top Pocket Find — Coins & collectibles</title>
+  <link rel="stylesheet" href="css/home.css">
+  <script src="js/home.js" defer></script>
 </head>
 <body>
-  <main>
-    <section id="login">
-      <div class="mark" aria-hidden="true">🗝️</div>
-      <h1>Top Pocket Find</h1>
-      <p>Something good is in the works.<br>Enter the workshop passphrase to continue.</p>
-      <form id="entry-form">
-        <label for="password">Workshop passphrase</label>
-        <input id="password" type="password" autocomplete="off" required autofocus>
-        <button type="submit">Enter Workshop</button>
-        <div id="error" role="status" aria-live="polite"></div>
-      </form>
-      <footer>Private development preview</footer>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="preview-note">DESIGN PREVIEW <span aria-hidden="true">/</span> Coin artwork is illustrative. Real photos and listings come next.</div>
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="./" aria-label="Top Pocket Find home"><span class="brand-mark" aria-hidden="true">TPF</span><span class="brand-name">TOP POCKET FIND<small>COINS &amp; COLLECTIBLES</small></span></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a href="#collection">The collection</a><a href="#contact">Get in touch</a></nav>
+      <div class="header-actions">
+        <button class="icon-button search-toggle" aria-label="Search the collection" aria-expanded="false" aria-controls="search-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <a class="icon-button cart-link" href="cart/cart.html" aria-label="Shopping bag, 0 items"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7.5h14l1 13H4l1-13Z"/><path d="M8.5 8V6a3.5 3.5 0 0 1 7 0v2"/></svg><span id="cart-count" class="cart-badge">0</span></a>
+        <button class="icon-button menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      </div>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav container" aria-label="Mobile navigation" hidden><a href="#collection">The collection</a><a href="#contact">Get in touch</a></nav>
+    <div id="search-panel" class="search-panel" hidden><div class="container"><form id="search-form" role="search"><label for="collection-search">Search the collection</label><div class="search-input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input id="collection-search" type="search" placeholder="Search coins, themes, keepsakes…" autocomplete="off"><button class="text-button" type="reset">Clear</button></div></form></div></div>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner container">
+        <div class="hero-copy"><p class="eyebrow"><span class="tiny-line"></span> COINS &amp; COLLECTIBLES</p><h1 id="hero-title">For your<br><em>collection.</em></h1><a class="button button-gold" href="#collection">Browse coins <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a><p class="hero-signoff">Shipping within Canada.</p></div>
+        <div class="hero-art"><span class="art-index" aria-hidden="true">THE COLLECTOR’S STUDY — Nº 01</span><img src="assets/home/collector-study.svg" width="650" height="510" alt="Decorative illustration of silver and gold keepsake coins on a collector’s display"><span class="art-caption">COIN COLLECTION PREVIEW</span></div>
+      </div>
+      <div class="hero-bottom container"><span>AN INDEPENDENT COLLECTION</span><span>MONCTON, NEW BRUNSWICK <span class="little-star" aria-hidden="true">✧</span></span></div>
     </section>
-    <section id="workshop" hidden>
-      <h2>Welcome to the workshop</h2>
-      <p>Our storefront is being rebuilt. Existing pages remain available here for testing.</p>
-      <a href="games.html">Browse games</a>
-      <a href="220001.html">View sample product</a>
-      <a href="cart/cart.html">View shopping cart</a>
-      <button id="lock" type="button">Lock this browser session</button>
+    <section id="collection" class="collection-section container" aria-labelledby="collection-title">
+      <div class="section-heading"><div><p class="eyebrow">THE COLLECTION</p><h2 id="collection-title">Browse the coins</h2></div><p>Selected pieces from a family collection.<br>Real photos and clear item descriptions.</p></div>
+      <div class="collection-toolbar"><span class="collection-tab">The coin collection <span id="collection-count">04</span></span><button class="collection-search-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>Search collection</button></div>
+      <p id="search-status" class="search-status" role="status" aria-live="polite"></p>
+      <div id="product-grid" class="product-grid">
+        <article class="product-card" data-keywords="holiday christmas snowflake winter festive keepsake coin" data-title="Holiday coin" data-theme="Holiday designs"><button class="product-image winter-stage" type="button" aria-label="Preview Holiday coin"><span class="artwork-label">ARTWORK PLACEHOLDER</span><svg class="coin-drawing silver-coin" viewBox="0 0 240 240" aria-hidden="true"><use href="assets/home/coin-motifs.svg#snowflake"/></svg><span class="view-detail">Take a closer look <svg class="small-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button><div class="product-meta"><span>THE COIN COLLECTION</span><span>01</span></div><button class="product-title" type="button">Holiday coin</button><p class="product-subtitle">Holiday designs <span aria-hidden="true">/</span> Listing preview</p><div class="product-bottom"><span>Details to follow</span><svg class="detail-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></div></article>
+        <article class="product-card" data-keywords="iceberg ice nature ocean water landscape blue coin" data-title="Iceberg design" data-theme="Iceberg designs"><button class="product-image ocean-stage" type="button" aria-label="Preview Iceberg design"><span class="artwork-label">ARTWORK PLACEHOLDER</span><svg class="coin-drawing ocean-coin" viewBox="0 0 240 240" aria-hidden="true"><use href="assets/home/coin-motifs.svg#iceberg"/></svg><span class="view-detail">Take a closer look <svg class="small-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button><div class="product-meta"><span>THE COIN COLLECTION</span><span>02</span></div><button class="product-title" type="button">Iceberg design</button><p class="product-subtitle">Iceberg designs <span aria-hidden="true">/</span> Listing preview</p><div class="product-bottom"><span>Details to follow</span><svg class="detail-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></div></article>
+        <article class="product-card" data-keywords="canada canadian maple leaf keepsake gold coin" data-title="Canadian coin" data-theme="Canadian keepsakes"><button class="product-image cream-stage" type="button" aria-label="Preview Canadian coin"><span class="artwork-label">ARTWORK PLACEHOLDER</span><svg class="coin-drawing gold-coin" viewBox="0 0 240 240" aria-hidden="true"><use href="assets/home/coin-motifs.svg#maple"/></svg><span class="view-detail">Take a closer look <svg class="small-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button><div class="product-meta"><span>THE COIN COLLECTION</span><span>03</span></div><button class="product-title" type="button">Canadian coin</button><p class="product-subtitle">Canadian keepsakes <span aria-hidden="true">/</span> Listing preview</p><div class="product-bottom"><span>Details to follow</span><svg class="detail-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></div></article>
+        <article class="product-card" data-keywords="presentation card packaging collector collection coin keepsake gift" data-title="Presentation-card coin" data-theme="Presentation-card coins"><button class="product-image rose-stage" type="button" aria-label="Preview Presentation-card coin"><span class="artwork-label">ARTWORK PLACEHOLDER</span><div class="presentation-card" aria-hidden="true"><span>TOP POCKET<br>FIND.</span><svg viewBox="0 0 240 240"><use href="assets/home/coin-motifs.svg#snowflake"/></svg><small>A COLLECTOR’S KEEPSAKE</small></div><span class="view-detail">Take a closer look <svg class="small-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></button><div class="product-meta"><span>THE COIN COLLECTION</span><span>04</span></div><button class="product-title" type="button">Presentation-card coin</button><p class="product-subtitle">Presentation-card coins <span aria-hidden="true">/</span> Listing preview</p><div class="product-bottom"><span>Details to follow</span><svg class="detail-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></div></article>
+      </div>
+      <div id="empty-results" class="empty-results" hidden><h3>No finds just yet.</h3><p>Try “holiday,” “iceberg,” or “keepsake.”</p><button class="text-button clear-search" type="button">Show the whole collection <span aria-hidden="true">→</span></button></div>
+      <p class="collection-footnote">A first look at the layout. These four previews are not items available to purchase.</p>
     </section>
+    <section id="contact" class="contact-section container" aria-labelledby="contact-title"><div><p class="eyebrow">CONTACT</p><h2 id="contact-title">Have a question?</h2><p>Ask about an item or get in touch with Rick.</p></div><form id="contact-form" class="contact-form"><p class="form-preview-note">Contact form preview — sending will be connected before launch.</p><div class="form-row"><label>Your name<input name="name" autocomplete="name" required maxlength="100"></label><label>Email address<input type="email" name="email" autocomplete="email" required maxlength="254"></label></div><label>What’s on your mind?<textarea name="message" rows="3" required maxlength="4000"></textarea></label><div class="form-submit"><button class="button button-navy" type="submit">Preview your message <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button><p id="contact-status" role="status" aria-live="polite">Nothing is sent from this preview.</p></div></form></section>
   </main>
-  <script>
-    // This is a casual visitor gate ONLY. GitHub Pages is static hosting:
-    // page HTML, images and files remain publicly accessible by direct URL.
-    // Do not use this to protect personal data, credentials or secrets.
-    const expectedHash = "ee561eae0d2ab5aa689bd7b2bf75400d5e97b403d4b80596ec126d7bec9a4e10";
-    const login = document.getElementById("login");
-    const workshop = document.getElementById("workshop");
-    const error = document.getElementById("error");
-    function showWorkshop() { login.hidden = true; workshop.hidden = false; }
-    if (sessionStorage.getItem("tpf-workshop") === "yes") showWorkshop();
-    document.getElementById("entry-form").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const value = document.getElementById("password").value;
-      const bytes = new TextEncoder().encode(value);
-      const digest = await crypto.subtle.digest("SHA-256", bytes);
-      const hash = Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
-      if (hash === expectedHash) {
-        sessionStorage.setItem("tpf-workshop", "yes");
-        document.getElementById("password").value = "";
-        showWorkshop();
-      } else {
-        error.textContent = "That passphrase isn't quite right.";
-      }
-    });
-    document.getElementById("lock").addEventListener("click", () => {
-      sessionStorage.removeItem("tpf-workshop");
-      location.reload();
-    });
-  </script>
+  <footer class="site-footer"><div class="footer-inner container"><a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true">TPF</span><span class="brand-name">TOP POCKET FIND<small>COINS &amp; COLLECTIBLES.</small></span></a><nav aria-label="Footer navigation"><a href="#contact">Contact us</a><button type="button" data-policy="Shipping & returns">Shipping & returns</button><button type="button" data-policy="Privacy">Privacy</button><button type="button" data-policy="Terms">Terms</button></nav></div><div class="footer-bottom container"><span>© <span id="copyright-year">2026</span> Top Pocket Find</span><span>Coins &amp; collectibles</span><span>Moncton, NB · Canada</span></div></footer>
+  <dialog id="detail-dialog" class="detail-dialog"><button class="dialog-close icon-button" aria-label="Close preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button><p id="dialog-eyebrow" class="eyebrow">COLLECTION PREVIEW</p><h2 id="dialog-title"></h2><p id="dialog-body"></p><button class="button button-navy dialog-dismiss" type="button">Back to the collection</button></dialog>
 </body>
 </html>
