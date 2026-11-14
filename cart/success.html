@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Thanks! — Top Pocket Find</title>
 <link rel="stylesheet" href="../css/style.css">
 <style>
@@ -20,19 +21,16 @@
   <div class="wrap">
     <div class="card">
       <div class="check">✓</div>
-      <h1>Thank you!</h1>
-      <p>Your order was received. A Stripe confirmation email is on the way.</p>
-      <p class="muted"><strong>Note:</strong> test mode uses card <code>4242 4242 4242 4242</code>.</p>
+      <h1 id="confirmation-title">Checking your order…</h1>
+      <p id="confirmation-status" role="status">Please wait while we confirm your payment.</p>
+
       <div class="actions">
         <a class="btn" href="../index.html">Back to Home</a>
- 
+
       </div>
     </div>
   </div>
 
-  <script>
-    // clear cart on success
-    try { localStorage.setItem('tpf_cart','[]'); } catch {}
-  </script>
+  <script src="success.js?v=20261114-quantity1" defer></script>
 </body>
 </html>
