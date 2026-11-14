@@ -41,8 +41,10 @@
     });
     $('#collection-count').textContent = String(matches).padStart(2, '0');
     $('#empty-results').hidden = matches !== 0;
-    $('#search-status').textContent = terms.length ? `${matches} collection preview${matches === 1 ? '' : 's'} found.` : '';
+    $('#search-status').textContent = terms.length ? `${matches} result${matches === 1 ? '' : 's'} found.` : '';
   }
+  const initialQuery = new URLSearchParams(window.location.search).get('q');
+  if (initialQuery) { searchInput.value = initialQuery; setSearch(true, false); filterCards(); }
   searchInput.addEventListener('input', filterCards);
   $('#search-form').addEventListener('submit', event => {
     event.preventDefault(); filterCards(); $('#collection').scrollIntoView({block:'start'});
@@ -93,7 +95,7 @@
   const policies = {
     'Shipping & returns': 'Our first collection will ship within Canada. Shipping options, rates and return terms are still being prepared and will be shown before orders open. This design preview does not accept purchases.',
     'Privacy': 'This homepage preview does not submit contact messages or install analytics. The existing shopping bag is stored in your browser. Our full privacy policy will be available before launch.',
-    'Terms': 'This is a storefront design preview. The coin artwork and collection cards are illustrative, with no final product descriptions or prices. Purchases are not available from these preview cards. Full terms will be provided before launch.'
+    'Terms': 'This is a storefront preview. The Santa lot has actual item photos; other collection cards use illustrative artwork. Prices and full sales terms are being prepared. Purchasing is not yet available.'
   };
   document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => showDialog(button.dataset.policy, policies[button.dataset.policy], button, 'BEFORE THE SHOP OPENS')));
   $('#contact-form').addEventListener('submit', event => {

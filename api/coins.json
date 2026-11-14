@@ -1,0 +1,67 @@
+{
+  "products": [
+    {
+      "id": "coin-001",
+      "slug": "2013-santa-silver-coins",
+      "title": "2013 $20 Santa Fine Silver Coins — Lot of 3",
+      "url": "products/2013-santa-silver-coins.html",
+      "status": "price_pending",
+      "currency": "CAD",
+      "priceCents": null,
+      "purchasable": false,
+      "quantityAvailable": 1,
+      "coinCount": 3,
+      "year": 2013,
+      "mint": "Royal Canadian Mint",
+      "composition": "99.99% fine silver",
+      "weightGramsPerCoin": 7.96,
+      "diameterMmPerCoin": 27,
+      "faceValueCadPerCoin": 20,
+      "grade": null,
+      "includes": "Three pictured coins, protective sleeves and pictured presentation packaging/certificate.",
+      "images": [
+        {
+          "src": "assets/product-001/03-coins-closeup.jpg",
+          "thumbnail": "assets/product-001/03-coins-closeup-thumb.jpg",
+          "alt": "Close-up photograph of the three coins and red presentation card"
+        },
+        {
+          "src": "assets/product-001/01-front-cards.jpg",
+          "thumbnail": "assets/product-001/01-front-cards-thumb.jpg",
+          "alt": "Holiday presentation cards photographed together"
+        },
+        {
+          "src": "assets/product-001/02-coins-certificate.jpg",
+          "thumbnail": "assets/product-001/02-coins-certificate-thumb.jpg",
+          "alt": "Three Santa coins in sleeves with the certificate"
+        },
+        {
+          "src": "assets/product-001/04-open-packaging.jpg",
+          "thumbnail": "assets/product-001/04-open-packaging-thumb.jpg",
+          "alt": "Photograph of the opened holiday packaging and coins"
+        },
+        {
+          "src": "assets/product-001/05-packaging-certificate.jpg",
+          "thumbnail": "assets/product-001/05-packaging-certificate-thumb.jpg",
+          "alt": "Photograph showing the certificate and coins together"
+        },
+        {
+          "src": "assets/product-001/06-front-cards-alternate.jpg",
+          "thumbnail": "assets/product-001/06-front-cards-alternate-thumb.jpg",
+          "alt": "Alternate photograph of the holiday presentation cards"
+        },
+        {
+          "src": "assets/product-001/07-open-cards-alternate.jpg",
+          "thumbnail": "assets/product-001/07-open-cards-alternate-thumb.jpg",
+          "alt": "Alternate photograph of the opened card and three coins"
+        },
+        {
+          "src": "assets/product-001/08-front-card-scan.jpg",
+          "thumbnail": "assets/product-001/08-front-card-scan-thumb.jpg",
+          "alt": "Scan of the holiday presentation card front"
+        }
+      ],
+      "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---santa-2013"
+    }
+  ]
+}
