@@ -21,47 +21,136 @@
       "includes": "Three pictured coins, protective sleeves and pictured presentation packaging/certificate.",
       "images": [
         {
-          "src": "assets/product-001/03-coins-closeup.jpg",
-          "thumbnail": "assets/product-001/03-coins-closeup-thumb.jpg",
-          "alt": "Close-up photograph of the three coins and red presentation card"
+          "src": "assets/product-001/10-cover-scan-source.jpg",
+          "thumbnail": "assets/product-001/10-cover-scan-source.jpg",
+          "alt": "Presentation card front — cropped scan of the packaging artwork",
+          "sourceWidth": 1760,
+          "sourceHeight": 3280,
+          "viewBox": [
+            4,
+            0,
+            1698,
+            1685
+          ],
+          "transform": "",
+          "kind": "packaging"
         },
         {
-          "src": "assets/product-001/01-front-cards.jpg",
-          "thumbnail": "assets/product-001/01-front-cards-thumb.jpg",
-          "alt": "Holiday presentation cards photographed together"
+          "src": "assets/product-001/09-coin-scan-source.jpg",
+          "thumbnail": "assets/product-001/09-coin-scan-source.jpg",
+          "alt": "Actual coin close-up — cropped from the scan, through its protective sleeve",
+          "sourceWidth": 1756,
+          "sourceHeight": 3400,
+          "viewBox": [
+            665,
+            115,
+            470,
+            470
+          ],
+          "transform": "rotate(-65 900 350)",
+          "kind": "coin-detail"
+        },
+        {
+          "src": "assets/product-001/03-coins-closeup.jpg",
+          "thumbnail": "assets/product-001/03-coins-closeup-thumb.jpg",
+          "alt": "Close-up photograph of the three coins and red presentation card",
+          "sourceWidth": 2200,
+          "sourceHeight": 1650,
+          "viewBox": [
+            0,
+            0,
+            2200,
+            1650
+          ],
+          "transform": ""
         },
         {
           "src": "assets/product-001/02-coins-certificate.jpg",
           "thumbnail": "assets/product-001/02-coins-certificate-thumb.jpg",
-          "alt": "Three Santa coins in sleeves with the certificate"
+          "alt": "Three Santa coins in sleeves with the certificate",
+          "sourceWidth": 1012,
+          "sourceHeight": 1959,
+          "viewBox": [
+            0,
+            0,
+            1012,
+            1959
+          ],
+          "transform": ""
+        },
+        {
+          "src": "assets/product-001/01-front-cards.jpg",
+          "thumbnail": "assets/product-001/01-front-cards-thumb.jpg",
+          "alt": "Holiday presentation cards photographed together",
+          "sourceWidth": 1650,
+          "sourceHeight": 2200,
+          "viewBox": [
+            0,
+            0,
+            1650,
+            2200
+          ],
+          "transform": ""
         },
         {
           "src": "assets/product-001/04-open-packaging.jpg",
           "thumbnail": "assets/product-001/04-open-packaging-thumb.jpg",
-          "alt": "Photograph of the opened holiday packaging and coins"
+          "alt": "Photograph of the opened holiday packaging and coins",
+          "sourceWidth": 2200,
+          "sourceHeight": 1650,
+          "viewBox": [
+            0,
+            0,
+            2200,
+            1650
+          ],
+          "transform": "translate(2200 1650) rotate(180)"
         },
         {
           "src": "assets/product-001/05-packaging-certificate.jpg",
           "thumbnail": "assets/product-001/05-packaging-certificate-thumb.jpg",
-          "alt": "Photograph showing the certificate and coins together"
+          "alt": "Photograph showing the certificate and coins together",
+          "sourceWidth": 2200,
+          "sourceHeight": 1650,
+          "viewBox": [
+            0,
+            0,
+            1650,
+            2200
+          ],
+          "transform": "translate(0 2200) rotate(-90)"
         },
         {
           "src": "assets/product-001/06-front-cards-alternate.jpg",
           "thumbnail": "assets/product-001/06-front-cards-alternate-thumb.jpg",
-          "alt": "Alternate photograph of the holiday presentation cards"
+          "alt": "Alternate photograph of the holiday presentation cards",
+          "sourceWidth": 1650,
+          "sourceHeight": 2200,
+          "viewBox": [
+            0,
+            0,
+            1650,
+            2200
+          ],
+          "transform": ""
         },
         {
           "src": "assets/product-001/07-open-cards-alternate.jpg",
           "thumbnail": "assets/product-001/07-open-cards-alternate-thumb.jpg",
-          "alt": "Alternate photograph of the opened card and three coins"
-        },
-        {
-          "src": "assets/product-001/08-front-card-scan.jpg",
-          "thumbnail": "assets/product-001/08-front-card-scan-thumb.jpg",
-          "alt": "Scan of the holiday presentation card front"
+          "alt": "Alternate photograph of the opened card and three coins",
+          "sourceWidth": 1650,
+          "sourceHeight": 2200,
+          "viewBox": [
+            0,
+            0,
+            2200,
+            1650
+          ],
+          "transform": "translate(0 1650) rotate(-90)"
         }
       ],
-      "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---santa-2013"
+      "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---santa-2013",
+      "coverImage": 0
     }
   ]
 }

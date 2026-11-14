@@ -36,12 +36,22 @@
   function selectPhoto(index) {
     selected = (index + thumbs.length) % thumbs.length;
     const thumb = thumbs[selected];
-    $('#main-photo').src = thumb.dataset.full;
-    $('#main-photo').alt = thumb.dataset.caption;
+    // SVG viewports reframe original photo pixels without altering coin detail.
+    for (const id of ['#main-photo', '#lightbox-photo']) {
+      const frame = $(id);
+      frame.setAttribute('viewBox', thumb.dataset.viewbox);
+      const crop = thumb.dataset.viewbox.split(' ');
+      const bounds = frame.querySelector('clipPath rect');
+      ['x', 'y', 'width', 'height'].forEach((name, i) => bounds.setAttribute(name, crop[i]));
+      frame.setAttribute('aria-label', thumb.dataset.caption);
+      const source = frame.querySelector('image');
+      source.setAttribute('href', thumb.dataset.full);
+      source.setAttribute('width', thumb.dataset.width);
+      source.setAttribute('height', thumb.dataset.height);
+      source.setAttribute('transform', thumb.dataset.transform);
+    }
     $('#photo-caption').textContent = thumb.dataset.caption;
     $('#photo-counter').textContent = `${selected + 1} / ${thumbs.length}`;
-    $('#lightbox-photo').src = thumb.dataset.full;
-    $('#lightbox-photo').alt = thumb.dataset.caption;
     $('#lightbox-caption').textContent = thumb.dataset.caption;
     $('#lightbox-counter').textContent = `Photo ${selected + 1} of ${thumbs.length}`;
     $('#full-photo-link').href = thumb.dataset.full;
