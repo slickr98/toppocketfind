@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="9" fill="#142735"/><rect x="5" y="5" width="54" height="54" rx="5" fill="none" stroke="#c5a45e" stroke-width="2"/><text x="32" y="42" fill="#e4c87c" font-family="Georgia,serif" font-size="27" font-weight="bold" text-anchor="middle" letter-spacing="-1">TPF</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Top Pocket Find — gold maple-leaf coin</title>
+  <defs>
+    <radialGradient id="gold" cx="30%" cy="22%" r="85%">
+      <stop stop-color="#fff0b9"/>
+      <stop offset=".52" stop-color="#d6b065"/>
+      <stop offset="1" stop-color="#9b7439"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#gold)" stroke="#f1d492" stroke-width="2"/>
+  <circle cx="32" cy="32" r="26.5" fill="none" stroke="#805c26" stroke-width="1.3"/>
+  <circle cx="32" cy="32" r="25" fill="none" stroke="#f4dba1" stroke-width="1"/>
+  <path d="m32 12 4.1 8 4.3-2.2-1.2 10.5 6.4-3.9 1.1 4.1 5.4-1-2.4 6.9 3.2 2.6-13.2 8.2 1.4 4.2-7.9-1.2.7 8.3h-4l.7-8.3-7.9 1.2 1.4-4.2L11 37l3.2-2.6-2.4-6.9 5.4 1 1.1-4.1 6.4 3.9-1.2-10.5 4.3 2.2Z" fill="#fff0bb" stroke="#9a7130" stroke-width="1.15" stroke-linejoin="round"/>
+</svg>
