@@ -61,7 +61,7 @@
       }, 0);
     } catch { /* A blocked or malformed local cart should not break browsing. */ }
     $('#cart-count').textContent = count > 99 ? '99+' : String(count);
-    $('.cart-link').setAttribute('aria-label', `Shopping bag, ${count} item${count === 1 ? '' : 's'}`);
+    $('.cart-link').setAttribute('aria-label', `Shopping cart, ${count} item${count === 1 ? '' : 's'}`);
   }
   updateCartCount();
   window.addEventListener('storage', updateCartCount);
@@ -94,7 +94,7 @@
   });
   const policies = {
     'Shipping & returns': 'Our first collection will ship within Canada. Shipping options, rates and return terms are still being prepared and will be shown before orders open. This design preview does not accept purchases.',
-    'Privacy': 'This homepage preview does not submit contact messages or install analytics. The existing shopping bag is stored in your browser. Our full privacy policy will be available before launch.',
+    'Privacy': 'This homepage preview does not submit contact messages or install analytics. The existing shopping cart is stored in your browser. Our full privacy policy will be available before launch.',
     'Terms': 'This is a storefront preview. The Santa coin listing has actual item photos; other collection cards use illustrative artwork. The Santa coin is $54.95 CAD each with shipping included within Canada. Full sales terms and checkout are being prepared. Purchasing is not yet available.'
   };
   document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => showDialog(button.dataset.policy, policies[button.dataset.policy], button, 'BEFORE THE SHOP OPENS')));
