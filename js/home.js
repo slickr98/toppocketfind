@@ -63,6 +63,21 @@
     $('#cart-count').textContent = count > 99 ? '99+' : String(count);
     $('.cart-link').setAttribute('aria-label', `Shopping cart, ${count} item${count === 1 ? '' : 's'}`);
   }
+  function updateStockBadges() {
+    cards.forEach(card => {
+      const product = window.tpfShop?.product(card.dataset.productId);
+      const badge = card.querySelector('.sold-out-badge');
+      if (product && badge) {
+        badge.hidden = product.quantityAvailable !== 0;
+        card.querySelector('a.product-image')?.setAttribute('aria-label', `View ${card.dataset.title}, ${badge.hidden ? 'sold individually' : 'sold out'}`);
+        const photoLabel = card.querySelector('.real-photo-label');
+        if (photoLabel) photoLabel.hidden = !badge.hidden;
+      }
+    });
+  }
+  window.tpfShop?.ready.then(updateStockBadges).catch(() => {});
+  window.addEventListener('tpf:stock', updateStockBadges);
+  window.addEventListener('tpf:cart', updateCartCount);
   updateCartCount();
   window.addEventListener('storage', updateCartCount);
   window.addEventListener('pageshow', updateCartCount);

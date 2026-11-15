@@ -104,6 +104,8 @@
     $('#stock-status').textContent = stock ? `${stock} available${inBag ? ` · ${inBag} in your cart` : ''}` : 'Sold out';
     quantity.max = String(remaining);
     quantity.disabled = remaining === 0;
+    quantity.hidden = stock === 0;
+    $('label[for="coin-quantity"]').hidden = stock === 0;
     if (remaining) quantity.value = String(Math.min(remaining, Math.max(1, Number(quantity.value) || 1)));
     addButton.disabled = remaining === 0;
     addButton.textContent = !stock ? 'Sold out' : remaining ? 'Add to cart' : 'All available coins are in your cart';
