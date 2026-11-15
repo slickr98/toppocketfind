@@ -16,6 +16,9 @@ body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:56px 16px
 .cart{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;}
 @media (max-width:900px){ .cart{grid-template-columns:1fr;} .back-row{ position:static; margin-bottom:12px; } body.cart-page .main-wrapper{ padding-top:16px; } }
 
+/* Keep hidden status controls out of the layout. */
+.cart-page [hidden]{display:none!important;}
+
 /* Buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid #0a457a;background:#ffd814;color:#111;font-weight:700;cursor:pointer;box-shadow:0 2px 0 #af8a00;transition:.15s transform;}
 .btn:hover{filter:brightness(1.05)}
