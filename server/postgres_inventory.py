@@ -36,8 +36,11 @@ class PostgresInventory(Inventory):
     @contextmanager
     def connection(self, initialize=False):
         # Do not retain idle connections: both Render and Neon can sleep.
-        with psycopg.connect(self.url, row_factory=dict_row, connect_timeout=10,
-                             options='-c statement_timeout=15000 -c lock_timeout=10000') as connection:
+        with psycopg.connect(self.url, row_factory=dict_row, connect_timeout=10) as connection:
+            # Neon/PgBouncer rejects these as connection startup options. Keep
+            # them transaction-local so pooled connections remain compatible.
+            connection.execute("SET LOCAL statement_timeout = '15s'")
+            connection.execute("SET LOCAL lock_timeout = '10s'")
             if initialize:
                 # Serialize first-time DDL when multiple Gunicorn workers start.
                 connection.execute('SELECT pg_advisory_xact_lock(%s)',
