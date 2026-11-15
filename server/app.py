@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from functools import lru_cache
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -8,8 +9,10 @@ import stripe
 
 try:
     from .inventory import Inventory, OutOfStock
+    from .postgres_inventory import PostgresInventory
 except ImportError:  # Existing Render start command: gunicorn app:app, root directory server.
     from inventory import Inventory, OutOfStock
+    from postgres_inventory import PostgresInventory
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024
@@ -18,25 +21,59 @@ CATALOG = {item['id']: item for item in json.loads((ROOT / 'api/coins.json').rea
 # Preserve the remaining original game listing with a server-trusted price.
 CATALOG['220025'] = {'id': '220025', 'title': "PS2 - Baldur's Gate Dark Alliance II (Used)",
                      'priceCents': 4599, 'quantityAvailable': 1, 'purchasable': True}
-stripe.api_key = os.getenv('STRIPE_SECRET_KEY_TEST') or os.getenv('STRIPE_SECRET_KEY')
+# Explicit opt-in to live mode; merely adding a live key never enables payments.
+PAYMENT_MODE = os.getenv('STRIPE_MODE', 'test')
+if PAYMENT_MODE not in ('test', 'live'):
+    raise ValueError('STRIPE_MODE must be test or live')
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY_TEST' if PAYMENT_MODE == 'test' else 'STRIPE_SECRET_KEY')
 CORS(app, resources={r'/*': {'origins': [
     'https://toppocketfind.ca', 'https://www.toppocketfind.ca',
     'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8080'
 ]}}, methods=['GET', 'POST', 'OPTIONS'], allow_headers=['Content-Type'])
 
 
+def payment_mode():
+    return app.config.get('STRIPE_MODE', PAYMENT_MODE)
+
+
+def setting(name):
+    return app.config.get(name) or os.getenv(name)
+
+
+@lru_cache(maxsize=4)
+def postgres_store(url, mode):
+    return PostgresInventory(url, CATALOG, mode)
+
+
+def inventory_configured():
+    key = 'DATABASE_URL' if payment_mode() == 'live' else 'DATABASE_URL_TEST'
+    return bool(setting(key) or setting('INVENTORY_DB_PATH'))
+
+
+def webhook_secret():
+    return setting('STRIPE_WEBHOOK_SECRET' if payment_mode() == 'live' else 'STRIPE_WEBHOOK_SECRET_TEST')
+
+
 def inventory():
+    mode = payment_mode()
+    url = setting('DATABASE_URL' if mode == 'live' else 'DATABASE_URL_TEST')
+    if url:
+        return postgres_store(url, mode)
     # No ephemeral fallback: losing this file must not silently restock sold coins.
-    path = app.config.get('INVENTORY_DB_PATH') or os.getenv('INVENTORY_DB_PATH')
+    path = setting('INVENTORY_DB_PATH')
     if not path:
         return None
-    return Inventory(path, CATALOG)
+    return Inventory(path, CATALOG, mode)
 
 
 def checkout_ready():
+    mode = payment_mode()
+    prefix = ('sk_live_', 'rk_live_') if mode == 'live' else ('sk_test_', 'rk_test_')
     return bool((app.config.get('CHECKOUT_ENABLED') or os.getenv('CHECKOUT_ENABLED') == '1')
-                and stripe.api_key and os.getenv('STRIPE_WEBHOOK_SECRET')
-                and (app.config.get('INVENTORY_DB_PATH') or os.getenv('INVENTORY_DB_PATH')))
+                and mode in ('test', 'live')
+                and (mode == 'test' or setting('LIVE_CHECKOUT_ENABLED') == '1')
+                and stripe.api_key and stripe.api_key.startswith(prefix)
+                and webhook_secret() and inventory_configured())
 
 
 def reconcile(store):
@@ -61,7 +98,7 @@ def stock():
             reconcile(store)
         quantities = store.quantities() if store else {key: item['quantityAvailable'] for key, item in CATALOG.items()}
         response = jsonify(products=[{'id': key, 'quantityAvailable': qty} for key, qty in quantities.items()],
-                           checkoutReady=checkout_ready())
+                           checkoutReady=checkout_ready(), paymentMode=payment_mode())
         response.headers['Cache-Control'] = 'no-store'
         return response
     except Exception:
@@ -136,13 +173,15 @@ def create_checkout_session():
 
 @app.post('/stripe-webhook')
 def stripe_webhook():
-    secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+    secret = webhook_secret()
     if not secret or not inventory():
         return jsonify(error='Webhook is not configured.'), 503
     try:
         event = stripe.Webhook.construct_event(request.get_data(), request.headers.get('Stripe-Signature', ''), secret)
     except (ValueError, stripe.error.SignatureVerificationError):
         return jsonify(error='Invalid webhook signature.'), 400
+    if event.get('livemode') is not (payment_mode() == 'live'):
+        return jsonify(error='Webhook belongs to a different payment mode.'), 400
     if event['type'] in ('checkout.session.completed', 'checkout.session.async_payment_succeeded', 'checkout.session.expired'):
         try:
             incoming = event['data']['object']

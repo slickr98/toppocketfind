@@ -5,6 +5,10 @@
   const API = 'https://tpf-api.onrender.com';
   let catalog = new Map();
   let checkoutReady = false;
+  let inventoryRequest = null;
+  let checkingStock = false;
+  let stockFailed = false;
+  let paymentMode = null;
   const money = cents => (cents / 100).toLocaleString('en-CA', {style: 'currency', currency: 'CAD'});
   const integer = (value, fallback = 0) => Number.isSafeInteger(Number(value)) && Number(value) >= 0 ? Number(value) : fallback;
   function read() {
@@ -50,19 +54,30 @@
     if (item) item.qty = Math.min(item.maxQty, Math.max(0, integer(qty)));
     return save(items.filter(row => row.qty > 0));
   }
-  async function refreshStock() {
+  function refreshStock() {
+    if (inventoryRequest) return inventoryRequest;
+    checkingStock = true;
+    window.dispatchEvent(new Event('tpf:stock'));
+    inventoryRequest = loadStock().finally(() => { inventoryRequest = null; });
+    return inventoryRequest;
+  }
+  async function loadStock() {
     try {
-      const response = await fetch(`${API}/inventory`, {cache: 'no-store', signal: AbortSignal.timeout(12000)});
+      const response = await fetch(`${API}/inventory`, {cache: 'no-store', signal: AbortSignal.timeout(90000)});
       if (!response.ok) throw new Error('Stock service unavailable');
       const data = await response.json();
+      if (!Array.isArray(data.products)) throw new Error('Invalid stock response');
       for (const product of data.products || []) {
         const known = catalog.get(product.id);
         if (known && Number.isSafeInteger(product.quantityAvailable) && product.quantityAvailable >= 0) {
           catalog.set(product.id, {...known, quantityAvailable: product.quantityAvailable});
         }
       }
-      checkoutReady = data.checkoutReady === true;
-    } catch { checkoutReady = false; }
+      paymentMode = ['test', 'live'].includes(data.paymentMode) ? data.paymentMode : null;
+      checkoutReady = data.checkoutReady === true && paymentMode !== null;
+      stockFailed = false;
+    } catch { checkoutReady = false; stockFailed = true; }
+    checkingStock = false;
     // Never overwrite someone's cart from another tab with a cached copy.
     try { save(read()); } catch { /* Browsing works when storage is unavailable. */ }
     window.dispatchEvent(new Event('tpf:stock'));
@@ -76,9 +91,11 @@
     refreshStock();
   });
   window.tpfShop = {get, save, add, setQuantity, money, ready, refreshStock,
-    product: id => catalog.get(id), checkoutReady: () => checkoutReady, api: API};
+    product: id => catalog.get(id), checkoutReady: () => checkoutReady && !checkingStock,
+    stockStatus: () => ({checking: checkingStock, failed: stockFailed, paymentMode}), api: API};
   window.addEventListener('storage', event => { if (event.key === KEY) window.dispatchEvent(new Event('tpf:cart')); });
   window.addEventListener('pageshow', () => ready.then(refreshStock).catch(() => {}));
   document.addEventListener('visibilitychange', () => { if (!document.hidden) ready.then(refreshStock).catch(() => {}); });
-  setInterval(() => { if (!document.hidden) ready.then(refreshStock).catch(() => {}); }, 30000);
+  // Refresh on navigation, returning to the tab, and before checkout. Continuous
+  // polling keeps free compute awake and can exhaust its monthly allowance.
 })();

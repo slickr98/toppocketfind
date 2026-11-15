@@ -16,10 +16,11 @@ from server.inventory import Inventory, OutOfStock
 class CheckoutTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
-        self.env = patch.dict(os.environ, {'STRIPE_WEBHOOK_SECRET': 'whsec_local_test_only'})
+        self.env = patch.dict(os.environ, {'STRIPE_WEBHOOK_SECRET_TEST': 'whsec_local_test_only'})
         self.env.start()
         backend.stripe.api_key = 'sk_test_local_only'
-        backend.app.config.update(TESTING=True, INVENTORY_DB_PATH=self.temp.name + '/stock.sqlite3', CHECKOUT_ENABLED=True)
+        backend.app.config.update(TESTING=True, STRIPE_MODE='test', DATABASE_URL_TEST=None,
+                                  DATABASE_URL=None, INVENTORY_DB_PATH=self.temp.name + '/stock.sqlite3', CHECKOUT_ENABLED=True)
         self.client = backend.app.test_client()
         self.serial = 0
         self.sessions = {}
@@ -37,7 +38,7 @@ class CheckoutTests(unittest.TestCase):
     def create_session(self, **kwargs):
         self.serial += 1
         key = 'cs_test_' + str(self.serial)
-        self.sessions[key] = dict(id=key, status='open', payment_status='unpaid', currency='cad',
+        self.sessions[key] = dict(id=key, livemode=False, status='open', payment_status='unpaid', currency='cad',
                                  amount_total=sum(row['price_data']['unit_amount'] * row['quantity'] for row in kwargs['line_items']),
                                  metadata=kwargs['metadata'], shipping_details={'address': {'country': 'CA'}})
         return SimpleNamespace(id=key, url='https://checkout.stripe.com/c/pay/' + key)
@@ -49,8 +50,11 @@ class CheckoutTests(unittest.TestCase):
         data = self.client.get('/inventory').get_json()
         return next(item['quantityAvailable'] for item in data['products'] if item['id'] == 'coin-001')
 
+    def new_store(self):
+        return Inventory(backend.app.config['INVENTORY_DB_PATH'], backend.CATALOG)
+
     def webhook(self, key='cs_test_1', kind='checkout.session.completed', event_id='evt_local'):
-        payload = json.dumps({'id': event_id, 'object': 'event', 'type': kind, 'data': {'object': self.sessions[key]}}).encode()
+        payload = json.dumps({'id': event_id, 'object': 'event', 'livemode': False, 'type': kind, 'data': {'object': self.sessions[key]}}).encode()
         timestamp = str(int(time.time()))
         signature = hmac.new(b'whsec_local_test_only', timestamp.encode() + b'.' + payload, hashlib.sha256).hexdigest()
         return self.client.post('/stripe-webhook', data=payload, headers={'Stripe-Signature': f't={timestamp},v1={signature}', 'Content-Type': 'application/json'})
@@ -89,7 +93,7 @@ class CheckoutTests(unittest.TestCase):
         self.assertEqual(self.webhook().status_code, 200)
         self.assertEqual(self.webhook(event_id='evt_retry').status_code, 200)
         self.assertEqual(self.quantity(), 2)
-        store = Inventory(backend.app.config['INVENTORY_DB_PATH'], backend.CATALOG)
+        store = self.new_store()
         self.assertEqual(store.quantities()['coin-001'], 2)
         self.assertEqual(self.client.get('/checkout-status?session_id=cs_test_1').get_json()['items'], [{'id':'coin-001','qty':1}])
         self.assertEqual(self.quantity(), 2)
@@ -140,7 +144,7 @@ class CheckoutTests(unittest.TestCase):
         store = backend.inventory()
         def attempt(_):
             try:
-                Inventory(store.path, backend.CATALOG).reserve([{'id':'coin-001','qty':2}])
+                self.new_store().reserve([{'id':'coin-001','qty':2}])
                 return True
             except OutOfStock:
                 return False
@@ -154,6 +158,18 @@ class CheckoutTests(unittest.TestCase):
         with self.assertLogs(backend.app.logger, level='ERROR'):
             self.assertEqual(self.webhook().status_code, 500)
         self.assertEqual(backend.inventory().get(self.sessions['cs_test_1']['metadata']['inventory_reservation_id'])['status'], 'open')
+
+    def test_live_key_is_rejected_in_test_mode(self):
+        backend.stripe.api_key = 'sk_live_local_only'
+        self.assertFalse(self.client.get('/inventory').get_json()['checkoutReady'])
+        self.assertEqual(self.checkout().status_code, 503)
+
+    def test_test_session_cannot_settle_live_payment(self):
+        self.checkout()
+        session = dict(self.sessions['cs_test_1'], payment_status='paid', livemode=True)
+        with self.assertRaises(ValueError):
+            backend.inventory().settle(session)
+        self.assertEqual(self.quantity(), 2)  # Reservation stays held, not fulfilled.
 
 
 if __name__ == '__main__':
