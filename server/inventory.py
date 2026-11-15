@@ -12,23 +12,31 @@ class OutOfStock(ValueError):
 
 
 class Inventory:
-    def __init__(self, path, catalog):
+    def __init__(self, path, catalog, mode='test'):
         self.path = path
         self.catalog = catalog
+        self.livemode = mode == 'live'
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         with self.connection() as db:
-            db.executescript('''
+            self.initialize(db)
+
+    def initialize(self, db):
+        for statement in ('''
                 CREATE TABLE IF NOT EXISTS stock (
-                    id TEXT PRIMARY KEY, quantity INTEGER NOT NULL CHECK(quantity >= 0));
+                    id TEXT PRIMARY KEY, quantity INTEGER NOT NULL CHECK(quantity >= 0))''', '''
                 CREATE TABLE IF NOT EXISTS reservations (
                     id TEXT PRIMARY KEY, session_id TEXT UNIQUE,
                     status TEXT NOT NULL, lines TEXT NOT NULL,
                     amount INTEGER NOT NULL, expires_at INTEGER NOT NULL,
-                    created_at INTEGER NOT NULL);
-            ''')
-            for item in catalog.values():
-                db.execute('INSERT OR IGNORE INTO stock VALUES (?, ?)',
-                           (item['id'], item['quantityAvailable']))
+                    created_at INTEGER NOT NULL)'''):
+            db.execute(statement)
+        for item in self.catalog.values():
+            db.execute('INSERT INTO stock VALUES (?, ?) ON CONFLICT(id) DO NOTHING',
+                       (item['id'], item['quantityAvailable']))
+
+    @staticmethod
+    def begin_write(db):
+        db.execute('BEGIN IMMEDIATE')
 
     @contextmanager
     def connection(self):
@@ -57,11 +65,11 @@ class Inventory:
 
     def reserve(self, lines):
         with self.connection() as db:
-            db.execute('BEGIN IMMEDIATE')
+            self.begin_write(db)
             available = self.available(db)
             for line in lines:
                 if line['qty'] > available.get(line['id'], 0):
-                    raise OutOfStock('Some items are no longer available in that quantity. Please update your bag.')
+                    raise OutOfStock('Some items are no longer available in that quantity. Please update your cart.')
             token = uuid.uuid4().hex
             now = int(time.time())
             # A little over Stripe's 30-minute minimum to allow for network latency.
@@ -95,8 +103,10 @@ class Inventory:
         token = session.get('metadata', {}).get('inventory_reservation_id')
         if not token:
             return False  # Unrelated Stripe checkout.
+        if session.get('livemode') is not self.livemode:
+            raise ValueError('Checkout belongs to a different payment mode')
         with self.connection() as db:
-            db.execute('BEGIN IMMEDIATE')
+            self.begin_write(db)
             row = db.execute('SELECT * FROM reservations WHERE id=?', (token,)).fetchone()
             if not row:
                 raise ValueError('Unknown stock reservation')

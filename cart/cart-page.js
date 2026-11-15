@@ -30,13 +30,17 @@
       $('#list').append(row);
     }
     const subtotal = items.reduce((sum, item) => sum + item.qty * item.priceCents, 0);
+    const stock = shop.stockStatus();
     $('#subtotal').textContent = shop.money(subtotal);
     $('#shipping').textContent = items.length ? 'Included' : shop.money(0);
     $('#total').textContent = shop.money(subtotal);
     $('#checkout').disabled = busy || !items.length || !shop.checkoutReady();
-    $('#checkout').textContent = busy ? 'Opening secure checkout…' : 'Checkout';
-    $('#cart-status').textContent = !items.length ? '' : shop.checkoutReady() ? 'Shipping included within Canada. Stock is confirmed at checkout.' : 'Checkout is being prepared. Your items can stay in your cart.';
+    $('#checkout').textContent = busy ? 'Opening secure checkout…' : stock.checking ? 'Checking availability…' : stock.paymentMode === 'test' && shop.checkoutReady() ? 'Test checkout' : 'Checkout';
+    $('#test-checkout-note').hidden = !(stock.paymentMode === 'test' && shop.checkoutReady());
+    $('#retry-stock').hidden = !items.length || !stock.failed || stock.checking;
+    $('#cart-status').textContent = !items.length ? '' : stock.checking ? 'Checking availability. Please wait; this can take up to a minute.' : stock.failed ? 'Unable to confirm availability. Your items are saved; please try again.' : shop.checkoutReady() ? 'Shipping included within Canada. Stock is confirmed at checkout.' : 'Checkout is being prepared. Your items can stay in your cart.';
   }
+  $('#retry-stock').addEventListener('click', () => shop.refreshStock());
   $('#clear').addEventListener('click', () => { try { shop.save([]); } catch { $('#cart-status').textContent = 'Unable to clear your cart.'; } });
   $('#checkout').addEventListener('click', async () => {
     if (busy) return;
@@ -47,6 +51,7 @@
       if (!items.length || !shop.checkoutReady()) throw new Error('Checkout is currently unavailable. Your items can stay in your cart.');
       const response = await fetch(`${shop.api}/create-checkout-session`, {
         method: 'POST', headers: {'Content-Type': 'application/json'},
+        signal: AbortSignal.timeout(90000),
         body: JSON.stringify({items: items.map(item => ({id: item.id, qty: item.qty}))})
       });
       const data = await response.json();
