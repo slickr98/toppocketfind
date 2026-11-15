@@ -1,85 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cart — Top Pocket Find</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <style>
-/* page background */
-body.cart-page{background:#FFF8DC;}
-/* remove the blue panel from base theme on cart */
-.cart-page .main-wrapper, .cart-page main{ background:transparent !important; }
-
-/* Cart page styles (v2 polish) */
-body.cart-page .main-wrapper{max-width:1100px;margin:32px auto;padding:56px 16px 0;position:relative;}
-.cart{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start;}
-@media (max-width:900px){ .cart{grid-template-columns:1fr;} .back-row{ position:static; margin-bottom:12px; } body.cart-page .main-wrapper{ padding-top:16px; } }
-
-/* Keep hidden status controls out of the layout. */
-.cart-page [hidden]{display:none!important;}
-
-/* Buttons */
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid #0a457a;background:#ffd814;color:#111;font-weight:700;cursor:pointer;box-shadow:0 2px 0 #af8a00;transition:.15s transform;}
-.btn:hover{filter:brightness(1.05)}
-.btn:active{transform:translateY(0)}
-.btn.secondary{background:#0a457a;color:#fff;border-color:#0a457a;box-shadow:none}
-
-/* Back link positioning */
-.back-row{ position:absolute; top:12px; left:16px; z-index:5; margin:0; }
-
-/* Items */
-#list{display:grid;gap:12px}
-.item{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:12px 16px;}
-.item .title{font-weight:600}
-.item .qty{display:inline-flex;gap:6px;align-items:center;margin-top:6px}
-.item .qty button{min-width:28px;height:28px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;cursor:pointer}
-.item .remove-btn{margin-left:8px;border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer}
-
-.muted{color:#6b7280}
-
-/* Summary card */
-.summary{position:sticky;top:24px;background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;box-shadow:0 6px 24px rgba(0,0,0,.08)}
-.summary .row{display:flex;justify-content:space-between;margin:8px 0}
-.summary .actions{display:flex;gap:10px;margin-top:12px}
-
-/* Badges */
-.pill{display:inline-block;background:#0a457a;color:#fff;border-radius:999px;padding:3px 10px;font-size:.85rem}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#142735">
+  <title>Your cart — Top Pocket Find</title>
+  <link rel="stylesheet" href="../css/home.css?v=20261114-gallery2">
+  <link rel="stylesheet" href="../css/cart.css?v=20261115-cart1">
   <link rel="icon" href="/favicon.ico?v=20261114-2" sizes="16x16 32x32 48x48 64x64">
   <link rel="icon" href="/favicon.svg?v=20261114-2" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=20261114-2">
+  <script src="../js/shop.js?v=20261115-free1" defer></script>
+  <script src="cart-page.js?v=20261115-cart1" defer></script>
 </head>
 <body class="cart-page">
-  <div class="main-wrapper">
-    <main>
-      <div class="back-row">
-  <button onclick="window.location.href='/index.html#collection'" class="btn secondary">← Back to the collection</button>
-</div>
-<div class="cart">
-        <section>
-          <div id="empty" class="muted">Your cart is empty.</div>
-          <div id="list" style="display:none; display:grid; gap:12px"></div>
-        </section>
-        <aside class="summary">
-          <div class="row"><div>Subtotal</div><div id="subtotal">$0.00</div></div>
-          <div class="row"><div>Shipping</div><div id="shipping">$0.00</div></div>
-          <hr />
-          <div class="row" style="font-weight:700"><div>Total</div><div id="total">$0.00</div></div>
-          <p id="cart-status" class="muted" role="status" aria-live="polite">Loading your cart…</p>
-          <p id="test-checkout-note" class="muted" hidden>Test checkout only — no real payment or order will be placed.</p>
-          <button id="retry-stock" class="btn secondary" type="button" hidden>Check availability again</button>
-          <div class="actions">
-            <button id="checkout" class="btn" disabled>Checkout</button>
-            <button id="clear" class="btn secondary">Clear</button>
-          </div>
-        <div class="muted" style="margin-top:12px"><span class="pill">Canada only</span> — we currently ship within Canada</div>
-        </aside>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="preview-note">SHIPPING INCLUDED <span aria-hidden="true">/</span> Within Canada · Prices in CAD</div>
+  <header class="site-header">
+    <div class="header-inner container">
+      <a class="brand" href="../index.html" aria-label="Top Pocket Find home"><span class="brand-mark" aria-hidden="true">TPF</span><span class="brand-name">TOP POCKET FIND<small>COINS &amp; COLLECTIBLES</small></span></a>
+      <nav class="desktop-nav" aria-label="Main navigation"><a href="../index.html#collection">The collection</a><a href="../index.html#contact">Get in touch</a></nav>
+      <div class="header-actions">
+        <button class="icon-button search-toggle" aria-label="Search the collection" aria-expanded="false" aria-controls="search-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <a class="icon-button cart-link" href="../cart/cart.html" aria-label="Shopping cart, 0 items"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.5 12h11l2-8H6"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span id="cart-count" class="cart-badge">0</span></a>
+        <button class="icon-button menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       </div>
-    </main>
-  </div>
-
-  <script src="../js/shop.js?v=20261115-free1" defer></script>
-  <script src="cart-page.js?v=20261115-free1" defer></script>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav container" aria-label="Mobile navigation" hidden><a href="../index.html#collection">The collection</a><a href="../index.html#contact">Get in touch</a></nav>
+    <div id="search-panel" class="search-panel" hidden><div class="container"><form id="search-form" role="search" action="../index.html#collection" method="get"><label for="collection-search">Search the collection</label><div class="search-input-wrap"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input id="collection-search" name="q" type="search" placeholder="Search coins, themes, keepsakes…" autocomplete="off"><button class="text-button" type="submit">Search</button></div></form></div></div>
+  </header>
+  <main id="main" class="cart-main container">
+    <nav class="cart-breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Your cart</span></nav>
+    <div class="cart-heading"><div><p class="eyebrow">FOR YOUR COLLECTION</p><h1>Your cart<span class="heading-dot">.</span></h1></div><a class="continue-link" href="../index.html#collection"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6-6 6 6 6M4 12h16"/></svg>Continue browsing</a></div>
+    <div class="cart-layout">
+      <section class="cart-items" aria-labelledby="items-title">
+        <div class="items-heading"><h2 id="items-title">Your selection</h2><span id="item-count">0 items</span></div>
+        <div id="empty" class="empty-cart" hidden>
+          <svg class="empty-cart-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M5 8h6l5 24h22l4-17H13"/><circle cx="20" cy="40" r="2"/><circle cx="35" cy="40" r="2"/></svg>
+          <h2>A little room for a find.</h2><p>Your cart is empty. Explore the collection to find something to make your own.</p>
+          <a class="button button-navy" href="../index.html#collection">Browse the collection<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a>
+        </div>
+        <div id="list"></div>
+        <div id="cart-utilities" class="cart-utilities" hidden><p>Items stay in your cart on this browser. Availability is checked again at checkout.</p><button id="clear" class="clear-cart" type="button">Clear cart</button></div>
+      </section>
+      <aside class="order-summary" aria-labelledby="summary-title">
+        <p class="eyebrow">THE DETAILS</p><h2 id="summary-title">Order summary</h2>
+        <dl class="summary-totals"><div><dt>Subtotal</dt><dd id="subtotal">$0.00</dd></div><div><dt>Shipping</dt><dd id="shipping">$0.00</dd></div><div class="summary-total"><dt>Total <span>CAD</span></dt><dd id="total">$0.00</dd></div></dl>
+        <p id="cart-status" class="cart-status" role="status" aria-live="polite">Loading your cart…</p>
+        <p id="test-checkout-note" class="test-checkout-note" hidden><strong>Sandbox checkout</strong>Test only — no real payment or order will be placed.</p>
+        <button id="retry-stock" class="retry-stock" type="button" hidden>Check availability again</button>
+        <button id="checkout" class="button button-navy checkout-button" type="button" disabled>Checkout</button>
+        <p class="secure-checkout"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="1"/><path d="M8 10V6a4 4 0 0 1 8 0v4m-4 5v2"/></svg>Secure payment through Stripe</p>
+        <div class="shipping-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 7 9-4 9 4v11l-9 4-9-4Zm0 0 9 4 9-4M12 11v11M7 5l10 4v5"/></svg><p><strong>Shipping within Canada</strong>Included with your Santa coin.</p></div>
+      </aside>
+    </div>
+  </main>
+  <footer class="site-footer cart-footer"><div class="footer-inner container"><a class="brand footer-brand" href="../index.html"><span class="brand-mark" aria-hidden="true">TPF</span><span class="brand-name">TOP POCKET FIND<small>COINS &amp; COLLECTIBLES</small></span></a><nav aria-label="Footer navigation"><a href="../index.html#collection">The collection</a><a href="../index.html#contact">Contact us</a></nav></div><div class="footer-bottom container"><span>© <span id="copyright-year">2026</span> Top Pocket Find</span><span>Coins &amp; collectibles</span><span>Moncton, NB · Canada</span></div></footer>
 </body>
 </html>
