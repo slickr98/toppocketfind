@@ -21,7 +21,7 @@
       const inc = node('button', '+'); inc.type = 'button'; inc.setAttribute('aria-label', `Increase quantity of ${item.title}`);
       inc.disabled = item.qty >= item.maxQty;
       const remove = node('button', 'Remove', 'remove-btn'); remove.type = 'button';
-      const change = qty => { try { shop.setQuantity(item.id, qty); } catch { $('#cart-status').textContent = 'Unable to save your bag. Please allow browser storage.'; } };
+      const change = qty => { try { shop.setQuantity(item.id, qty); } catch { $('#cart-status').textContent = 'Unable to save your cart. Please allow browser storage.'; } };
       dec.addEventListener('click', () => change(item.qty - 1));
       inc.addEventListener('click', () => change(item.qty + 1));
       remove.addEventListener('click', () => change(0));
@@ -35,16 +35,16 @@
     $('#total').textContent = shop.money(subtotal);
     $('#checkout').disabled = busy || !items.length || !shop.checkoutReady();
     $('#checkout').textContent = busy ? 'Opening secure checkout…' : 'Checkout';
-    $('#cart-status').textContent = !items.length ? '' : shop.checkoutReady() ? 'Shipping included within Canada. Stock is confirmed at checkout.' : 'Checkout is being prepared. Your items can stay in your bag.';
+    $('#cart-status').textContent = !items.length ? '' : shop.checkoutReady() ? 'Shipping included within Canada. Stock is confirmed at checkout.' : 'Checkout is being prepared. Your items can stay in your cart.';
   }
-  $('#clear').addEventListener('click', () => { try { shop.save([]); } catch { $('#cart-status').textContent = 'Unable to clear your bag.'; } });
+  $('#clear').addEventListener('click', () => { try { shop.save([]); } catch { $('#cart-status').textContent = 'Unable to clear your cart.'; } });
   $('#checkout').addEventListener('click', async () => {
     if (busy) return;
     busy = true; render();
     try {
       await shop.refreshStock();
       const items = shop.get();
-      if (!items.length || !shop.checkoutReady()) throw new Error('Checkout is currently unavailable. Your items can stay in your bag.');
+      if (!items.length || !shop.checkoutReady()) throw new Error('Checkout is currently unavailable. Your items can stay in your cart.');
       const response = await fetch(`${shop.api}/create-checkout-session`, {
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({items: items.map(item => ({id: item.id, qty: item.qty}))})

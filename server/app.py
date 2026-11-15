@@ -74,14 +74,14 @@ def validated_lines(data):
         raise ValueError('Invalid cart.')
     items = data.get('items')
     if not isinstance(items, list) or not 1 <= len(items) <= 25:
-        raise ValueError('Your bag is empty or invalid.')
+        raise ValueError('Your cart is empty or invalid.')
     merged = {}
     for item in items:
         if not isinstance(item, dict):
             raise ValueError('Invalid item.')
         item_id, qty = item.get('id'), item.get('qty')
         if not isinstance(item_id, str) or item_id not in CATALOG or not CATALOG[item_id].get('purchasable'):
-            raise ValueError('An item in your bag is not available to purchase.')
+            raise ValueError('An item in your cart is not available to purchase.')
         if type(qty) is not int or not 1 <= qty <= CATALOG[item_id]['quantityAvailable']:
             raise ValueError('Choose a valid whole-number quantity.')
         merged[item_id] = merged.get(item_id, 0) + qty
@@ -99,7 +99,7 @@ def create_checkout_session():
     except ValueError as error:
         return jsonify(error=str(error)), 400
     if not checkout_ready():
-        return jsonify(error='Checkout is being prepared. Your items can stay in your bag.'), 503
+        return jsonify(error='Checkout is being prepared. Your items can stay in your cart.'), 503
     token = None
     try:
         store = inventory()

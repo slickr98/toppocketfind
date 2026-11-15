@@ -12,3 +12,14 @@
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
 
 .small-arrow,.detail-arrow{display:block;width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* Keep price attached to its product; close the card below the price. */
+.product-card{display:flex;flex-direction:column;min-width:0;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.product-image{flex-shrink:0}
+.product-bottom{border-top:0;padding-top:0;margin-top:auto;min-height:48px;gap:10px}
+.product-card .lot-meta{display:flex;flex-direction:column;gap:4px;color:var(--navy)}
+.price-amount{font:700 18px/1.25 var(--sans);letter-spacing:-.2px}
+.price-amount small{font-size:11px;font-weight:600;letter-spacing:0}
+.shipping-label{font-size:11px;line-height:1.4;color:#505f59}
+@media(max-width:560px){.product-card{padding-bottom:13px}.product-bottom{min-height:47px}.price-amount{font-size:16px}.price-amount small{font-size:10px}.shipping-label{font-size:10px}}
+.product-card .lot-meta .price-amount{color:var(--navy)}

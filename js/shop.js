@@ -40,7 +40,7 @@
     if (!product || !Number.isSafeInteger(qty) || qty < 1) throw new Error('Choose a whole-number quantity.');
     const items = get();
     const existing = items.find(item => item.id === id);
-    if ((existing?.qty || 0) + qty > product.quantityAvailable) throw new Error(`Only ${product.quantityAvailable} available, including any already in your bag.`);
+    if ((existing?.qty || 0) + qty > product.quantityAvailable) throw new Error(`Only ${product.quantityAvailable} available, including any already in your cart.`);
     items.push({id, qty});
     return save(items);
   }

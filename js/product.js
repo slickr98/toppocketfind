@@ -27,7 +27,7 @@
       }, 0);
     } catch { /* Browsing still works when local storage is unavailable. */ }
     $('#cart-count').textContent = count > 99 ? '99+' : String(count);
-    $('.cart-link').setAttribute('aria-label', `Shopping bag, ${count} item${count === 1 ? '' : 's'}`);
+    $('.cart-link').setAttribute('aria-label', `Shopping cart, ${count} item${count === 1 ? '' : 's'}`);
   }
   cartCount(); window.addEventListener('pageshow', cartCount); window.addEventListener('storage', cartCount); window.addEventListener('tpf:cart', cartCount);
   const thumbs = [...document.querySelectorAll('.thumbnail-button')];
@@ -76,7 +76,7 @@
   let policyTrigger;
   const policies = {
     'Shipping & returns':'Shipping is included in the $54.95 CAD price per coin, within Canada only. Full return terms will be available before checkout opens.',
-    'Privacy':'The photo gallery and product page do not submit contact information. The existing shopping bag is stored in your browser. Our full privacy policy will be available before orders open.',
+    'Privacy':'The photo gallery and product page do not submit contact information. The existing shopping cart is stored in your browser. Our full privacy policy will be available before orders open.',
     'Terms':'The price is $54.95 CAD for one coin with its presentation packaging and accompanying Mint paperwork. Coins are sold individually, subject to remaining stock. Full sales terms will be available before checkout opens.'
   };
   document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => {
@@ -94,22 +94,22 @@
     }
   });
   const quantity = $('#coin-quantity');
-  const addButton = $('#add-to-bag');
+  const addButton = $('#add-to-cart');
   function updatePurchaseControls() {
     const product = window.tpfShop.product('coin-001');
     if (!product) return;
     const stock = product.quantityAvailable;
     const inBag = window.tpfShop.get().find(item => item.id === product.id)?.qty || 0;
     const remaining = Math.max(0, stock - inBag);
-    $('#stock-status').textContent = stock ? `${stock} available${inBag ? ` · ${inBag} in your bag` : ''}` : 'Sold out';
+    $('#stock-status').textContent = stock ? `${stock} available${inBag ? ` · ${inBag} in your cart` : ''}` : 'Sold out';
     quantity.max = String(remaining);
     quantity.disabled = remaining === 0;
     if (remaining) quantity.value = String(Math.min(remaining, Math.max(1, Number(quantity.value) || 1)));
     addButton.disabled = remaining === 0;
-    addButton.textContent = !stock ? 'Sold out' : remaining ? 'Add to bag' : 'All available coins are in your bag';
+    addButton.textContent = !stock ? 'Sold out' : remaining ? 'Add to cart' : 'All available coins are in your cart';
   }
   window.tpfShop.ready.then(updatePurchaseControls).catch(error => {
-    addButton.textContent = 'Unable to load item'; $('#bag-status').textContent = error.message;
+    addButton.textContent = 'Unable to load item'; $('#cart-feedback').textContent = error.message;
   });
   window.addEventListener('tpf:cart', updatePurchaseControls);
   window.addEventListener('tpf:stock', updatePurchaseControls);
@@ -117,11 +117,11 @@
     try {
       if (!quantity.checkValidity()) { quantity.reportValidity(); return; }
       window.tpfShop.add('coin-001', Number(quantity.value));
-      $('#bag-status').replaceChildren(document.createTextNode('Added to your bag. '));
-      const link = document.createElement('a'); link.href = '../cart/cart.html'; link.textContent = 'View bag';
-      $('#bag-status').append(link);
+      $('#cart-feedback').replaceChildren(document.createTextNode('Added to your cart. '));
+      const link = document.createElement('a'); link.href = '../cart/cart.html'; link.textContent = 'View cart';
+      $('#cart-feedback').append(link);
     } catch (error) {
-      $('#bag-status').textContent = error.name === 'QuotaExceededError' || error.name === 'SecurityError' ? 'Please allow browser storage to use the shopping bag.' : error.message;
+      $('#cart-feedback').textContent = error.name === 'QuotaExceededError' || error.name === 'SecurityError' ? 'Please allow browser storage to use the shopping cart.' : error.message;
     }
   });
   selectPhoto(0);

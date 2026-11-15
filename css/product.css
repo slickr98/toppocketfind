@@ -19,4 +19,4 @@
 .purchase-controls input{width:64px;padding:12px 8px;border:1px solid #a7a696;border-radius:0;background:#fff;color:var(--navy);font:16px var(--sans)}
 .purchase-controls .button{flex:1;justify-content:center;min-width:150px}
 .purchase-controls .button:disabled{opacity:.6;cursor:not-allowed;transform:none}
-#bag-status{margin:13px 0 0}
+#cart-feedback{margin:13px 0 0}

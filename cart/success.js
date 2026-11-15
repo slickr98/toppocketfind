@@ -2,7 +2,7 @@
   const title = document.getElementById('confirmation-title');
   const status = document.getElementById('confirmation-status');
   const session = new URLSearchParams(location.search).get('session_id');
-  if (!session) { title.textContent = 'Order confirmation'; status.textContent = 'No checkout reference was provided. Your shopping bag has not been changed.'; return; }
+  if (!session) { title.textContent = 'Order confirmation'; status.textContent = 'No checkout reference was provided. Your shopping cart has not been changed.'; return; }
   try {
     const response = await fetch(`https://tpf-api.onrender.com/checkout-status?session_id=${encodeURIComponent(session)}`, {cache: 'no-store'});
     const data = await response.json();
