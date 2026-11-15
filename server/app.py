@@ -147,6 +147,7 @@ def create_checkout_session():
                        'quantity': line['qty']} for line in lines]
         session = stripe.checkout.Session.create(
             mode='payment', payment_method_types=['card'], line_items=line_items,
+            adaptive_pricing={'enabled': False},
             shipping_address_collection={'allowed_countries': ['CA']},
             shipping_options=[{'shipping_rate_data': {'type': 'fixed_amount',
                 'fixed_amount': {'amount': 0, 'currency': 'cad'}, 'display_name': 'Shipping included within Canada'}}],
