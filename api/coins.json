@@ -429,11 +429,11 @@
       "slug": "2011-canoe-silver-coins-lot-of-3",
       "title": "2011 $20 Canoe Fine Silver Coins — Lot of 3",
       "url": "products/2011-canoe-silver-coins-lot-of-3.html",
-      "status": "sold_out",
+      "status": "available",
       "currency": "CAD",
       "priceCents": 14995,
       "purchasable": true,
-      "quantityAvailable": 0,
+      "quantityAvailable": 1,
       "coinCount": 3,
       "year": 2011,
       "mint": "Royal Canadian Mint",
@@ -444,6 +444,21 @@
       "grade": null,
       "includes": "Three 2011 Canoe coins in their individual protective packaging, with one shared presentation folder. Sold together as one lot.",
       "images": [
+        {
+          "src": "assets/product-006/03-presentation-card.jpg",
+          "alt": "Presentation folder cover — scan of printed canoe artwork, not an additional coin",
+          "sourceWidth": 1712,
+          "sourceHeight": 2712,
+          "viewBox": [
+            0,
+            0,
+            2712,
+            1712
+          ],
+          "transform": "translate(2712 0) rotate(90)",
+          "kind": "packaging",
+          "thumbnail": "assets/product-006/03-presentation-card.jpg"
+        },
         {
           "src": "assets/product-006/01-three-coins-photo.jpg",
           "alt": "All three actual Canoe coins in individual protective packaging with the one shared presentation folder",
@@ -473,21 +488,6 @@
           "transform": "",
           "kind": "coin-detail",
           "thumbnail": "assets/product-006/02-coin-closeup.jpg"
-        },
-        {
-          "src": "assets/product-006/03-presentation-card.jpg",
-          "alt": "Presentation folder cover — scan of printed canoe artwork, not an additional coin",
-          "sourceWidth": 1712,
-          "sourceHeight": 2712,
-          "viewBox": [
-            0,
-            0,
-            2712,
-            1712
-          ],
-          "transform": "translate(2712 0) rotate(90)",
-          "kind": "packaging",
-          "thumbnail": "assets/product-006/03-presentation-card.jpg"
         },
         {
           "src": "assets/product-006/04-open-card-scan.jpg",
