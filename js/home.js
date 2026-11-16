@@ -109,18 +109,42 @@
   });
   const policies = {
     'Shipping & returns': 'Our first collection will ship within Canada. Shipping options, rates and return terms are still being prepared and will be shown before orders open. This design preview does not accept purchases.',
-    'Privacy': 'This homepage preview does not submit contact messages or install analytics. The existing shopping cart is stored in your browser. Our full privacy policy will be available before launch.',
+    'Privacy': 'Contact messages (name, email and message) are sent to Rick through FormSubmit, which retains submissions for 30 days. The shopping cart is stored in your browser, and payments are processed by Stripe. Please do not send card details or sensitive personal information through the contact form. The full privacy policy is being finalized.',
     'Terms': 'This is a storefront preview. The Santa coin listing has actual item photos; other collection cards use illustrative artwork. The Santa coin is $54.95 CAD each with shipping included within Canada. Full sales terms and checkout are being prepared. Purchasing is not yet available.'
   };
   document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => showDialog(button.dataset.policy, policies[button.dataset.policy], button, 'BEFORE THE SHOP OPENS')));
-  $('#contact-form').addEventListener('submit', event => {
+  const contactForm = $('#contact-form');
+  let contactBusy = false;
+  contactForm.addEventListener('submit', async event => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get('name') || '').trim();
-    const message = String(data.get('message') || '').trim();
-    if (!name || !message) { $('#contact-status').textContent = 'Please add your name and message.'; return; }
-    showDialog('Your message preview', `From: ${name}\nEmail: ${data.get('email')}\n\n${message}\n\nPreview only. Your message has not been sent or stored.`, event.submitter, 'CONTACT TOP POCKET FIND');
-    $('#contact-status').textContent = 'Message preview opened. Nothing was sent.';
+    if (contactBusy || !contactForm.reportValidity()) return;
+    const data = new FormData(contactForm);
+    const payload = Object.fromEntries(['name', 'email', 'message', 'website'].map(key => [key, String(data.get(key) || '').trim()]));
+    const status = $('#contact-status');
+    if (!payload.name || !payload.message) { status.textContent = 'Please add your name and message.'; return; }
+    contactBusy = true;
+    const button = event.submitter || contactForm.querySelector('button[type="submit"]');
+    const originalLabel = button.innerHTML;
+    button.disabled = true; button.textContent = 'Sending…';
+    contactForm.querySelectorAll('input, textarea').forEach(input => { input.readOnly = true; });
+    status.textContent = 'Sending your message. Please wait.';
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload), signal: AbortSignal.timeout(90000)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.submitted !== true) throw new Error(result.error || 'Your message could not be submitted. Please try again later.');
+      contactForm.reset();
+      status.textContent = 'Thanks—your message has been submitted. We’ll reply by email.';
+    } catch (error) {
+      status.textContent = error.name === 'TimeoutError' || error.name === 'AbortError' || error.name === 'TypeError'
+        ? 'We couldn’t confirm submission. Your message is still here; please try again later.'
+        : error.message;
+    } finally {
+      contactBusy = false; button.disabled = false; button.innerHTML = originalLabel;
+      contactForm.querySelectorAll('input, textarea').forEach(input => { input.readOnly = false; });
+    }
   });
   $('#copyright-year').textContent = String(new Date().getFullYear());
 })();

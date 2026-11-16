@@ -31,3 +31,13 @@
 /* Give the first real listing room while the collection grows. */
 .product-grid:has(> .product-card:only-child){grid-template-columns:minmax(0,380px);justify-content:center}
 .product-grid:has(> .product-card:only-child) .product-image{height:auto;aspect-ratio:1/1}
+
+/* Storefront polish: quiet search controls and a simpler hero footer. */
+.search-input-wrap{border-bottom:0}
+.search-panel .text-button{border-bottom:0}
+.search-panel .text-button:hover{color:var(--gold)}
+.hero-bottom{justify-content:flex-end}
+.contact-privacy-note{font-size:10px;line-height:1.7;color:var(--muted);margin:0 0 21px}
+.contact-privacy-note a{text-decoration:underline;text-underline-offset:3px}
+.contact-honeypot{display:none!important}
+.contact-form .button:disabled{opacity:.65;cursor:wait;transform:none}

@@ -75,6 +75,26 @@ using their `inventory_reservation_id` / idempotency key before releasing them.
 Do not release them based only on local elapsed time. Refunds/returns do not
 automatically restock a collectible; inspect it before manually returning stock.
 
+## Contact form
+
+The homepage sends enquiries to `POST /contact`. Set `CONTACT_RECIPIENT` privately
+in Render and `CONTACT_ENABLED=1` to enable the fixed-recipient FormSubmit relay.
+Do not put the destination email in frontend code. Sender-provided recipient,
+CC, subject and provider options are ignored. The form includes a honeypot,
+field limits, production-origin checks and best-effort per-worker rate limits;
+FormSubmit also applies its own spam filters. No customer messages are stored
+in this application's database or logs. FormSubmit retains submissions for 30 days.
+
+The first submission sends the mailbox owner an activation link. The owner must
+confirm it before email delivery is verified. Pending submissions are retained
+by FormSubmit until confirmation. A successful API response means accepted for
+delivery, not proof of inbox receipt. After activation, submit a real website
+enquiry and have the owner confirm receipt and Reply-To. Do not automatically
+retry ambiguous timeouts; the sender's form fields remain intact on failure.
+
+Contact settings are separate from Stripe merchant sale alerts and manual
+customer thank-you/shipping emails. No paid email plan is required.
+
 ## Checks
 
 From the repository root, with server dependencies installed:

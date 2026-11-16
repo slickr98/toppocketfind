@@ -10,11 +10,14 @@ import stripe
 try:
     from .inventory import Inventory, OutOfStock
     from .postgres_inventory import PostgresInventory
+    from .contact import contact_routes
 except ImportError:  # Existing Render start command: gunicorn app:app, root directory server.
     from inventory import Inventory, OutOfStock
     from postgres_inventory import PostgresInventory
+    from contact import contact_routes
 
 app = Flask(__name__)
+app.register_blueprint(contact_routes)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG = {item['id']: item for item in json.loads((ROOT / 'api/coins.json').read_text())['products']}
