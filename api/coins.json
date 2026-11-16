@@ -358,13 +358,13 @@
       "images": [
         {
           "src": "assets/product-005/01-presentation-card.jpg",
-          "alt": "Presentation card front — cropped scan of printed Magical Reindeer artwork",
+          "alt": "Presentation card front — full scan of printed Magical Reindeer artwork",
           "sourceWidth": 1660,
           "sourceHeight": 2540,
           "viewBox": [
-            1060,
             0,
-            1480,
+            0,
+            2540,
             1660
           ],
           "transform": "translate(2540 0) rotate(90)",
