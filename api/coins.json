@@ -255,6 +255,21 @@
           "transform": "",
           "kind": "presentation",
           "thumbnail": "assets/product-003/02-open-card-scan.jpg"
+        },
+        {
+          "src": "assets/product-003/03-open-card-photo.jpg",
+          "thumbnail": "assets/product-003/03-open-card-photo.jpg",
+          "alt": "Photograph of the actual Hockey coin in its protective sleeve with the open presentation card",
+          "sourceWidth": 1536,
+          "sourceHeight": 2048,
+          "viewBox": [
+            0,
+            0,
+            1536,
+            2048
+          ],
+          "transform": "",
+          "kind": "coin-photo"
         }
       ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---hockey-2013",
