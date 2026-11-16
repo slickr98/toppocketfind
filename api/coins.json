@@ -18,12 +18,12 @@
       "diameterMmPerCoin": 27,
       "faceValueCadPerCoin": 20,
       "grade": null,
-      "includes": "One Santa coin in its protective packaging, with one holiday presentation card and accompanying Mint paperwork.",
+      "includes": "One Santa coin in its protective packaging, with one holiday presentation card.",
       "images": [
         {
           "src": "assets/product-001/10-cover-scan-source.jpg",
           "thumbnail": "assets/product-001/10-cover-scan-source.jpg",
-          "alt": "Presentation card front — cropped scan of the packaging artwork",
+          "alt": "Presentation card front \u2014 cropped scan of the packaging artwork",
           "sourceWidth": 1760,
           "sourceHeight": 3280,
           "viewBox": [
@@ -38,7 +38,7 @@
         {
           "src": "assets/product-001/11-coin-closeup-photo.jpg",
           "thumbnail": "assets/product-001/11-coin-closeup-photo.jpg",
-          "alt": "Actual coin close-up — photographed in its protective packaging",
+          "alt": "Actual coin close-up \u2014 photographed in its protective packaging",
           "sourceWidth": 4000,
           "sourceHeight": 3000,
           "viewBox": [
@@ -108,11 +108,11 @@
       "slug": "2013-iceberg-and-whale-silver-coin",
       "title": "2013 $20 Iceberg and Whale Fine Silver Coin",
       "url": "products/2013-iceberg-and-whale-silver-coin.html",
-      "status": "sold_out",
+      "status": "available",
       "currency": "CAD",
       "priceCents": 5495,
       "purchasable": true,
-      "quantityAvailable": 0,
+      "quantityAvailable": 3,
       "coinCount": 1,
       "year": 2013,
       "mint": "Royal Canadian Mint",
@@ -121,11 +121,11 @@
       "diameterMmPerCoin": 27,
       "faceValueCadPerCoin": 20,
       "grade": null,
-      "includes": "One Iceberg and Whale coin in its protective packaging, with one illustrated presentation card and accompanying Mint paperwork.",
+      "includes": "One Iceberg and Whale coin in its protective packaging, with one illustrated presentation card.",
       "images": [
         {
           "src": "assets/product-002/01-presentation-card.jpg",
-          "alt": "Presentation card front — scanned packaging artwork",
+          "alt": "Presentation card front \u2014 scanned packaging artwork",
           "sourceWidth": 1692,
           "sourceHeight": 1696,
           "viewBox": [
@@ -140,7 +140,7 @@
         },
         {
           "src": "assets/product-002/02-coin-closeup.jpg",
-          "alt": "Actual Iceberg and Whale coin in its protective packaging — single-coin detail",
+          "alt": "Actual Iceberg and Whale coin in its protective packaging \u2014 single-coin detail",
           "sourceWidth": 3000,
           "sourceHeight": 4000,
           "viewBox": [

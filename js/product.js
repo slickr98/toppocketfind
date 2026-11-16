@@ -77,7 +77,7 @@
   const policies = {
     'Shipping & returns':'Shipping is included in the $54.95 CAD price per coin, within Canada only. Full return terms will be available before checkout opens.',
     'Privacy': 'Contact messages (name, email and message) are sent to Rick through FormSubmit, which retains submissions for 30 days. The shopping cart is stored in your browser, and payments are processed by Stripe. Please do not send card details or sensitive personal information through the contact form. The full privacy policy is being finalized.',
-    'Terms':'The price is $54.95 CAD for one coin with its presentation packaging and accompanying Mint paperwork. Coins are sold individually, subject to remaining stock. Full sales terms will be available before checkout opens.'
+    'Terms':'The price is $54.95 CAD for one coin with its presentation packaging. Coins are sold individually, subject to remaining stock. Full sales terms will be available before checkout opens.'
   };
   document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => {
     policyTrigger = button;
