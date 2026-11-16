@@ -23,7 +23,7 @@
         {
           "src": "assets/product-001/10-cover-scan-source.jpg",
           "thumbnail": "assets/product-001/10-cover-scan-source.jpg",
-          "alt": "Presentation card front \u2014 cropped scan of the packaging artwork",
+          "alt": "Presentation card front — cropped scan of the packaging artwork",
           "sourceWidth": 1760,
           "sourceHeight": 3280,
           "viewBox": [
@@ -38,7 +38,7 @@
         {
           "src": "assets/product-001/11-coin-closeup-photo.jpg",
           "thumbnail": "assets/product-001/11-coin-closeup-photo.jpg",
-          "alt": "Actual coin close-up \u2014 photographed in its protective packaging",
+          "alt": "Actual coin close-up — photographed in its protective packaging",
           "sourceWidth": 4000,
           "sourceHeight": 3000,
           "viewBox": [
@@ -97,6 +97,94 @@
         }
       ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---santa-2013",
+      "coverImage": 0,
+      "shippingIncluded": true,
+      "shippingCountries": [
+        "CA"
+      ]
+    },
+    {
+      "id": "coin-002",
+      "slug": "2013-iceberg-and-whale-silver-coin",
+      "title": "2013 $20 Iceberg and Whale Fine Silver Coin",
+      "url": "products/2013-iceberg-and-whale-silver-coin.html",
+      "status": "sold_out",
+      "currency": "CAD",
+      "priceCents": 5495,
+      "purchasable": true,
+      "quantityAvailable": 0,
+      "coinCount": 1,
+      "year": 2013,
+      "mint": "Royal Canadian Mint",
+      "composition": "99.99% fine silver",
+      "weightGramsPerCoin": 7.96,
+      "diameterMmPerCoin": 27,
+      "faceValueCadPerCoin": 20,
+      "grade": null,
+      "includes": "One Iceberg and Whale coin in its protective packaging, with one illustrated presentation card and accompanying Mint paperwork.",
+      "images": [
+        {
+          "src": "assets/product-002/01-presentation-card.jpg",
+          "alt": "Presentation card front — scanned packaging artwork",
+          "sourceWidth": 1692,
+          "sourceHeight": 1696,
+          "viewBox": [
+            0,
+            0,
+            1696,
+            1692
+          ],
+          "transform": "translate(0 1692) rotate(-90)",
+          "kind": "packaging",
+          "thumbnail": "assets/product-002/01-presentation-card.jpg"
+        },
+        {
+          "src": "assets/product-002/02-coin-closeup.jpg",
+          "alt": "Actual Iceberg and Whale coin in its protective packaging — single-coin detail",
+          "sourceWidth": 3000,
+          "sourceHeight": 4000,
+          "viewBox": [
+            450,
+            1550,
+            1800,
+            1800
+          ],
+          "transform": "",
+          "kind": "coin-detail",
+          "thumbnail": "assets/product-002/02-coin-closeup.jpg"
+        },
+        {
+          "src": "assets/product-002/03-open-card-scan.jpg",
+          "alt": "Open presentation card scan with the coin and Mint certificate",
+          "sourceWidth": 1868,
+          "sourceHeight": 3508,
+          "viewBox": [
+            0,
+            0,
+            1868,
+            3508
+          ],
+          "transform": "",
+          "kind": "presentation",
+          "thumbnail": "assets/product-002/03-open-card-scan.jpg"
+        },
+        {
+          "src": "assets/product-002/04-open-card-photo.jpg",
+          "alt": "Photograph of one Iceberg and Whale coin with its open presentation card",
+          "sourceWidth": 3000,
+          "sourceHeight": 4000,
+          "viewBox": [
+            0,
+            0,
+            3000,
+            4000
+          ],
+          "transform": "",
+          "kind": "coin-photo",
+          "thumbnail": "assets/product-002/04-open-card-photo.jpg"
+        }
+      ],
+      "specificationSource": "https://www.mint.ca/en/shop/coins/2013/$20-for-$20-fine-silver-coin---iceberg-and-whale-2013",
       "coverImage": 0,
       "shippingIncluded": true,
       "shippingCountries": [
