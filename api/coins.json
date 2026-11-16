@@ -278,6 +278,63 @@
       "shippingCountries": [
         "CA"
       ]
+    },
+    {
+      "id": "coin-004",
+      "slug": "2011-maple-leaf-silver-coin",
+      "title": "2011 $20 Maple Leaf Fine Silver Coin",
+      "url": "products/2011-maple-leaf-silver-coin.html",
+      "status": "sold_out",
+      "currency": "CAD",
+      "priceCents": 5495,
+      "purchasable": true,
+      "quantityAvailable": 0,
+      "coinCount": 1,
+      "year": 2011,
+      "mint": "Royal Canadian Mint",
+      "composition": "99.99% fine silver",
+      "weightGramsPerCoin": 7.96,
+      "faceValueCadPerCoin": 20,
+      "grade": null,
+      "includes": "One 2011 Maple Leaf coin in its unopened presentation packaging; outer card has visible edge and corner wear.",
+      "images": [
+        {
+          "src": "assets/product-004/01-sealed-front.jpg",
+          "alt": "Actual 2011 Maple Leaf coin viewed through its unopened presentation-card window",
+          "sourceWidth": 1536,
+          "sourceHeight": 2048,
+          "viewBox": [
+            0,
+            330,
+            1536,
+            1550
+          ],
+          "transform": "",
+          "kind": "coin-photo",
+          "thumbnail": "assets/product-004/01-sealed-front.jpg"
+        },
+        {
+          "src": "assets/product-004/02-seal-and-label.jpg",
+          "alt": "Back of the unopened presentation card showing the closure seal and Mint product number 114366",
+          "sourceWidth": 1536,
+          "sourceHeight": 2048,
+          "viewBox": [
+            0,
+            300,
+            1536,
+            1550
+          ],
+          "transform": "",
+          "kind": "packaging",
+          "thumbnail": "assets/product-004/02-seal-and-label.jpg"
+        }
+      ],
+      "specificationSource": "https://www.mint.ca/en/shop/coins/2011/$20-for-$20-fine-silver-commemorative-coin-2011",
+      "coverImage": 0,
+      "shippingIncluded": true,
+      "shippingCountries": [
+        "CA"
+      ]
     }
   ]
 }
