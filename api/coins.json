@@ -423,6 +423,94 @@
       "shippingCountries": [
         "CA"
       ]
+    },
+    {
+      "id": "coin-006",
+      "slug": "2011-canoe-silver-coins-lot-of-3",
+      "title": "2011 $20 Canoe Fine Silver Coins — Lot of 3",
+      "url": "products/2011-canoe-silver-coins-lot-of-3.html",
+      "status": "sold_out",
+      "currency": "CAD",
+      "priceCents": 14995,
+      "purchasable": true,
+      "quantityAvailable": 0,
+      "coinCount": 3,
+      "year": 2011,
+      "mint": "Royal Canadian Mint",
+      "composition": "99.99% fine silver",
+      "weightGramsPerCoin": 7.96,
+      "diameterMmPerCoin": 27,
+      "faceValueCadPerCoin": 20,
+      "grade": null,
+      "includes": "Three 2011 Canoe coins in their individual protective packaging, with one shared presentation folder. Sold together as one lot.",
+      "images": [
+        {
+          "src": "assets/product-006/01-three-coins-photo.jpg",
+          "alt": "All three actual Canoe coins in individual protective packaging with the one shared presentation folder",
+          "sourceWidth": 2048,
+          "sourceHeight": 1536,
+          "viewBox": [
+            0,
+            0,
+            2048,
+            1536
+          ],
+          "transform": "",
+          "kind": "lot-photo",
+          "thumbnail": "assets/product-006/01-three-coins-photo.jpg"
+        },
+        {
+          "src": "assets/product-006/02-coin-closeup.jpg",
+          "alt": "Close-up photograph of one of the actual Canoe coins in its protective packaging",
+          "sourceWidth": 1536,
+          "sourceHeight": 2048,
+          "viewBox": [
+            0,
+            0,
+            1536,
+            2048
+          ],
+          "transform": "",
+          "kind": "coin-detail",
+          "thumbnail": "assets/product-006/02-coin-closeup.jpg"
+        },
+        {
+          "src": "assets/product-006/03-presentation-card.jpg",
+          "alt": "Presentation folder cover — scan of printed canoe artwork, not an additional coin",
+          "sourceWidth": 1712,
+          "sourceHeight": 2712,
+          "viewBox": [
+            0,
+            0,
+            2712,
+            1712
+          ],
+          "transform": "translate(2712 0) rotate(90)",
+          "kind": "packaging",
+          "thumbnail": "assets/product-006/03-presentation-card.jpg"
+        },
+        {
+          "src": "assets/product-006/04-open-card-scan.jpg",
+          "alt": "Open shared presentation folder scan with the three actual Canoe coins and printed specifications",
+          "sourceWidth": 2552,
+          "sourceHeight": 2712,
+          "viewBox": [
+            0,
+            0,
+            2712,
+            2552
+          ],
+          "transform": "translate(2712 0) rotate(90)",
+          "kind": "presentation",
+          "thumbnail": "assets/product-006/04-open-card-scan.jpg"
+        }
+      ],
+      "specificationSource": "https://www.mint.ca/en/shop/coins/2011/$20-for-$20-fine-silver-coin---canoe-2011",
+      "coverImage": 0,
+      "shippingIncluded": true,
+      "shippingCountries": [
+        "CA"
+      ]
     }
   ]
 }

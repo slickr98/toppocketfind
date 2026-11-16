@@ -109,7 +109,7 @@
     $('label[for="coin-quantity"]').hidden = stock === 0;
     if (remaining) quantity.value = String(Math.min(remaining, Math.max(1, Number(quantity.value) || 1)));
     addButton.disabled = remaining === 0;
-    addButton.textContent = !stock ? 'Sold out' : remaining ? 'Add to cart' : 'All available coins are in your cart';
+    addButton.textContent = !stock ? 'Sold out' : remaining ? 'Add to cart' : product.coinCount > 1 ? 'This lot is already in your cart' : 'All available coins are in your cart';
   }
   window.tpfShop.ready.then(updatePurchaseControls).catch(error => {
     addButton.textContent = 'Unable to load item'; $('#cart-feedback').textContent = error.message;
