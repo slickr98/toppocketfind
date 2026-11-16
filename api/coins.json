@@ -284,11 +284,11 @@
       "slug": "2011-maple-leaf-silver-coin",
       "title": "2011 $20 Maple Leaf Fine Silver Coin",
       "url": "products/2011-maple-leaf-silver-coin.html",
-      "status": "sold_out",
+      "status": "available",
       "currency": "CAD",
       "priceCents": 5495,
       "purchasable": true,
-      "quantityAvailable": 0,
+      "quantityAvailable": 1,
       "coinCount": 1,
       "year": 2011,
       "mint": "Royal Canadian Mint",
@@ -330,6 +330,94 @@
         }
       ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/2011/$20-for-$20-fine-silver-commemorative-coin-2011",
+      "coverImage": 0,
+      "shippingIncluded": true,
+      "shippingCountries": [
+        "CA"
+      ]
+    },
+    {
+      "id": "coin-005",
+      "slug": "2012-magical-reindeer-silver-coin",
+      "title": "2012 $20 Magical Reindeer Fine Silver Coin",
+      "url": "products/2012-magical-reindeer-silver-coin.html",
+      "status": "sold_out",
+      "currency": "CAD",
+      "priceCents": 5495,
+      "purchasable": true,
+      "quantityAvailable": 0,
+      "coinCount": 1,
+      "year": 2012,
+      "mint": "Royal Canadian Mint",
+      "composition": "99.99% fine silver",
+      "weightGramsPerCoin": 7.96,
+      "diameterMmPerCoin": 27,
+      "faceValueCadPerCoin": 20,
+      "grade": null,
+      "includes": "One Magical Reindeer coin in its protective packaging, with one illustrated holiday presentation card.",
+      "images": [
+        {
+          "src": "assets/product-005/01-presentation-card.jpg",
+          "alt": "Presentation card front — cropped scan of printed Magical Reindeer artwork",
+          "sourceWidth": 1660,
+          "sourceHeight": 2540,
+          "viewBox": [
+            850,
+            0,
+            1660,
+            1660
+          ],
+          "transform": "translate(2540 0) rotate(90)",
+          "kind": "packaging",
+          "thumbnail": "assets/product-005/01-presentation-card.jpg"
+        },
+        {
+          "src": "assets/product-005/02-coin-closeup.jpg",
+          "alt": "Actual Magical Reindeer coin close-up, photographed in its protective packaging",
+          "sourceWidth": 1536,
+          "sourceHeight": 2048,
+          "viewBox": [
+            0,
+            0,
+            1536,
+            2048
+          ],
+          "transform": "",
+          "kind": "coin-detail",
+          "thumbnail": "assets/product-005/02-coin-closeup.jpg"
+        },
+        {
+          "src": "assets/product-005/03-card-specifications.jpg",
+          "alt": "Open presentation card and printed coin specifications — scan",
+          "sourceWidth": 2544,
+          "sourceHeight": 2552,
+          "viewBox": [
+            0,
+            0,
+            2544,
+            2552
+          ],
+          "transform": "",
+          "kind": "presentation",
+          "thumbnail": "assets/product-005/03-card-specifications.jpg"
+        },
+        {
+          "src": "assets/product-005/04-open-card-photo.jpg",
+          "alt": "Photograph of the actual Magical Reindeer coin with its open presentation card",
+          "sourceWidth": 2048,
+          "sourceHeight": 1536,
+          "viewBox": [
+            0,
+            0,
+            2048,
+            1536
+          ],
+          "transform": "",
+          "kind": "coin-photo",
+          "thumbnail": "assets/product-005/04-open-card-photo.jpg"
+        }
+      ],
+      "specificationSource": "https://www.mint.ca/en/shop/coins/2012/$20-for-$20-fine-silver-coin---magical-reindeer-2012",
       "coverImage": 0,
       "shippingIncluded": true,
       "shippingCountries": [
