@@ -86,6 +86,7 @@
     $('#dialog-title').textContent = title;
     $('#dialog-body').textContent = body;
     $('#dialog-eyebrow').textContent = eyebrow;
+    $('#dialog-eyebrow').hidden = !eyebrow;
     dialog.setAttribute('aria-labelledby', 'dialog-title');
     dialog.setAttribute('aria-describedby', 'dialog-body');
     dialog.showModal();
@@ -112,6 +113,6 @@
     'Privacy': 'Contact enquiries are sent directly through your email app. Your email address and message are used to reply to your enquiry. The shopping cart is stored in your browser, and payments are processed by Stripe. Please do not send card details or sensitive personal information by email. The full privacy policy is being finalized.',
     'Terms': 'This is a storefront preview. The Santa coin listing has actual item photos; other collection cards use illustrative artwork. The Santa coin is $54.95 CAD each with shipping included within Canada. Full sales terms and checkout are being prepared. Purchasing is not yet available.'
   };
-  document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => showDialog(button.dataset.policy, policies[button.dataset.policy], button, 'BEFORE THE SHOP OPENS')));
+  document.querySelectorAll('[data-policy]').forEach(button => button.addEventListener('click', () => showDialog(button.dataset.policy, policies[button.dataset.policy], button, '')));
   $('#copyright-year').textContent = String(new Date().getFullYear());
 })();
