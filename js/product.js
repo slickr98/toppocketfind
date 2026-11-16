@@ -93,10 +93,11 @@
       menu.hidden = true; menuToggle.setAttribute('aria-expanded','false'); menuToggle.setAttribute('aria-label','Open menu');
     }
   });
+  const productId = document.body.dataset.productId || 'coin-001';
   const quantity = $('#coin-quantity');
   const addButton = $('#add-to-cart');
   function updatePurchaseControls() {
-    const product = window.tpfShop.product('coin-001');
+    const product = window.tpfShop.product(productId);
     if (!product) return;
     const stock = product.quantityAvailable;
     const inBag = window.tpfShop.get().find(item => item.id === product.id)?.qty || 0;
@@ -118,7 +119,7 @@
   addButton.addEventListener('click', () => {
     try {
       if (!quantity.checkValidity()) { quantity.reportValidity(); return; }
-      window.tpfShop.add('coin-001', Number(quantity.value));
+      window.tpfShop.add(productId, Number(quantity.value));
       $('#cart-feedback').replaceChildren(document.createTextNode('Added to your cart. '));
       const link = document.createElement('a'); link.href = '../cart/cart.html'; link.textContent = 'View cart';
       $('#cart-feedback').append(link);
