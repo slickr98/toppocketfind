@@ -89,3 +89,6 @@ DTC is a separate VINVOX project: requested v4 based on original v2 Table Repair
 
 ## Resume
 Start with this file, current catalog and live stock. Products 1–6 are reviewed/live, not pending approval. Next likely work is more coin intake or the 20-comic collection. Ask for a new handoff/current-status read if source has changed.
+
+## Denomination title wording (2026-11-23)
+Rick approved spelling out “Twenty Dollar” in the six $20 coin listing titles. Homepage cards, product headings/page titles/breadcrumbs and catalog/cart names use that wording. Numeric face values remain $20 CAD per coin in specifications. Silver-dollar listings retain “Silver Dollar.” Prices, quantities and product URLs are unchanged.
