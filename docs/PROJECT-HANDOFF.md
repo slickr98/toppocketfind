@@ -2,15 +2,33 @@
 Updated 2026-11-23. Read this before continuing work. This handoff preserves decisions from the product-listing chat; confirm current source and stock before future edits.
 
 ## Coming-soon coin listings (2026-11-23)
-- Rick authorized ten upcoming single silver-dollar listings: 1982–1988, 1992, 1993, 1996. Complete **1982 only** first and let him review before adding the other nine.
+- Rick authorized ten upcoming single silver-dollar listings: 1982–1988, 1992, 1993, 1996. Rick reviewed and approved the 1982 layout, then authorized completing the remaining nine together. All ten stay unavailable to purchase pending final photo, condition and price review.
 - `coin-007`, `products/1982-regina-centennial-silver-dollar.html`: 1982 Regina Centennial. Quantity 0, status `coming-soon`, `purchasable: false`, price not set (`null`). Unopened, original sleeve included, no condition grade. Photos and detailed condition review remain outstanding before activation.
 - The Royal Canadian Mint archive currently shows this issue at a mismatched historical URL (`$1---sterling-silver-coin-international-year-of-older-persons-1999`), product number 1210. The actual rendered title is Regina Centennial (1982). No product photo is available there; Rick explicitly approved a text placeholder for now. Never label a placeholder as a Mint image or an actual-item photo.
 - The Mint archive's weight field appears inconsistent (36.07 g); omit weight and diameter until checked against packaging or reliable corroboration. Proof issue specifications are provisional until the actual coin is reviewed.
 - Future activation requires reviewing photos, condition, finish, price, then updating catalog status/purchasable/quantity and explicitly setting production stock. A backend stock value alone cannot make coming-soon products purchasable.
 - Production stock read before this change: coin-001/002/003/005 = 3 each; coin-004/006 = 1 each; legacy 220025 = 0. Do not reset these quantities.
 
+## Remaining nine previews (2026-11-23)
+All use the approved 1982 layout: quantity 0, `coming-soon`, `purchasable: false`, price `null`, unopened with original sleeve, no numerical grade. The nine Mint archive pages were checked and provide no usable product image; use the approved text placeholders. Replace them with actual-item photos when available. Do not silently substitute dealer photos or artwork.
+
+| ID | Issue | Composition | Proof issue mintage | Source |
+|---|---|---|---:|---|
+| coin-008 | 1983 World University Games | 50% silver, 50% copper | 340,068 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---world-university-games-1983) |
+| coin-009 | 1984 Toronto 150th Anniversary | 50% silver, 50% copper | 571,563 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---silver-coin-toronto-sesquicentennial-1984) |
+| coin-010 | 1985 National Parks Centennial | 50% silver, 50% copper | 537,297 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---silver-coin-henry-kelsey-tricentennial-1990) |
+| coin-011 | 1986 Vancouver Centennial | 50% silver, 50% copper | 496,418 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---silver-coin-vancouver-centennial-1986) |
+| coin-012 | 1987 John Davis | 50% silver, 50% copper | 405,688 | [Mint archive](https://www.mint.ca/en-us/shopping/archives/pre-2010/$1---silver-coin-national-parks-centennial-1985) |
+| coin-013 | 1988 Saint-Maurice Ironworks | 50% silver, 50% copper | 259,230 | [Mint archive](https://www.mint.ca/en-us/shopping/archives/pre-2010/$1---silver-coin-saint-maurice-ironworks-1988) |
+| coin-014 | 1992 Kingston to York Stagecoach | 92.5% silver, 7.5% copper | 187,612 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-kingston-to-york-stagecoach-1992) |
+| coin-015 | 1993 Stanley Cup Centennial | 92.5% silver, 7.5% copper | 294,314 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-100th-anniversary-of-the-stanley-cup-1993) |
+| coin-016 | 1996 John McIntosh | 92.5% silver, 7.5% copper | 133,779 | [Mint archive](https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-the-200th-anniversary-of-john-mcintosh-1996) |
+
+Specifications describe the Mint's proof issues; verify the actual items' finishes before activation. Omit weight and diameter because the Mint archives repeat an inconsistent weight field. The 1985 and 1987 URLs have unrelated historical slugs: their rendered titles and product numbers were checked (National Parks Centennial, 1201; John Davis, 1200). The 1988 source misspells one engraver's name; list confirmed designer R.R. Carmichael only for now.
+The original six entries and their live quantities were preserved. The 1982 listing remains unchanged.
+
 ## Current position
-Six reviewed coin listings are published at https://www.toppocketfind.ca/.
+Six reviewed coin listings and ten coming-soon silver-dollar previews are published at https://www.toppocketfind.ca/.
 GitHub: slickr98/toppocketfind, main. GitHub Pages frontend; Flask backend on Render at https://tpf-api.onrender.com. Preserve existing hosting and design.
 
 ## Inventory snapshot (verified source and production database 2026-11-16)

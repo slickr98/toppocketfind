@@ -62,18 +62,22 @@ test('unavailable backend never claims checkout is ready', async () => {
 });
 
 test('coming-soon coins stay out of carts even when stock service reports stock', async () => {
-  const upcoming = JSON.parse(fs.readFileSync('api/coins.json')).products.find(row => row.id === 'coin-007');
-  assert.equal(upcoming.status, 'coming-soon');
-  assert.equal(upcoming.purchasable, false);
-  assert.equal(upcoming.quantityAvailable, 0);
-  const initial = JSON.stringify([{id: upcoming.id, qty: 1, priceCents: 1}]);
-  const {shop, context} = await setup(initial, [coin, upcoming]);
+  const upcoming = JSON.parse(fs.readFileSync('api/coins.json')).products.filter(row => row.status === 'coming-soon');
+  assert.deepEqual(upcoming.map(row => row.year), [1982, 1983, 1984, 1985, 1986, 1987, 1988, 1992, 1993, 1996]);
+  for (const row of upcoming) {
+    assert.equal(row.purchasable, false);
+    assert.equal(row.quantityAvailable, 0);
+  }
+  const initial = JSON.stringify(upcoming.map(row => ({id: row.id, qty: 1, priceCents: 1})));
+  const {shop, context} = await setup(initial, [coin, ...upcoming]);
   assert.equal(shop.get().length, 0);
-  assert.throws(() => shop.add(upcoming.id, 1), /coming soon/);
-  context.fetch = async () => ({ok: true, json: async () => ({products: [{id: upcoming.id, quantityAvailable: 3}], checkoutReady: true, paymentMode: 'live'})});
+  for (const row of upcoming) assert.throws(() => shop.add(row.id, 1), /coming soon/);
+  context.fetch = async () => ({ok: true, json: async () => ({products: upcoming.map(row => ({id: row.id, quantityAvailable: 3})), checkoutReady: true, paymentMode: 'live'})});
   await shop.refreshStock();
-  assert.equal(shop.product(upcoming.id).quantityAvailable, 0);
-  assert.throws(() => shop.add(upcoming.id, 1), /coming soon/);
+  for (const row of upcoming) {
+    assert.equal(shop.product(row.id).quantityAvailable, 0);
+    assert.throws(() => shop.add(row.id, 1), /coming soon/);
+  }
   shop.add(coin.id, 1);
   assert.equal(shop.get()[0].id, coin.id);
 });
