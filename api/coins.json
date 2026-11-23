@@ -511,6 +511,30 @@
       "shippingCountries": [
         "CA"
       ]
+    },
+    {
+      "id": "coin-007",
+      "slug": "1982-regina-centennial-silver-dollar",
+      "title": "1982 $1 Regina Centennial Silver Dollar",
+      "url": "products/1982-regina-centennial-silver-dollar.html",
+      "status": "coming-soon",
+      "currency": "CAD",
+      "priceCents": null,
+      "purchasable": false,
+      "quantityAvailable": 0,
+      "coinCount": 1,
+      "year": 1982,
+      "mint": "Royal Canadian Mint",
+      "composition": "50% silver, 50% copper",
+      "faceValueCadPerCoin": 1,
+      "grade": null,
+      "includes": "One unopened 1982 Regina Centennial silver dollar with its original sleeve.",
+      "images": [],
+      "specificationSource": "https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-international-year-of-older-persons-1999",
+      "shippingIncluded": true,
+      "shippingCountries": [
+        "CA"
+      ]
     }
   ]
 }

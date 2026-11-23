@@ -20,7 +20,7 @@
     for (const raw of items) {
       if (!raw || typeof raw.id !== 'string') continue;
       const product = catalog.get(raw.id);
-      const maxQty = product ? product.quantityAvailable : Math.max(1, integer(raw.maxQty, 1));
+      const maxQty = product ? (product.purchasable === false || product.status === 'coming-soon' ? 0 : product.quantityAvailable) : Math.max(1, integer(raw.maxQty, 1));
       const qty = Math.min(maxQty, integer(raw.qty));
       if (!qty) continue;
       const item = product ? {id: product.id, title: product.title, priceCents: product.priceCents,
@@ -42,6 +42,7 @@
   function add(id, qty) {
     const product = catalog.get(id);
     if (!product || !Number.isSafeInteger(qty) || qty < 1) throw new Error('Choose a whole-number quantity.');
+    if (product.status === 'coming-soon' || product.purchasable === false) throw new Error('This item is coming soon and is not available to purchase yet.');
     const items = get();
     const existing = items.find(item => item.id === id);
     if ((existing?.qty || 0) + qty > product.quantityAvailable) throw new Error(`Only ${product.quantityAvailable} available, including any already in your cart.`);
@@ -70,7 +71,7 @@
       for (const product of data.products || []) {
         const known = catalog.get(product.id);
         if (known && Number.isSafeInteger(product.quantityAvailable) && product.quantityAvailable >= 0) {
-          catalog.set(product.id, {...known, quantityAvailable: product.quantityAvailable});
+          catalog.set(product.id, {...known, quantityAvailable: known.purchasable === false || known.status === 'coming-soon' ? 0 : product.quantityAvailable});
         }
       }
       paymentMode = ['test', 'live'].includes(data.paymentMode) ? data.paymentMode : null;

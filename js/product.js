@@ -34,6 +34,7 @@
   const lightbox = $('#photo-lightbox');
   let selected = 0;
   function selectPhoto(index) {
+    if (!thumbs.length) return;
     selected = (index + thumbs.length) % thumbs.length;
     const thumb = thumbs[selected];
     // SVG viewports reframe original photo pixels without altering coin detail.
@@ -58,16 +59,16 @@
     thumbs.forEach((button,i) => button.setAttribute('aria-pressed', String(i === selected)));
   }
   thumbs.forEach((thumb,i) => thumb.addEventListener('click', () => selectPhoto(i)));
-  $('#open-photo').addEventListener('click', () => lightbox.showModal());
-  $('#close-photo').addEventListener('click', () => lightbox.close());
-  $('#previous-photo').addEventListener('click', () => selectPhoto(selected - 1));
-  $('#next-photo').addEventListener('click', () => selectPhoto(selected + 1));
-  lightbox.addEventListener('close', () => $('#open-photo').focus());
-  lightbox.addEventListener('keydown', event => {
+  $('#open-photo')?.addEventListener('click', () => lightbox.showModal());
+  $('#close-photo')?.addEventListener('click', () => lightbox.close());
+  $('#previous-photo')?.addEventListener('click', () => selectPhoto(selected - 1));
+  $('#next-photo')?.addEventListener('click', () => selectPhoto(selected + 1));
+  lightbox?.addEventListener('close', () => $('#open-photo')?.focus());
+  lightbox?.addEventListener('keydown', event => {
     if (event.key === 'ArrowRight') { event.preventDefault(); selectPhoto(selected + 1); }
     if (event.key === 'ArrowLeft') { event.preventDefault(); selectPhoto(selected - 1); }
   });
-  lightbox.addEventListener('click', event => {
+  lightbox?.addEventListener('click', event => {
     if (event.target !== lightbox) return;
     const r = lightbox.getBoundingClientRect();
     if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) lightbox.close();
@@ -88,7 +89,7 @@
   document.querySelectorAll('[data-close-policy]').forEach(button => button.addEventListener('click', () => policyDialog.close()));
   policyDialog.addEventListener('close', () => policyTrigger?.focus());
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && !lightbox.open && !policyDialog.open) {
+    if (event.key === 'Escape' && !lightbox?.open && !policyDialog.open) {
       searchPanel.hidden = true; searchToggle.setAttribute('aria-expanded','false');
       menu.hidden = true; menuToggle.setAttribute('aria-expanded','false'); menuToggle.setAttribute('aria-label','Open menu');
     }
@@ -99,17 +100,18 @@
   function updatePurchaseControls() {
     const product = window.tpfShop.product(productId);
     if (!product) return;
-    const stock = product.quantityAvailable;
+    const comingSoon = product.status === 'coming-soon';
+    const stock = product.purchasable === false || comingSoon ? 0 : product.quantityAvailable;
     const inBag = window.tpfShop.get().find(item => item.id === product.id)?.qty || 0;
     const remaining = Math.max(0, stock - inBag);
-    $('#stock-status').textContent = stock ? `${stock} available${inBag ? ` · ${inBag} in your cart` : ''}` : 'Sold out';
+    $('#stock-status').textContent = comingSoon ? 'Coming soon' : stock ? `${stock} available${inBag ? ` · ${inBag} in your cart` : ''}` : 'Sold out';
     quantity.max = String(remaining);
     quantity.disabled = remaining === 0;
     quantity.hidden = stock === 0;
     $('label[for="coin-quantity"]').hidden = stock === 0;
     if (remaining) quantity.value = String(Math.min(remaining, Math.max(1, Number(quantity.value) || 1)));
     addButton.disabled = remaining === 0;
-    addButton.textContent = !stock ? 'Sold out' : remaining ? 'Add to cart' : product.coinCount > 1 ? 'This lot is already in your cart' : 'All available coins are in your cart';
+    addButton.textContent = comingSoon ? 'Coming soon' : !stock ? 'Sold out' : remaining ? 'Add to cart' : product.coinCount > 1 ? 'This lot is already in your cart' : 'All available coins are in your cart';
   }
   window.tpfShop.ready.then(updatePurchaseControls).catch(error => {
     addButton.textContent = 'Unable to load item'; $('#cart-feedback').textContent = error.message;

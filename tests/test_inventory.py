@@ -81,6 +81,13 @@ class CheckoutTests(unittest.TestCase):
         self.assertEqual(self.client.post('/create-checkout-session', json={'items': [{'id':'coin-001','qty':2}]*2}).status_code, 400)
         self.assertEqual(self.quantity(), 3)
 
+    def test_coming_soon_coin_cannot_start_checkout(self):
+        self.assertEqual(backend.CATALOG['coin-007']['quantityAvailable'], 0)
+        response = self.client.post('/create-checkout-session', json={'items': [{'id': 'coin-007', 'qty': 1}]})
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('not available to purchase', response.get_json()['error'])
+        self.create_mock.assert_not_called()
+
     def test_competing_buyers_cannot_oversell(self):
         self.assertEqual(self.checkout(2).status_code, 200)
         self.assertEqual(self.checkout(2).status_code, 409)

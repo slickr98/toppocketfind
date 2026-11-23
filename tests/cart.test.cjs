@@ -3,12 +3,12 @@ const assert = require('node:assert/strict');
 const vm = require('node:vm');
 const fs = require('node:fs');
 const coin = JSON.parse(fs.readFileSync('api/coins.json')).products[0];
-async function setup(initial = '[]') {
+async function setup(initial = '[]', products = [coin]) {
   const values = new Map([['tpf_cart', initial]]);
   const window = new EventTarget();
   const document = new EventTarget(); document.hidden = true;
   const context = {window, document, localStorage: {getItem: k => values.get(k) || null, setItem: (k,v) => values.set(k,v)},
-    Event, AbortSignal, setInterval: () => {}, fetch: async url => ({ok: true, json: async () => url === '/api/coins.json' ? {products:[coin]} : {products:[{id:'coin-001',quantityAvailable:3}],checkoutReady:false}})};
+    Event, AbortSignal, setInterval: () => {}, fetch: async url => ({ok: true, json: async () => url === '/api/coins.json' ? {products} : {products:[{id:'coin-001',quantityAvailable:3}],checkoutReady:false}})};
   vm.runInNewContext(fs.readFileSync('js/shop.js','utf8'), context);
   await window.tpfShop.ready;
   await window.tpfShop.refreshStock();
@@ -59,4 +59,21 @@ test('unavailable backend never claims checkout is ready', async () => {
   const {shop,context} = await setup(); context.fetch = async()=>{throw new Error('offline')};
   await shop.refreshStock(); assert.equal(shop.checkoutReady(),false);
   shop.add('coin-001',1); assert.equal(shop.get()[0].qty,1);
+});
+
+test('coming-soon coins stay out of carts even when stock service reports stock', async () => {
+  const upcoming = JSON.parse(fs.readFileSync('api/coins.json')).products.find(row => row.id === 'coin-007');
+  assert.equal(upcoming.status, 'coming-soon');
+  assert.equal(upcoming.purchasable, false);
+  assert.equal(upcoming.quantityAvailable, 0);
+  const initial = JSON.stringify([{id: upcoming.id, qty: 1, priceCents: 1}]);
+  const {shop, context} = await setup(initial, [coin, upcoming]);
+  assert.equal(shop.get().length, 0);
+  assert.throws(() => shop.add(upcoming.id, 1), /coming soon/);
+  context.fetch = async () => ({ok: true, json: async () => ({products: [{id: upcoming.id, quantityAvailable: 3}], checkoutReady: true, paymentMode: 'live'})});
+  await shop.refreshStock();
+  assert.equal(shop.product(upcoming.id).quantityAvailable, 0);
+  assert.throws(() => shop.add(upcoming.id, 1), /coming soon/);
+  shop.add(coin.id, 1);
+  assert.equal(shop.get()[0].id, coin.id);
 });

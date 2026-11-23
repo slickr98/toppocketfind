@@ -1,5 +1,13 @@
 # Top Pocket Find — project handoff
-Updated 2026-11-16. Read this before continuing work. This handoff preserves decisions from the product-listing chat; confirm current source and stock before future edits.
+Updated 2026-11-23. Read this before continuing work. This handoff preserves decisions from the product-listing chat; confirm current source and stock before future edits.
+
+## Coming-soon coin listings (2026-11-23)
+- Rick authorized ten upcoming single silver-dollar listings: 1982–1988, 1992, 1993, 1996. Complete **1982 only** first and let him review before adding the other nine.
+- `coin-007`, `products/1982-regina-centennial-silver-dollar.html`: 1982 Regina Centennial. Quantity 0, status `coming-soon`, `purchasable: false`, price not set (`null`). Unopened, original sleeve included, no condition grade. Photos and detailed condition review remain outstanding before activation.
+- The Royal Canadian Mint archive currently shows this issue at a mismatched historical URL (`$1---sterling-silver-coin-international-year-of-older-persons-1999`), product number 1210. The actual rendered title is Regina Centennial (1982). No product photo is available there; Rick explicitly approved a text placeholder for now. Never label a placeholder as a Mint image or an actual-item photo.
+- The Mint archive's weight field appears inconsistent (36.07 g); omit weight and diameter until checked against packaging or reliable corroboration. Proof issue specifications are provisional until the actual coin is reviewed.
+- Future activation requires reviewing photos, condition, finish, price, then updating catalog status/purchasable/quantity and explicitly setting production stock. A backend stock value alone cannot make coming-soon products purchasable.
+- Production stock read before this change: coin-001/002/003/005 = 3 each; coin-004/006 = 1 each; legacy 220025 = 0. Do not reset these quantities.
 
 ## Current position
 Six reviewed coin listings are published at https://www.toppocketfind.ca/.

@@ -68,8 +68,10 @@
       const product = window.tpfShop?.product(card.dataset.productId);
       const badge = card.querySelector('.sold-out-badge');
       if (product && badge) {
-        badge.hidden = product.quantityAvailable !== 0;
-        card.querySelector('a.product-image')?.setAttribute('aria-label', `View ${card.dataset.title}, ${badge.hidden ? 'sold individually' : 'sold out'}`);
+        const comingSoon = product.status === 'coming-soon';
+        badge.textContent = comingSoon ? 'Coming soon' : 'Sold out';
+        badge.hidden = !comingSoon && product.quantityAvailable !== 0;
+        card.querySelector('a.product-image')?.setAttribute('aria-label', `View ${card.dataset.title}, ${comingSoon ? 'coming soon' : badge.hidden ? (product.coinCount > 1 ? 'lot of ' + product.coinCount : 'sold individually') : 'sold out'}`);
         const photoLabel = card.querySelector('.real-photo-label');
         if (photoLabel) photoLabel.hidden = !badge.hidden;
       }
