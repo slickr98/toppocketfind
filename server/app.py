@@ -11,13 +11,16 @@ try:
     from .inventory import Inventory, OutOfStock
     from .postgres_inventory import PostgresInventory
     from .contact import contact_routes
+    from .analytics import analytics_routes
 except ImportError:  # Existing Render start command: gunicorn app:app, root directory server.
     from inventory import Inventory, OutOfStock
     from postgres_inventory import PostgresInventory
     from contact import contact_routes
+    from analytics import analytics_routes
 
 app = Flask(__name__)
 app.register_blueprint(contact_routes)
+app.register_blueprint(analytics_routes)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024
 ROOT = Path(__file__).resolve().parent.parent
 CATALOG = {item['id']: item for item in json.loads((ROOT / 'api/coins.json').read_text())['products']}
@@ -32,7 +35,7 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY_TEST' if PAYMENT_MODE == 'test' el
 CORS(app, resources={r'/*': {'origins': [
     'https://toppocketfind.ca', 'https://www.toppocketfind.ca',
     'http://localhost:8000', 'http://127.0.0.1:8000', 'http://localhost:8080'
-]}}, methods=['GET', 'POST', 'OPTIONS'], allow_headers=['Content-Type'])
+]}}, methods=['GET', 'POST', 'OPTIONS'], allow_headers=['Content-Type', 'Authorization'])
 
 
 def payment_mode():

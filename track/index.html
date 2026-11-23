@@ -5,52 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#101719">
-  <title>Track — Design preview — Top Pocket Find</title>
-  <meta name="description" content="Top Pocket Find traffic dashboard design preview. All figures are sample data; tracking is not active.">
+  <title>Track — Top Pocket Find</title>
+  <meta name="description" content="Private anonymous aggregate traffic reports for Top Pocket Find.">
   <link rel="icon" href="/favicon.svg?v=20261115-maple1" type="image/svg+xml">
-  <link rel="stylesheet" href="track.css?v=20261123-preview1">
-  <script src="track.js?v=20261123-preview1" defer></script>
+  <link rel="stylesheet" href="track.css?v=20261123-live2">
+  <script src="track.js?v=20261123-live2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to dashboard</a>
   <header class="topbar">
     <a class="brand" href="../index.html" aria-label="Top Pocket Find store"><span class="monogram" aria-hidden="true">TPF</span><span>TOP POCKET FIND<small>STORE INSIGHTS</small></span></a>
     <span class="header-divider" aria-hidden="true"></span><span class="page-name">Track</span>
-    <a class="store-link" href="../index.html">Visit the store</a>
+    <a class="store-link" href="../index.html?analytics=off">Visit the store</a><button id="sign-out" class="small-control" type="button" hidden>Sign out</button>
   </header>
-  <div class="preview-banner"><span class="preview-dot" aria-hidden="true"></span><strong>Design preview</strong><span>All figures are sample data. Visitor tracking is not active.</span></div>
-  <main id="main" class="dashboard">
+  <div class="preview-banner"><span class="preview-dot" aria-hidden="true"></span><strong>Private report</strong><span id="tracking-status">Sign in to view the private report.</span></div>
+  <section id="login-panel" class="login-panel" aria-labelledby="login-title"><span class="store-emblem" aria-hidden="true">TPF</span><h1 id="login-title">Your store insights</h1><p>Enter your private access code to view the dashboard.</p><form id="login-form"><label for="access-code">Access code</label><input id="access-code" name="access-code" type="password" autocomplete="current-password" minlength="16" maxlength="200" required><button id="login-submit" type="submit">View dashboard</button><p id="login-feedback" role="status" aria-live="polite"></p></form><p class="login-note">Sign-in lasts up to 12 hours in this tab. Signing in also excludes this browser from page counters.</p></section><noscript><p class="login-panel">Enable JavaScript to view the private report.</p></noscript>
+  <main id="main" class="dashboard" hidden><p id="report-error" class="report-error" role="alert" hidden></p><div class="report-actions"><span id="exclusion-status"></span><button id="toggle-exclusion" class="small-control" type="button">Exclude this browser</button><button id="refresh-report" class="small-control" type="button">Refresh</button></div>
     <section class="overview" aria-labelledby="overview-title">
       <div class="overview-heading"><div><p class="eyebrow">YOUR STORE AT A GLANCE</p><h1 id="overview-title">Store activity</h1></div><span class="timezone">Atlantic time</span></div>
       <div class="summary">
         <span class="store-emblem" aria-hidden="true">TPF</span>
         <p class="store-name">Top Pocket Find</p>
-        <div class="metric-switch" role="group" aria-label="Chart metric"><button type="button" data-metric="visits" aria-pressed="true">Site visits</button><button type="button" data-metric="clicks" aria-pressed="false">Inventory clicks</button></div>
+        <div class="metric-switch" role="group" aria-label="Chart metric"><button type="button" data-metric="visits" aria-pressed="true">Page views</button><button type="button" data-metric="clicks" aria-pressed="false">Inventory clicks</button></div>
         <p id="headline-value" class="headline-value">—</p>
-        <p id="headline-label" class="headline-label">Sample site visits</p>
+        <p id="headline-label" class="headline-label">Page views</p>
         <p id="headline-range" class="headline-range"></p>
       </div>
     </section>
     <section class="chart-panel" aria-labelledby="chart-title">
       <div class="chart-toolbar">
-        <div><h2 id="chart-title">Site visits over time</h2><p id="chart-description">Sample visits per day</p></div>
+        <div><h2 id="chart-title">Page views over time</h2><p id="chart-description">Recorded page views per day</p></div>
         <div class="chart-controls">
-          <label class="select-label" for="source-filter">Source<select id="source-filter"><option value="all">All sources</option><option value="kijiji">Kijiji</option><option value="facebook">Facebook</option><option value="direct">Direct / unknown</option></select></label>
+          <label class="select-label" for="source-filter">Source<select id="source-filter"><option value="all">All sources</option><option value="kijiji">Kijiji</option><option value="facebook">Facebook</option><option value="direct">Direct / unknown</option><option value="google">Google</option><option value="bing">Bing</option><option value="other">Other referral</option></select></label>
           <label class="select-label" for="period-filter">Period<select id="period-filter"><option value="today">Today</option><option value="7" selected>Last 7 days</option><option value="28">Last 28 days</option><option value="all">Since tracking began</option></select></label>
         </div>
       </div>
-      <div class="chart-options"><div class="series-label"><span aria-hidden="true"></span><span id="series-label">Site visits</span><small>SAMPLE DATA</small></div><label class="cumulative-toggle"><input id="cumulative" type="checkbox"><span>Cumulative total</span></label></div>
+      <div class="chart-options"><div class="series-label"><span aria-hidden="true"></span><span id="series-label">Page views</span></div><label class="cumulative-toggle"><input id="cumulative" type="checkbox"><span>Cumulative total</span></label></div>
       <div id="chart-wrap" class="chart-wrap"><svg id="traffic-chart" viewBox="0 0 1100 300" role="img" aria-labelledby="chart-title chart-accessible-description"></svg><div id="chart-tooltip" class="chart-tooltip" role="status" hidden></div></div>
       <p id="chart-accessible-description" class="sr-only"></p>
       <div class="chart-footer"><span>Hover over a point, or tab through the chart, to see a daily total.</span><button id="show-data" type="button" aria-expanded="false" aria-controls="chart-data">View data table</button></div>
-      <div id="chart-data" class="data-table-wrap" hidden><table><caption>Sample daily figures for the selected period and source</caption><thead><tr><th scope="col">Date</th><th scope="col">Site visits</th><th scope="col">Inventory clicks</th></tr></thead><tbody id="daily-rows"></tbody></table></div>
+      <div id="chart-data" class="data-table-wrap" hidden><table><caption>Recorded totals for the selected period and source</caption><thead><tr><th scope="col">Date</th><th scope="col">Page views</th><th scope="col">Inventory clicks</th></tr></thead><tbody id="daily-rows"></tbody></table></div>
     </section>
     <div class="detail-grid">
-      <section class="detail-panel" aria-labelledby="sources-title"><div class="panel-heading"><h2 id="sources-title">Where visits came from</h2><span class="sample-label">SAMPLE DATA</span></div><p class="panel-description">Each ad can have its own link, so you can compare campaigns.</p><div id="source-rows" class="source-rows"></div></section>
-      <section class="detail-panel" aria-labelledby="inventory-title"><div class="panel-heading"><h2 id="inventory-title">Inventory interest</h2><span class="sample-label">SAMPLE DATA</span></div><p class="panel-description">Clicks to open a coin listing, ranked for the selected period.</p><table class="inventory-table"><thead><tr><th scope="col">Coin listing</th><th scope="col">Clicks</th></tr></thead><tbody id="inventory-rows"></tbody></table></section>
+      <section class="detail-panel" aria-labelledby="sources-title"><div class="panel-heading"><h2 id="sources-title">Page views by source</h2></div><p class="panel-description">Registered ad labels carry between pages. These are page views, including repeat loads, not unique visitors.</p><div id="source-rows" class="source-rows"></div></section>
+      <section class="detail-panel" aria-labelledby="inventory-title"><div class="panel-heading"><h2 id="inventory-title">Inventory interest</h2></div><p class="panel-description">Recorded listing views and clicks to open each coin, ranked for the selected period.</p><table class="inventory-table"><thead><tr><th scope="col">Coin listing</th><th scope="col">Views</th><th scope="col">Clicks</th></tr></thead><tbody id="inventory-rows"></tbody></table></section>
     </div>
     <p id="filter-status" class="sr-only" role="status" aria-live="polite"></p>
-    <footer class="dashboard-footer"><p><strong>Preview only.</strong> These are invented figures for reviewing the design, not activity on your store.</p><p>The finished dashboard will require sign-in. Real reporting will begin when tracking is enabled.</p></footer>
+    <footer class="dashboard-footer"><p id="tracking-started"></p><p>Page views include refreshes and repeat loads. Totals are anonymous counts, not unique people. Known bots and browser privacy signals are excluded where detectable; blocked or failed requests may be missed.</p><p>Today is shown by hour; other periods are shown by day, in Atlantic time. Reports refresh when you use the controls or choose Refresh.</p></footer>
   </main>
 </body>
 </html>

@@ -1,73 +1,43 @@
-/* DESIGN PREVIEW ONLY. Synthetic events; no visitor collection or network calls. */
+/* Authenticated aggregate reporting. No sample figures or visitor identifiers. */
 (() => {
   'use strict';
   const $ = selector => document.querySelector(selector);
-  const sampleToday = '2026-11-23';
-  const sources = [
-    {id: 'kijiji-coins', platform: 'kijiji', name: 'Kijiji · Coin collection', detail: 'Example ad A'},
-    {id: 'kijiji-dollars', platform: 'kijiji', name: 'Kijiji · Silver dollars', detail: 'Example ad B'},
-    {id: 'facebook-coins', platform: 'facebook', name: 'Facebook · Coin collection', detail: 'Example campaign'},
-    {id: 'direct', platform: 'direct', name: 'Direct / unknown', detail: 'No campaign identified'}
-  ];
-  const products = [
-    {id: 'coin-001', title: '2013 Santa Silver Coin'},
-    {id: 'coin-009', title: '1984 Toronto Silver Dollar'},
-    {id: 'coin-015', title: '1993 Stanley Cup Silver Dollar'},
-    {id: 'coin-016', title: '1996 John McIntosh Silver Dollar'},
-    {id: 'coin-007', title: '1982 Regina Silver Dollar'}
-  ];
-  // Deliberately fixed example history, independent of real visitors or orders.
-  const events = [];
-  for (let day = 1; day <= 23; day++) {
-    const date = `2026-11-${String(day).padStart(2, '0')}`;
-    const volume = day < 12 ? 2 + day % 4 : day < 18 ? 6 + day % 5 : 12 + day % 7;
-    const split = [day < 12 ? 0 : Math.floor(volume * .35), day < 18 ? 0 : Math.floor(volume * .2), day % 3 === 0 ? 2 : 0];
-    split.push(volume - split.reduce((sum, count) => sum + count, 0));
-    sources.forEach((source, sourceIndex) => {
-      const visits = split[sourceIndex];
-      for (let i = 0; i < visits; i++) {
-        events.push({date, hour: (i * 7 + day * 3 + sourceIndex) % 24, source: source.id, platform: source.platform, type: 'visits'});
-      }
-      const clicks = Math.floor(visits * (sourceIndex === 0 ? 1.2 : .75));
-      for (let i = 0; i < clicks; i++) {
-        events.push({date, hour: (i * 5 + day * 3 + sourceIndex + 1) % 24, source: source.id, platform: source.platform, type: 'clicks', product: products[(day + i + sourceIndex) % products.length].id});
-      }
-    });
-  }
+  const API = 'https://tpf-api.onrender.com/analytics';
+  const TOKEN_KEY = 'tpf_track_token';
+  const EXCLUDE = 'tpf_analytics_exclude';
+  let token = '';
+  try { token = sessionStorage.getItem(TOKEN_KEY) || ''; } catch { /* In-memory sign-in still works. */ }
   let metric = 'visits';
-  let buckets = [];
-  let plotted = [];
-  let points = [];
-  let activeIndex = null;
-  let chartWidth = 1100;
-  let plotRight = 1040;
-  const dayMs = 86400000;
-  const endDate = new Date(`${sampleToday}T12:00:00Z`);
-  const dateLabel = value => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-CA', {month: 'short', day: 'numeric', timeZone: 'UTC'});
-  const metricName = () => metric === 'visits' ? 'site visits' : 'inventory clicks';
-  function period() {
-    const selection = $('#period-filter').value;
-    const days = selection === 'today' ? 1 : selection === 'all' ? 23 : Number(selection);
-    const start = new Date(endDate.getTime() - (days - 1) * dayMs).toISOString().slice(0, 10);
-    return {start, end: sampleToday, hourly: selection === 'today'};
+  let data = null;
+  let buckets = [], plotted = [], points = [];
+  let activeIndex = null, chartWidth = 1100, plotRight = 1040;
+  let requestSequence = 0;
+  const dateLabel = value => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-CA', {month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
+  const shortDate = value => new Date(`${value}T12:00:00Z`).toLocaleDateString('en-CA', {month:'short',day:'numeric',timeZone:'UTC'});
+  const metricName = () => metric === 'visits' ? 'page views' : 'inventory clicks';
+  const period = () => ({hourly: data?.hourly === true});
+  function textCell(value) { const cell = document.createElement('td'); cell.textContent = String(value); return cell; }
+  function error(message) { $('#report-error').textContent = message; $('#report-error').hidden = !message; }
+  function clearReport() {
+    data = null; buckets = []; points = []; plotted = [];
+    $('#headline-value').textContent = '—';
+    ['#traffic-chart','#source-rows','#inventory-rows','#daily-rows'].forEach(id => $(id).replaceChildren());
+    $('#chart-tooltip').hidden = true;
   }
-  function currentEvents(range) {
-    const source = $('#source-filter').value;
-    return events.filter(event => event.date >= range.start && event.date <= range.end && (source === 'all' || event.platform === source));
+  function signedOut(message = '') {
+    ++requestSequence;
+    token = '';
+    try { sessionStorage.removeItem(TOKEN_KEY); } catch {}
+    clearReport();
+    $('#main').hidden = true; $('#login-panel').hidden = false; $('#sign-out').hidden = true;
+    $('#login-feedback').textContent = message;
+    $('#tracking-status').textContent = 'Sign in to view the private report.';
   }
-  function buildBuckets(range, selected) {
-    const result = [];
-    if (range.hourly) {
-      for (let hour = 0; hour < 24; hour++) result.push({key: hour, label: `${String(hour).padStart(2, '0')}:00`, tooltip: `${dateLabel(range.end)}, ${String(hour).padStart(2, '0')}:00`, visits: 0, clicks: 0});
-    } else {
-      for (let time = Date.parse(`${range.start}T12:00:00Z`); time <= endDate.getTime(); time += dayMs) {
-        const key = new Date(time).toISOString().slice(0, 10);
-        result.push({key, label: dateLabel(key), tooltip: dateLabel(key), visits: 0, clicks: 0});
-      }
-    }
-    const lookup = new Map(result.map(row => [row.key, row]));
-    for (const event of selected) lookup.get(range.hourly ? event.hour : event.date)[event.type]++;
-    return result;
+  function exclusionState() {
+    let excluded = false;
+    try { excluded = localStorage.getItem(EXCLUDE) === '1'; } catch {}
+    $('#exclusion-status').textContent = excluded ? 'This browser is excluded from counting.' : 'This browser is included in counting.';
+    $('#toggle-exclusion').textContent = excluded ? 'Include this browser' : 'Exclude this browser';
   }
   function hideTooltip() {
     activeIndex = null;
@@ -119,7 +89,7 @@
     const labelCount = Math.min(chartWidth < 500 ? 3 : 6, buckets.length);
     const indices = [...new Set(Array.from({length: labelCount}, (_, index) => Math.round(index / Math.max(1, labelCount - 1) * (buckets.length - 1))))];
     const labels = indices.map((index, order) => `<text class="axis-label" x="${points[index].x}" y="${height - 14}" text-anchor="${order === 0 ? 'start' : order === indices.length - 1 ? 'end' : 'middle'}">${buckets[index].label}</text>`).join('');
-    const targets = points.map((point, index) => `<circle class="chart-target" cx="${point.x}" cy="${point.y}" r="9" tabindex="0" role="button" data-index="${index}" aria-label="Sample ${buckets[index].tooltip}: ${plotted[index]} ${$('#cumulative').checked ? 'cumulative ' : ''}${metricName()}"/>`).join('');
+    const targets = points.map((point, index) => `<circle class="chart-target" cx="${point.x}" cy="${point.y}" r="9" tabindex="0" role="button" data-index="${index}" aria-label="${buckets[index].tooltip}: ${plotted[index]} ${$('#cumulative').checked ? 'cumulative ' : ''}${metricName()}"/>`).join('');
     svg.innerHTML = `<defs><linearGradient id="area-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#50c5d9" stop-opacity=".13"/><stop offset="100%" stop-color="#50c5d9" stop-opacity="0"/></linearGradient></defs>${grid}<path class="chart-area" d="${line} L${right},${bottom} L${left},${bottom} Z"/><path class="chart-line" d="${line}"/>${labels}<line id="chart-cursor" class="chart-cursor" x1="0" x2="0" y1="${top}" y2="${bottom}" visibility="hidden"/><circle id="chart-dot" class="chart-dot" r="5" visibility="hidden"/>${targets}`;
     svg.querySelectorAll('.chart-target').forEach(target => {
       target.addEventListener('focus', () => showTooltip(Number(target.dataset.index)));
@@ -136,53 +106,91 @@
       });
     });
     const cumulativeLabel = $('#cumulative').checked ? 'cumulative total' : range.hourly ? 'per hour' : 'per day';
-    $('#chart-title').textContent = `${metric === 'visits' ? 'Site visits' : 'Inventory clicks'} over time`;
-    $('#chart-description').textContent = `Sample ${metricName()} · ${cumulativeLabel}`;
-    $('#chart-accessible-description').textContent = `Design preview with sample data. ${$('#headline-value').textContent} ${metricName()} in the selected period. ${$('#chart-description').textContent}. A complete data table follows the chart.`;
-    $('#series-label').textContent = metric === 'visits' ? 'Site visits' : 'Inventory clicks';
+    $('#chart-title').textContent = `${metric === 'visits' ? 'Page views' : 'Inventory clicks'} over time`;
+    $('#chart-description').textContent = `${metricName()} · ${cumulativeLabel}`;
+    $('#chart-accessible-description').textContent = `${$('#headline-value').textContent} ${metricName()} in the selected period. ${$('#chart-description').textContent}. A complete data table is available below the chart.`;
+    $('#series-label').textContent = metric === 'visits' ? 'Page views' : 'Inventory clicks';
     hideTooltip();
   }
-  function renderDetails(selected) {
-    const sourceCounts = sources.map(source => ({...source, count: selected.filter(event => event.type === 'visits' && event.source === source.id).length})).sort((a, b) => b.count - a.count);
-    const total = sourceCounts.reduce((sum, source) => sum + source.count, 0);
-    $('#source-rows').innerHTML = sourceCounts.map(source => `<div class="source-row"><div class="source-info"><span>${source.name}<small>${source.detail}</small></span><span class="source-count">${source.count}</span></div><div class="source-bar"><span style="width:${total ? source.count / total * 100 : 0}%"></span></div></div>`).join('');
-    const productCounts = products.map(product => ({...product, count: selected.filter(event => event.type === 'clicks' && event.product === product.id).length})).sort((a, b) => b.count - a.count);
-    $('#inventory-rows').innerHTML = productCounts.map(product => `<tr><td>${product.title}</td><td>${product.count}</td></tr>`).join('');
-    $('#daily-rows').innerHTML = buckets.map(row => `<tr><td>${row.tooltip}</td><td>${row.visits}</td><td>${row.clicks}</td></tr>`).join('');
+  function renderDetails() {
+    $('#source-rows').replaceChildren();
+    const sourceTotal = data.sources.reduce((sum, source) => sum + source.count, 0);
+    if (!data.sources.length) { const p = document.createElement('p'); p.className = 'panel-description'; p.textContent = 'No page views recorded for this selection.'; $('#source-rows').append(p); }
+    for (const source of data.sources) {
+      const row = document.createElement('div'); row.className = 'source-row';
+      const info = document.createElement('div'); info.className = 'source-info';
+      const name = document.createElement('span'); name.textContent = source.name;
+      const count = document.createElement('span'); count.className = 'source-count'; count.textContent = source.count.toLocaleString('en-CA');
+      info.append(name, count);
+      const bar = document.createElement('div'); bar.className = 'source-bar';
+      const fill = document.createElement('span'); fill.style.width = `${sourceTotal ? source.count / sourceTotal * 100 : 0}%`; bar.append(fill); row.append(info,bar); $('#source-rows').append(row);
+    }
+    $('#inventory-rows').replaceChildren();
+    for (const product of data.products) {
+      const row = document.createElement('tr'); row.append(textCell(product.title),textCell(product.views),textCell(product.count)); $('#inventory-rows').append(row);
+    }
+    if (!data.products.length) { const row = document.createElement('tr'); const cell = textCell('No product activity recorded for this selection.'); cell.colSpan = 3; row.append(cell); $('#inventory-rows').append(row); }
+    $('#daily-rows').replaceChildren();
+    for (const bucket of buckets) { const row = document.createElement('tr'); row.append(textCell(bucket.tooltip),textCell(bucket.visits),textCell(bucket.clicks)); $('#daily-rows').append(row); }
   }
   function render() {
-    const range = period();
-    const selected = currentEvents(range);
-    buckets = buildBuckets(range, selected);
-    const total = selected.filter(event => event.type === metric).length;
+    if (!data) return;
+    buckets = data.buckets.map(row => ({...row,label:data.hourly ? row.key : shortDate(row.key),tooltip:data.hourly ? `${shortDate(data.end)}, ${row.key}` : dateLabel(row.key)}));
+    const total = buckets.reduce((sum,row) => sum + row[metric],0);
     $('#headline-value').textContent = total.toLocaleString('en-CA');
-    $('#headline-label').textContent = `Sample ${metricName()}`;
-    $('#headline-range').textContent = `${dateLabel(range.start)}${range.start === range.end ? '' : ' – ' + dateLabel(range.end)}, 2026`;
-    document.querySelectorAll('[data-metric]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.metric === metric)));
-    renderChart(range);
-    renderDetails(selected);
-    $('#filter-status').textContent = `Sample data: ${total} ${metricName()}, ${$('#headline-range').textContent}, ${$('#source-filter').selectedOptions[0].textContent}.`;
+    $('#headline-label').textContent = metricName();
+    $('#headline-range').textContent = `${dateLabel(data.start)}${data.start === data.end ? '' : ' – ' + dateLabel(data.end)}`;
+    document.querySelectorAll('[data-metric]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.metric === metric)));
+    renderChart(period()); renderDetails();
+    const started = new Date(data.startedAt).toLocaleString('en-CA',{timeZone:'America/Moncton',dateStyle:'medium',timeStyle:'short'});
+    $('#tracking-started').textContent = `Counting began ${started}, Atlantic time. Earlier activity is unavailable.`;
+    $('#tracking-status').textContent = 'Anonymous aggregate counting is active.';
+    $('#filter-status').textContent = `${total} ${metricName()}, ${$('#headline-range').textContent}, ${$('#source-filter').selectedOptions[0].textContent}.`;
   }
-  document.querySelectorAll('[data-metric]').forEach(button => button.addEventListener('click', () => {metric = button.dataset.metric; render();}));
-  ['#period-filter', '#source-filter', '#cumulative'].forEach(selector => $(selector).addEventListener('change', render));
-  $('#show-data').addEventListener('click', () => {
-    const open = $('#chart-data').hidden;
-    $('#chart-data').hidden = !open;
-    $('#show-data').setAttribute('aria-expanded', String(open));
-    $('#show-data').textContent = open ? 'Hide data table' : 'View data table';
+  async function loadReport() {
+    if (!token) return;
+    const sequence = ++requestSequence;
+    error(''); $('#refresh-report').disabled = true; $('#refresh-report').textContent = 'Loading…';
+    $('#main').hidden = false; $('#login-panel').hidden = true; $('#sign-out').hidden = false;
+    try {
+      const query = new URLSearchParams({period:$('#period-filter').value,source:$('#source-filter').value});
+      const response = await fetch(`${API}/report?${query}`,{headers:{Authorization:`Bearer ${token}`},credentials:'omit',cache:'no-store',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(90000)});
+      if (sequence !== requestSequence) return;
+      const body = await response.json();
+      if (response.status === 401) {signedOut('Your sign-in has expired. Please enter your access code again.');return;}
+      if (!response.ok) throw new Error(body.error || 'Reporting is temporarily unavailable.');
+      data = body; render(); exclusionState();
+    } catch (problem) {if (sequence === requestSequence) error((problem.message || 'Unable to load the report. Please try again.') + (data ? ' Showing the last loaded report.' : ''));}
+    finally {if (sequence === requestSequence) {$('#refresh-report').disabled=false;$('#refresh-report').textContent='Refresh';}}
+  }
+  $('#login-form').addEventListener('submit',async event => {
+    event.preventDefault(); const button = $('#login-submit'); button.disabled=true; $('#login-feedback').textContent='Signing in…';
+    const code = $('#access-code').value; $('#access-code').value='';
+    try {
+      const response = await fetch(`${API}/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code}),credentials:'omit',referrerPolicy:'no-referrer',signal:AbortSignal.timeout(90000)});
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error || 'Unable to sign in.');
+      token=body.token;
+      try {sessionStorage.setItem(TOKEN_KEY,token);localStorage.setItem(EXCLUDE,'1');} catch {}
+      $('#login-feedback').textContent=''; await loadReport();
+    } catch(problem) {$('#login-feedback').textContent=problem.message || 'Unable to sign in. Please try again.';}
+    finally {button.disabled=false;}
   });
-  $('#traffic-chart').addEventListener('pointermove', event => {
-    const bounds = event.currentTarget.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width * chartWidth;
-    const index = Math.max(0, Math.min(points.length - 1, Math.round((x - 12) / (plotRight - 12) * (points.length - 1))));
-    if (index !== activeIndex) showTooltip(index);
+  $('#sign-out').addEventListener('click',()=>signedOut('Signed out.'));
+  $('#refresh-report').addEventListener('click',loadReport);
+  $('#toggle-exclusion').addEventListener('click',()=>{
+    try {if(localStorage.getItem(EXCLUDE)==='1')localStorage.removeItem(EXCLUDE);else localStorage.setItem(EXCLUDE,'1');exclusionState();}
+    catch {error('Browser storage must be available to remember this preference.');}
   });
-  $('#traffic-chart').addEventListener('pointerleave', hideTooltip);
-  let resizePending = false;
-  window.addEventListener('resize', () => {
-    if (resizePending) return;
-    resizePending = true;
-    requestAnimationFrame(() => {resizePending = false; renderChart(period());});
+  document.querySelectorAll('[data-metric]').forEach(button=>button.addEventListener('click',()=>{metric=button.dataset.metric;render();}));
+  ['#period-filter','#source-filter'].forEach(id=>$(id).addEventListener('change',loadReport));
+  $('#cumulative').addEventListener('change',()=>{if(data)renderChart(period());});
+  $('#show-data').addEventListener('click',()=>{const open=$('#chart-data').hidden;$('#chart-data').hidden=!open;$('#show-data').setAttribute('aria-expanded',String(open));$('#show-data').textContent=open?'Hide data table':'View data table';});
+  $('#traffic-chart').addEventListener('pointermove',event=>{
+    if(!points.length)return;const bounds=event.currentTarget.getBoundingClientRect();const x=(event.clientX-bounds.left)/bounds.width*chartWidth;
+    const index=Math.max(0,Math.min(points.length-1,Math.round((x-12)/(plotRight-12)*(points.length-1))));if(index!==activeIndex)showTooltip(index);
   });
-  render();
+  $('#traffic-chart').addEventListener('pointerleave',hideTooltip);
+  let resizePending=false;window.addEventListener('resize',()=>{if(resizePending||!data)return;resizePending=true;requestAnimationFrame(()=>{resizePending=false;renderChart(period());});});
+  if(token)loadReport();
 })();

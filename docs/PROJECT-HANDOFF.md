@@ -31,13 +31,13 @@ The original six entries and their live quantities were preserved. The 1982 list
 Six reviewed coin listings and ten coming-soon silver-dollar previews are published at https://www.toppocketfind.ca/.
 GitHub: slickr98/toppocketfind, main. GitHub Pages frontend; Flask backend on Render at https://tpf-api.onrender.com. Preserve existing hosting and design.
 
-## Traffic dashboard design preview (2026-11-23)
-- Rick wants `/track` to resemble YouTube's chart: large selected-period total, line chart, date filter, site visits/inventory clicks, ad-source comparison. He also wants to ask ChatGPT for daily/weekly totals from the same saved records.
-- `/track/` currently serves **a design preview only**, in `track/index.html`, `track/track.css`, `track/track.js`. All numbers are deterministic synthetic examples, prominently labelled. No analytics events are collected, no real visitor records are read, and no authentication has been implemented. Do not describe the preview as private, protected, or active tracking.
-- Interactive preview: metric toggle, Today/7 days/28 days/since-start selector, source filter, daily/hourly/cumulative graph, point tooltips and keyboard navigation, data table, campaign breakdown and ranked sample coin clicks. Sample dates are fixed to November 2026.
-- Kept out of storefront navigation and marked noindex. Only invented data is public. Before connecting actual records, implement server-enforced authentication and protect statistics endpoints; a hidden URL or client-side password is insufficient.
-- Planned real reporting: visits/sessions, listing clicks/views, per-ad UTM attribution, Atlantic-time periods, an own-device exclusion option, bot filtering as practical. Define counting rules before enabling collection. Start collecting only when implemented; previous visits cannot be recovered from this preview.
-- Anne of Green Gables free-coin promo remains a thought: Rick needs to count stock first. No promo or advertising was activated. Kijiji promotion is being considered after the ten pending coins have actual photos, final review/prices, and stock activated.
+## Anonymous traffic reporting (2026-11-23)
+- Rick approved connecting the YouTube-inspired `/track/` dashboard to real anonymous aggregate counts, with no tracking cookies, identifiers or fingerprinting. See [ANALYTICS.md](ANALYTICS.md) for counting rules, configuration, campaign links and reporting queries.
+- Dashboard is private through server-verified access codes/tokens. The public static shell contains no statistics. All synthetic figures were removed. Page views include reloads; do not call them unique visitors or sessions.
+- Counts: page views, listing clicks, per-product views and approved ad labels. The optional own-browser exclusion is remembered as a boolean preference. Signing in excludes that browser by default. Reports use Atlantic time and refresh manually/on filters.
+- Anonymous counters use a separate `tpf_analytics` schema in the existing production database. Inventory, reservations, checkout, Stripe configuration and plans are unchanged. Use production records when Rick asks for daily/weekly totals; never fabricate missing past history.
+- The access code is private and was supplied directly to Rick; no credential is stored in source/docs. Only its hash and token-signing secret are configured in Render. Rotate through a scoped Render environment merge if necessary.
+- Anne of Green Gables free-coin promo is still an idea pending a stock count. No promotion or ad was posted. Coin photos, final listing review/prices and activation remain outstanding.
 
 ## Inventory snapshot (verified source and production database 2026-11-16)
 Prices CAD; shipping included within Canada.
@@ -61,7 +61,7 @@ Do not promise separate Mint paperwork/invoices; Rick requested removing that pr
 - Work out comic packing and shipping before deciding to include shipping as with coins.
 - Hold promotion on Facebook, Kijiji and other marketplaces until inventory is fuller. Quiet sales before promotion are not a useful demand test.
 - Games and old toys discussed but not selected as next collection.
-- Earlier traffic-dashboard hold was revisited on 2026-11-23: see the `/track/` design preview above. Live analytics and authentication remain unimplemented; do not mistake synthetic data for store activity.
+- Traffic reporting was approved on 2026-11-23 and is documented above; the old dashboard hold no longer applies.
 - Keep listing work in small bounded stages/checkpoints; repeated long sessions previously timed out.
 - Rick values creativity, enjoyable sustainable work, clearing collection space and future original products. Revenue is useful feedback, not the sole goal.
 

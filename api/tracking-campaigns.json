@@ -1,0 +1,7 @@
+{
+  "campaigns": [
+    {"id":"coin-collection","source":"kijiji","name":"Kijiji · Coin collection"},
+    {"id":"silver-dollars","source":"kijiji","name":"Kijiji · Silver dollars"},
+    {"id":"coin-collection","source":"facebook","name":"Facebook · Coin collection"}
+  ]
+}
