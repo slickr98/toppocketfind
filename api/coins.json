@@ -531,34 +531,34 @@
       "includes": "One 1982 Regina Centennial silver dollar in a protective case.",
       "images": [
         {
-          "src": "assets/product-007/01-regina-reverse-preview.jpg",
-          "thumbnail": "assets/product-007/01-regina-reverse-preview.jpg",
-          "alt": "Regina Centennial design — edited preview",
-          "sourceWidth": 1254,
-          "sourceHeight": 1254,
+          "src": "assets/product-007/01-regina-reverse-photo.png",
+          "thumbnail": "assets/product-007/01-regina-reverse-photo.png",
+          "alt": "Regina Centennial design",
+          "sourceWidth": 480,
+          "sourceHeight": 480,
           "viewBox": [
             0,
             0,
-            1254,
-            1254
+            480,
+            480
           ],
           "transform": "",
-          "kind": "edited-preview"
+          "kind": "coin-photo"
         },
         {
-          "src": "assets/product-007/02-elizabeth-portrait-preview.jpg",
-          "thumbnail": "assets/product-007/02-elizabeth-portrait-preview.jpg",
-          "alt": "Queen Elizabeth II portrait — edited preview",
-          "sourceWidth": 1254,
-          "sourceHeight": 1254,
+          "src": "assets/product-007/02-elizabeth-portrait-photo.png",
+          "thumbnail": "assets/product-007/02-elizabeth-portrait-photo.png",
+          "alt": "Queen Elizabeth II portrait",
+          "sourceWidth": 400,
+          "sourceHeight": 400,
           "viewBox": [
             0,
             0,
-            1254,
-            1254
+            400,
+            400
           ],
           "transform": "",
-          "kind": "edited-preview"
+          "kind": "coin-photo"
         }
       ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-international-year-of-older-persons-1999",
