@@ -1,5 +1,11 @@
 # Top Pocket Find — project handoff
-Updated 2026-11-23. Read this before continuing work. This handoff preserves decisions from the product-listing chat; confirm current source and stock before future edits.
+Updated 2026-11-25. Read this before continuing work. This handoff preserves decisions from the product-listing chat; confirm current source and stock before future edits.
+
+## Regina image previews and packaging (2026-11-25)
+- Rick approved the two tightly framed black-and-white image edits for coin-007 and asked to see them in the listing. They are stored in assets/product-007 and used in the homepage card, catalog, gallery, thumbnails and lightbox.
+- The image generator changed fine details, so both images are explicitly labelled edited previews, with an AI-edit disclosure. Do not describe these as unaltered photographs or use them to assess grade/condition. Obtain final accurate condition photos before activation.
+- Rick decided to leave the outer sleeve out of the offer because one is missing. The Regina listing now promises one coin in its protective case. No sleeve is promised or pictured. This supersedes the earlier Regina sleeve text below; the other nine upcoming listings have not been edited in this change.
+- Regina remains coming-soon, price null, quantity 0 and purchasable false. No production inventory changes.
 
 ## Coming-soon coin listings (2026-11-23)
 - Rick authorized ten upcoming single silver-dollar listings: 1982–1988, 1992, 1993, 1996. Rick reviewed and approved the 1982 layout, then authorized completing the remaining nine together. All ten stay unavailable to purchase pending final photo, condition and price review.

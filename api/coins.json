@@ -528,13 +528,45 @@
       "composition": "50% silver, 50% copper",
       "faceValueCadPerCoin": 1,
       "grade": null,
-      "includes": "One unopened 1982 Regina Centennial silver dollar with its original sleeve.",
-      "images": [],
+      "includes": "One 1982 Regina Centennial silver dollar in a protective case.",
+      "images": [
+        {
+          "src": "assets/product-007/01-regina-reverse-preview.jpg",
+          "thumbnail": "assets/product-007/01-regina-reverse-preview.jpg",
+          "alt": "Regina Centennial design — edited preview",
+          "sourceWidth": 1254,
+          "sourceHeight": 1254,
+          "viewBox": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "transform": "",
+          "kind": "edited-preview"
+        },
+        {
+          "src": "assets/product-007/02-elizabeth-portrait-preview.jpg",
+          "thumbnail": "assets/product-007/02-elizabeth-portrait-preview.jpg",
+          "alt": "Queen Elizabeth II portrait — edited preview",
+          "sourceWidth": 1254,
+          "sourceHeight": 1254,
+          "viewBox": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "transform": "",
+          "kind": "edited-preview"
+        }
+      ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-international-year-of-older-persons-1999",
       "shippingIncluded": true,
       "shippingCountries": [
         "CA"
-      ]
+      ],
+      "coverImage": 0
     },
     {
       "id": "coin-008",
