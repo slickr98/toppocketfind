@@ -531,16 +531,16 @@
       "includes": "One 1982 Regina Centennial silver dollar in a protective case.",
       "images": [
         {
-          "src": "assets/product-007/01-regina-reverse-photo.png",
-          "thumbnail": "assets/product-007/01-regina-reverse-photo.png",
+          "src": "assets/product-007/01-regina-reverse-bw-photo.png",
+          "thumbnail": "assets/product-007/01-regina-reverse-bw-photo.png",
           "alt": "Regina Centennial design",
-          "sourceWidth": 480,
-          "sourceHeight": 480,
+          "sourceWidth": 560,
+          "sourceHeight": 560,
           "viewBox": [
             0,
             0,
-            480,
-            480
+            560,
+            560
           ],
           "transform": "",
           "kind": "coin-photo"
