@@ -559,6 +559,21 @@
           ],
           "transform": "",
           "kind": "coin-photo"
+        },
+        {
+          "src": "assets/product-007/03-case-angle-photo.png",
+          "thumbnail": "assets/product-007/03-case-angle-photo.png",
+          "alt": "Angled view of the coin and protective case",
+          "sourceWidth": 497,
+          "sourceHeight": 452,
+          "viewBox": [
+            31,
+            28,
+            454,
+            410
+          ],
+          "transform": "",
+          "kind": "coin-photo"
         }
       ],
       "specificationSource": "https://www.mint.ca/en/shop/coins/pre-2010/$1---sterling-silver-coin-international-year-of-older-persons-1999",
